@@ -371,7 +371,7 @@ git commit -m "build: configure GitHub Pages base path"
 - Modify: `.github/workflows/ci.yml`
 - Modify: `README.md`
 
-- [ ] **Step 1: Extend the existing workflow**
+- [x] **Step 1: Extend the existing workflow**
 
 Replace `.github/workflows/ci.yml` with:
 
@@ -436,7 +436,7 @@ jobs:
         uses: actions/deploy-pages@v4
 ```
 
-- [ ] **Step 2: Document deployment and one-time setup**
+- [x] **Step 2: Document deployment and one-time setup**
 
 Add after README's Quick start section:
 
@@ -446,7 +446,8 @@ Add after README's Quick start section:
 The latest verified `main` build is published at
 <https://annsonn.github.io/op-prerelease-deck-builder/>. Pushes to `main`
 deploy automatically, and **Actions -> CI -> Run workflow** starts the same
-deployment manually.
+deployment when run on `main`; selecting another branch only verifies and
+builds.
 
 Before the first deployment, set **Settings -> Pages -> Build and deployment ->
 Source** to **GitHub Actions**. The workflow deploys with GitHub's built-in
@@ -454,7 +455,7 @@ Source** to **GitHub Actions**. The workflow deploys with GitHub's built-in
 Pull requests verify and build the Pages configuration without deploying it.
 ```
 
-- [ ] **Step 3: Validate the workflow contract and documentation diff**
+- [x] **Step 3: Validate the workflow contract and documentation diff**
 
 Run:
 
@@ -465,7 +466,7 @@ git diff --check
 
 Expected: the Node assertion and diff check both exit `0`.
 
-- [ ] **Step 4: Commit deployment automation and docs**
+- [x] **Step 4: Commit deployment automation and docs**
 
 ```bash
 git add .github/workflows/ci.yml README.md

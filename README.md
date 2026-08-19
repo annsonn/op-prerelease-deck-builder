@@ -46,6 +46,19 @@ npm run dev
 Vite prints the local URL. The development preflight validates the committed
 catalogs before starting.
 
+## GitHub Pages
+
+The latest verified `main` build is published at
+<https://annsonn.github.io/op-prerelease-deck-builder/>. Pushes to `main`
+deploy automatically, and **Actions -> CI -> Run workflow** starts the same
+deployment when run on `main`; selecting another branch only verifies and
+builds.
+
+Before the first deployment, set **Settings -> Pages -> Build and deployment ->
+Source** to **GitHub Actions**. The workflow deploys with GitHub's built-in
+`GITHUB_TOKEN`; no personal access token or repository secret is required.
+Pull requests verify and build the Pages configuration without deploying it.
+
 ## Commands
 
 | Command | Purpose |
