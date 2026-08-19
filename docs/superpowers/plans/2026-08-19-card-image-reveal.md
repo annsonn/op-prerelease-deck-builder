@@ -163,7 +163,7 @@ git commit -m "fix: use Limitless card images"
 - Create: `src/components/CardImageDialog.tsx`
 - Modify: `src/App.css`
 
-- [ ] **Step 1: Write failing button tests**
+- [x] **Step 1: Write failing button tests**
 
 Use a `PlayableCard` fixture named `Edward.Newgate` with ID `OP17-005`. Test that `CardRevealButton`:
 
@@ -186,7 +186,7 @@ await user.click(button)
 expect(onReveal).toHaveBeenLastCalledWith(card)
 ```
 
-- [ ] **Step 2: Run the button test and confirm the missing module fails**
+- [x] **Step 2: Run the button test and confirm the missing module fails**
 
 Run:
 
@@ -196,7 +196,7 @@ npm test -- src/components/CardRevealButton.test.tsx
 
 Expected: FAIL because `CardRevealButton.tsx` does not exist.
 
-- [ ] **Step 3: Implement the button**
+- [x] **Step 3: Implement the button**
 
 Create `src/components/CardRevealButton.tsx` with this public interface:
 
@@ -237,7 +237,7 @@ export function CardRevealButton({
 
 The SVG must use CSS-driven `fill="none"`, `stroke="currentColor"`, rounded line caps, and rounded line joins so it does not depend on an icon package.
 
-- [ ] **Step 4: Run the button tests**
+- [x] **Step 4: Run the button tests**
 
 Run:
 
@@ -247,7 +247,7 @@ npm test -- src/components/CardRevealButton.test.tsx
 
 Expected: PASS.
 
-- [ ] **Step 5: Write failing dialog tests**
+- [x] **Step 5: Write failing dialog tests**
 
 Create `src/components/CardImageDialog.test.tsx` around this interface:
 
@@ -284,7 +284,7 @@ expect(origin).toHaveFocus()
 origin.remove()
 ```
 
-- [ ] **Step 6: Run the dialog test and confirm the missing module fails**
+- [x] **Step 6: Run the dialog test and confirm the missing module fails**
 
 Run:
 
@@ -294,7 +294,7 @@ npm test -- src/components/CardImageDialog.test.tsx
 
 Expected: FAIL because `CardImageDialog.tsx` does not exist.
 
-- [ ] **Step 7: Implement the dialog**
+- [x] **Step 7: Implement the dialog**
 
 Create `src/components/CardImageDialog.tsx` using `createPortal` into `document.body`. Import `resolveCardImageUrl`, `CARD_IMAGE_PROVIDER_NAME`, and `CARD_IMAGE_PROVIDER_URL` from `../card-image/card-image-url.js`. Required internal state and refs:
 
@@ -400,7 +400,7 @@ Render this hierarchy through the portal:
 
 Use `useId()` for `titleId`. Retain the exact target/currentTarget guard on the backdrop click.
 
-- [ ] **Step 8: Add the approved button and dialog CSS**
+- [x] **Step 8: Add the approved button and dialog CSS**
 
 Add to `src/App.css`:
 
@@ -515,7 +515,7 @@ Add to `src/App.css`:
 
 Add hover styling only as enhancement; the button must remain understandable and usable without hover.
 
-- [ ] **Step 9: Run the component tests, lint, and app type-check**
+- [x] **Step 9: Run the component tests, lint, and app type-check**
 
 Run:
 
@@ -527,7 +527,7 @@ npx tsc -b
 
 Expected: all commands PASS.
 
-- [ ] **Step 10: Commit the reveal controls**
+- [x] **Step 10: Commit the reveal controls**
 
 ```bash
 git add src/components/CardRevealButton.tsx src/components/CardRevealButton.test.tsx src/components/CardImageDialog.tsx src/components/CardImageDialog.test.tsx src/App.css
