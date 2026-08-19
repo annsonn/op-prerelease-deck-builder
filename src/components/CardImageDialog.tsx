@@ -23,8 +23,6 @@ export function CardImageDialog({ card, onClose }: CardImageDialogProps) {
   const dialogRef = useRef<HTMLDivElement>(null)
   const closeButtonRef = useRef<HTMLButtonElement>(null)
   const originRef = useRef<HTMLElement | null>(null)
-  const [imageStatus, setImageStatus] = useState<ImageStatus>('loading')
-  const [retryKey, setRetryKey] = useState(0)
 
   useEffect(() => {
     originRef.current =
@@ -42,11 +40,6 @@ export function CardImageDialog({ card, onClose }: CardImageDialogProps) {
       }
     }
   }, [])
-
-  useEffect(() => {
-    setImageStatus('loading')
-    setRetryKey(0)
-  }, [card.cardNumber])
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
@@ -113,37 +106,11 @@ export function CardImageDialog({ card, onClose }: CardImageDialogProps) {
             Close
           </button>
         </header>
-        <div className="card-image-dialog__media">
-          {imageStatus === 'loading' ? (
-            <p role="status">Loading card image…</p>
-          ) : null}
-          {imageStatus === 'failed' ? (
-            <div className="card-image-dialog__error" role="alert">
-              <strong>Card image unavailable</strong>
-              <button
-                type="button"
-                className="card-image-dialog__retry"
-                onClick={() => {
-                  setImageStatus('loading')
-                  setRetryKey((current) => current + 1)
-                }}
-              >
-                Retry
-              </button>
-            </div>
-          ) : (
-            <img
-              key={`${card.cardNumber}-${retryKey}`}
-              className="card-image-dialog__image"
-              src={resolveCardImageUrl(card.cardNumber)}
-              alt={`${card.name} (${card.cardNumber}) card`}
-              referrerPolicy="no-referrer"
-              hidden={imageStatus !== 'loaded'}
-              onLoad={() => setImageStatus('loaded')}
-              onError={() => setImageStatus('failed')}
-            />
-          )}
-        </div>
+        <CardImageRequest
+          key={card.cardNumber}
+          card={card}
+          onRetry={() => closeButtonRef.current?.focus()}
+        />
         <p className="card-image-dialog__note">
           Standard reference printing; alternate art may look different.
         </p>
@@ -158,5 +125,50 @@ export function CardImageDialog({ card, onClose }: CardImageDialogProps) {
       </div>
     </div>,
     document.body,
+  )
+}
+
+interface CardImageRequestProps {
+  readonly card: PlayableCard
+  readonly onRetry: () => void
+}
+
+function CardImageRequest({ card, onRetry }: CardImageRequestProps) {
+  const [imageStatus, setImageStatus] = useState<ImageStatus>('loading')
+  const [retryKey, setRetryKey] = useState(0)
+
+  return (
+    <div className="card-image-dialog__media">
+      {imageStatus === 'loading' ? (
+        <p role="status">Loading card image…</p>
+      ) : null}
+      {imageStatus === 'failed' ? (
+        <div className="card-image-dialog__error" role="alert">
+          <strong>Card image unavailable</strong>
+          <button
+            type="button"
+            className="card-image-dialog__retry"
+            onClick={() => {
+              onRetry()
+              setImageStatus('loading')
+              setRetryKey((current) => current + 1)
+            }}
+          >
+            Retry
+          </button>
+        </div>
+      ) : (
+        <img
+          key={retryKey}
+          className="card-image-dialog__image"
+          src={resolveCardImageUrl(card.cardNumber)}
+          alt={`${card.name} (${card.cardNumber}) card`}
+          referrerPolicy="no-referrer"
+          hidden={imageStatus !== 'loaded'}
+          onLoad={() => setImageStatus('loaded')}
+          onError={() => setImageStatus('failed')}
+        />
+      )}
+    </div>
   )
 }

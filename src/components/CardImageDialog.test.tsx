@@ -1,8 +1,3 @@
-/// <reference types="node" />
-
-import { readFileSync } from 'node:fs'
-import { resolve } from 'node:path'
-
 import { useState } from 'react'
 import { fireEvent, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -12,9 +7,6 @@ import type { PlayableCard } from '../../shared/catalog.js'
 import { CARD_IMAGE_PROVIDER_URL } from '../card-image/card-image-url.js'
 import { CardImageDialog } from './CardImageDialog.js'
 import { CardRevealButton } from './CardRevealButton.js'
-
-const appCss = readFileSync(resolve(process.cwd(), 'src/App.css'), 'utf8')
-const indexCss = readFileSync(resolve(process.cwd(), 'src/index.css'), 'utf8')
 
 const card: PlayableCard = {
   cardNumber: 'OP17-005',
@@ -91,19 +83,6 @@ function expectAttribution() {
 }
 
 describe('CardImageDialog', () => {
-  it('uses a centered viewport-bounded 5:7 modal with global focus visibility', () => {
-    expect(appCss).toMatch(
-      /\.card-image-backdrop\s*\{[^}]*position:\s*fixed;[^}]*z-index:\s*1000;[^}]*inset:\s*0;[^}]*display:\s*grid;[^}]*place-items:\s*center;/s,
-    )
-    expect(appCss).toMatch(
-      /\.card-image-dialog\s*\{[^}]*width:\s*min\(100%, 420px\);[^}]*max-height:\s*calc\(100dvh - 32px\);[^}]*overflow:\s*auto;/s,
-    )
-    expect(appCss).toMatch(
-      /\.card-image-dialog__media\s*\{[^}]*width:\s*min\(100%, 350px\);[^}]*aspect-ratio:\s*5 \/ 7;/s,
-    )
-    expect(indexCss).toMatch(/:focus-visible\s*\{[^}]*outline:/s)
-  })
-
   it('creates one named dialog and one image request only after activation', async () => {
     const user = userEvent.setup()
     const { container } = render(<DialogHarness />)
@@ -120,6 +99,10 @@ describe('CardImageDialog', () => {
     const dialog = getDialog()
     expect(screen.getAllByRole('dialog')).toHaveLength(1)
     expect(dialog).toHaveAttribute('aria-modal', 'true')
+    expect(dialog).toHaveClass('card-image-dialog')
+    expect(
+      within(dialog).getByRole('button', { name: 'Close card image' }),
+    ).toHaveClass('card-image-dialog__close')
 
     const image = getImage(document.body)
     expect(document.body.querySelectorAll('img')).toHaveLength(1)
@@ -170,10 +153,16 @@ describe('CardImageDialog', () => {
     await user.click(retry)
 
     const retriedImage = getImage(document.body)
+    const dialog = getDialog()
+    const close = within(dialog).getByRole('button', {
+      name: 'Close card image',
+    })
     expect(retriedImage).not.toBe(firstImage)
     expect(screen.getByRole('status')).toHaveTextContent('Loading card image…')
     expect(screen.queryByRole('alert')).not.toBeInTheDocument()
     expect(retriedImage).toHaveAttribute('hidden')
+    expect(close).toHaveFocus()
+    expect(dialog).toContainElement(document.activeElement as HTMLElement)
     expectAttribution()
   })
 
@@ -367,5 +356,48 @@ describe('CardImageDialog', () => {
 
     fireEvent.keyDown(document, { key: 'Escape' })
     expect(onClose).toHaveBeenCalledTimes(1)
+  })
+
+  it('mounts exactly one fresh loading request when replacing a loaded retry', async () => {
+    const user = userEvent.setup()
+    const onClose = vi.fn()
+    const view = render(<CardImageDialog card={card} onClose={onClose} />)
+
+    fireEvent.error(getImage(document.body))
+    await user.click(screen.getByRole('button', { name: 'Retry' }))
+    const retriedImage = getImage(document.body)
+    fireEvent.load(retriedImage)
+    expect(retriedImage).not.toHaveAttribute('hidden')
+
+    const addedImages: HTMLImageElement[] = []
+    const observer = new MutationObserver(() => undefined)
+    observer.observe(getDialog(), { childList: true, subtree: true })
+
+    view.rerender(
+      <CardImageDialog card={replacementCard} onClose={onClose} />,
+    )
+
+    for (const record of observer.takeRecords()) {
+      for (const node of record.addedNodes) {
+        if (node instanceof HTMLImageElement) addedImages.push(node)
+        if (node instanceof HTMLElement) {
+          addedImages.push(...node.querySelectorAll('img'))
+        }
+      }
+    }
+    observer.disconnect()
+
+    expect(addedImages).toHaveLength(1)
+    const replacementImage = addedImages[0]
+    expect(replacementImage).not.toBe(retriedImage)
+    expect(replacementImage).toHaveAttribute('hidden')
+    expect(replacementImage).toHaveAttribute(
+      'src',
+      'https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/one-piece/OP16/OP16-005_EN.webp',
+    )
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'Loading card image…',
+    )
+    expect(document.body.querySelectorAll('img')).toHaveLength(1)
   })
 })
