@@ -33,7 +33,7 @@
 - Create: `src/card-image/card-image-url.test.ts`
 - Create: `src/card-image/card-image-url.ts`
 
-- [ ] **Step 1: Write the failing resolver tests**
+- [x] **Step 1: Write the failing resolver tests**
 
 Create `src/card-image/card-image-url.test.ts`:
 
@@ -65,7 +65,7 @@ describe('resolveCardImageUrl', () => {
 })
 ```
 
-- [ ] **Step 2: Run the focused test and confirm the missing module fails**
+- [x] **Step 2: Run the focused test and confirm the missing module fails**
 
 Run:
 
@@ -75,7 +75,7 @@ npm test -- src/card-image/card-image-url.test.ts
 
 Expected: FAIL because `card-image-url.ts` does not exist.
 
-- [ ] **Step 3: Implement the validated resolver**
+- [x] **Step 3: Implement the validated resolver**
 
 Create `src/card-image/card-image-url.ts`:
 
@@ -95,7 +95,7 @@ export function resolveCardImageUrl(cardNumber: string): string {
 }
 ```
 
-- [ ] **Step 4: Run the resolver tests and type-check the app**
+- [x] **Step 4: Run the resolver tests and type-check the app**
 
 Run:
 
@@ -106,7 +106,7 @@ npx tsc -b
 
 Expected: resolver tests PASS and TypeScript exits zero.
 
-- [ ] **Step 5: Commit the resolver**
+- [x] **Step 5: Commit the resolver**
 
 ```bash
 git add src/card-image/card-image-url.ts src/card-image/card-image-url.test.ts
