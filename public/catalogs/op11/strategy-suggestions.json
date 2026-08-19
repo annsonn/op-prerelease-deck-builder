@@ -1,0 +1,7024 @@
+[
+  {
+    "cardNumber": "EB01-057",
+    "features": {
+      "evidence": [
+        "blocker"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "blocker"
+    ]
+  },
+  {
+    "cardNumber": "OP05-119",
+    "features": {
+      "evidence": [
+        "boss",
+        "brick"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": true,
+        "brick": true,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": true,
+        "brick": true,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "boss"
+    ]
+  },
+  {
+    "cardNumber": "OP06-119",
+    "features": {
+      "evidence": [
+        "boss",
+        "brick"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": true,
+        "brick": true,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": true,
+        "brick": true,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "boss"
+    ]
+  },
+  {
+    "cardNumber": "OP07-085",
+    "features": {
+      "evidence": [
+        "boss",
+        "brick",
+        "removal"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": true,
+        "brick": true,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": true,
+        "brick": true,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "boss",
+      "removal"
+    ]
+  },
+  {
+    "cardNumber": "OP09-005",
+    "features": {
+      "evidence": [
+        "blocker",
+        "comboDependent",
+        "draw",
+        "twoForOne"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": true,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": true,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "neutral",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": true,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": true,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": {
+          "requiredNames": [],
+          "requiredTraits": []
+        },
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": {
+          "requiredNames": [],
+          "requiredTraits": []
+        }
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "blocker",
+      "draw",
+      "pressure"
+    ]
+  },
+  {
+    "cardNumber": "OP09-015",
+    "features": {
+      "evidence": [
+        "blocker",
+        "comboDependent",
+        "removal"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "incompatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [
+        "Red-Haired Pirates"
+      ],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "blocker",
+      "pressure",
+      "removal"
+    ]
+  },
+  {
+    "cardNumber": "OP11-001",
+    "features": {
+      "evidence": [
+        "comboDependent"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "neutral",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [
+        "Navy"
+      ],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": []
+  },
+  {
+    "cardNumber": "OP11-002",
+    "features": {
+      "evidence": [
+        "removal"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "removal"
+    ]
+  },
+  {
+    "cardNumber": "OP11-003",
+    "features": {
+      "evidence": [
+        "twoKCounter"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "pressure",
+      "twoKCounter"
+    ]
+  },
+  {
+    "cardNumber": "OP11-004",
+    "features": {
+      "evidence": [
+        "searcher"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": true,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": true,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [
+        "Navy"
+      ],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": []
+  },
+  {
+    "cardNumber": "OP11-005",
+    "features": {
+      "evidence": [
+        "blocker"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "blocker",
+      "pressure"
+    ]
+  },
+  {
+    "cardNumber": "OP11-006",
+    "features": {
+      "evidence": [],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "pressure"
+    ]
+  },
+  {
+    "cardNumber": "OP11-007",
+    "features": {
+      "evidence": [
+        "comboDependent"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "incompatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [
+        "Navy"
+      ],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": []
+  },
+  {
+    "cardNumber": "OP11-008",
+    "features": {
+      "evidence": [
+        "blocker",
+        "comboDependent",
+        "removal"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "incompatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [
+        "Navy"
+      ],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "blocker"
+    ]
+  },
+  {
+    "cardNumber": "OP11-009",
+    "features": {
+      "evidence": [
+        "removal"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": []
+  },
+  {
+    "cardNumber": "OP11-010",
+    "features": {
+      "evidence": [
+        "brick",
+        "removal"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": true,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": true,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "pressure"
+    ]
+  },
+  {
+    "cardNumber": "OP11-011",
+    "features": {
+      "evidence": [
+        "vanillaLike"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": true
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": true
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "pressure"
+    ]
+  },
+  {
+    "cardNumber": "OP11-012",
+    "features": {
+      "evidence": [
+        "twoKCounter"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "twoKCounter"
+    ]
+  },
+  {
+    "cardNumber": "OP11-013",
+    "features": {
+      "evidence": [
+        "blocker",
+        "twoKCounter"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "blocker",
+      "twoKCounter"
+    ]
+  },
+  {
+    "cardNumber": "OP11-014",
+    "features": {
+      "evidence": [
+        "blocker"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "blocker"
+    ]
+  },
+  {
+    "cardNumber": "OP11-015",
+    "features": {
+      "evidence": [
+        "vanillaLike"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": true
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": true
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "pressure"
+    ]
+  },
+  {
+    "cardNumber": "OP11-016",
+    "features": {
+      "evidence": [],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "pressure"
+    ]
+  },
+  {
+    "cardNumber": "OP11-017",
+    "features": {
+      "evidence": [
+        "twoKCounter"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "twoKCounter"
+    ]
+  },
+  {
+    "cardNumber": "OP11-018",
+    "features": {
+      "evidence": [
+        "removal"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "removal"
+    ]
+  },
+  {
+    "cardNumber": "OP11-019",
+    "features": {
+      "evidence": [
+        "comboDependent"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "neutral",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": []
+  },
+  {
+    "cardNumber": "OP11-020",
+    "features": {
+      "evidence": [
+        "removal",
+        "twoForOne"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": true,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": true,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "removal"
+    ]
+  },
+  {
+    "cardNumber": "OP11-021",
+    "features": {
+      "evidence": [
+        "comboDependent"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "neutral",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": []
+  },
+  {
+    "cardNumber": "OP11-022",
+    "features": {
+      "evidence": [],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": []
+  },
+  {
+    "cardNumber": "OP11-023",
+    "features": {
+      "evidence": [
+        "boss",
+        "comboDependent",
+        "removal"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": true,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "incompatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": true,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [
+        "Fish-Man"
+      ],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": []
+  },
+  {
+    "cardNumber": "OP11-024",
+    "features": {
+      "evidence": [],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "pressure"
+    ]
+  },
+  {
+    "cardNumber": "OP11-025",
+    "features": {
+      "evidence": [],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": []
+  },
+  {
+    "cardNumber": "OP11-026",
+    "features": {
+      "evidence": [
+        "vanillaLike"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": true
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": true
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": []
+  },
+  {
+    "cardNumber": "OP11-027",
+    "features": {
+      "evidence": [
+        "brick",
+        "comboDependent"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": true,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "incompatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": true,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": true
+      },
+      "requiredNames": [
+        "Shirahoshi"
+      ],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "pressure"
+    ]
+  },
+  {
+    "cardNumber": "OP11-028",
+    "features": {
+      "evidence": [],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "pressure",
+      "removal"
+    ]
+  },
+  {
+    "cardNumber": "OP11-029",
+    "features": {
+      "evidence": [
+        "blocker",
+        "removal"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "blocker"
+    ]
+  },
+  {
+    "cardNumber": "OP11-030",
+    "features": {
+      "evidence": [
+        "searcher"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": true,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": true,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [
+        "Fish-Man Island",
+        "Neptunian"
+      ],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": []
+  },
+  {
+    "cardNumber": "OP11-031",
+    "features": {
+      "evidence": [
+        "brick",
+        "comboDependent",
+        "removal"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": true,
+        "comboDependent": true,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "neutral",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": true,
+        "comboDependent": true,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [
+        "Fish-Man",
+        "Merfolk"
+      ],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": {
+          "requiredNames": [],
+          "requiredTraits": [
+            "Fish-Man",
+            "Merfolk"
+          ]
+        },
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": []
+  },
+  {
+    "cardNumber": "OP11-032",
+    "features": {
+      "evidence": [
+        "twoKCounter"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "pressure",
+      "twoKCounter"
+    ]
+  },
+  {
+    "cardNumber": "OP11-033",
+    "features": {
+      "evidence": [
+        "twoKCounter"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "twoKCounter"
+    ]
+  },
+  {
+    "cardNumber": "OP11-034",
+    "features": {
+      "evidence": [
+        "comboDependent"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "neutral",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [
+        "Fish-Man",
+        "Merfolk"
+      ],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "pressure"
+    ]
+  },
+  {
+    "cardNumber": "OP11-035",
+    "features": {
+      "evidence": [
+        "removal"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": []
+  },
+  {
+    "cardNumber": "OP11-036",
+    "features": {
+      "evidence": [
+        "comboDependent",
+        "searcher"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": true,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "incompatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [
+        "Shirahoshi"
+      ],
+      "requiredTraits": [],
+      "searchableNames": [
+        "Shirahoshi"
+      ],
+      "searchableTraits": [
+        "Neptunian"
+      ],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "pressure"
+    ]
+  },
+  {
+    "cardNumber": "OP11-037",
+    "features": {
+      "evidence": [
+        "draw",
+        "searcher"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": true,
+        "removal": false,
+        "rush": false,
+        "searcher": true,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": true,
+        "removal": false,
+        "rush": false,
+        "searcher": true,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [
+        "Fish-Man Island",
+        "Neptunian"
+      ],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "draw"
+    ]
+  },
+  {
+    "cardNumber": "OP11-038",
+    "features": {
+      "evidence": [
+        "removal"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": []
+  },
+  {
+    "cardNumber": "OP11-039",
+    "features": {
+      "evidence": [
+        "removal"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": []
+  },
+  {
+    "cardNumber": "OP11-040",
+    "features": {
+      "evidence": [
+        "comboDependent",
+        "searcher"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": true,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "neutral",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": true,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [
+        "Straw Hat Crew"
+      ],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": {
+          "requiredNames": [],
+          "requiredTraits": []
+        },
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": []
+  },
+  {
+    "cardNumber": "OP11-041",
+    "features": {
+      "evidence": [
+        "comboDependent",
+        "draw"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": true,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "neutral",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": true,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": {
+          "requiredNames": [],
+          "requiredTraits": []
+        },
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "draw"
+    ]
+  },
+  {
+    "cardNumber": "OP11-042",
+    "features": {
+      "evidence": [
+        "rush"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": true,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": true,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": []
+  },
+  {
+    "cardNumber": "OP11-043",
+    "features": {
+      "evidence": [
+        "blocker",
+        "brick"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": true,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": true,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "blocker"
+    ]
+  },
+  {
+    "cardNumber": "OP11-044",
+    "features": {
+      "evidence": [
+        "brick",
+        "vanillaLike"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": true,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": true
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": true,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": true
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": []
+  },
+  {
+    "cardNumber": "OP11-045",
+    "features": {
+      "evidence": [
+        "twoKCounter"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "pressure",
+      "twoKCounter"
+    ]
+  },
+  {
+    "cardNumber": "OP11-046",
+    "features": {
+      "evidence": [
+        "blocker",
+        "comboDependent"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "neutral",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [
+        "GERMA"
+      ],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "blocker",
+      "pressure"
+    ]
+  },
+  {
+    "cardNumber": "OP11-047",
+    "features": {
+      "evidence": [
+        "comboDependent",
+        "searcher",
+        "twoKCounter"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": true,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "incompatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [
+        "The Vinsmoke Family"
+      ],
+      "searchableNames": [],
+      "searchableTraits": [
+        "GERMA"
+      ],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "pressure",
+      "twoKCounter"
+    ]
+  },
+  {
+    "cardNumber": "OP11-048",
+    "features": {
+      "evidence": [
+        "searcher"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": true,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": true,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [
+        "Firetank Pirates",
+        "Straw Hat Crew"
+      ],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": []
+  },
+  {
+    "cardNumber": "OP11-049",
+    "features": {
+      "evidence": [],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": []
+  },
+  {
+    "cardNumber": "OP11-050",
+    "features": {
+      "evidence": [
+        "removal",
+        "twoKCounter"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "twoKCounter"
+    ]
+  },
+  {
+    "cardNumber": "OP11-051",
+    "features": {
+      "evidence": [
+        "brick",
+        "removal"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": true,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": true,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": []
+  },
+  {
+    "cardNumber": "OP11-052",
+    "features": {
+      "evidence": [
+        "vanillaLike"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": true
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": true
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "pressure"
+    ]
+  },
+  {
+    "cardNumber": "OP11-053",
+    "features": {
+      "evidence": [
+        "twoKCounter"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "pressure",
+      "twoKCounter"
+    ]
+  },
+  {
+    "cardNumber": "OP11-054",
+    "features": {
+      "evidence": [
+        "blocker",
+        "comboDependent",
+        "draw"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": true,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "neutral",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": true,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": {
+          "requiredNames": [],
+          "requiredTraits": []
+        },
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "blocker",
+      "draw",
+      "pressure"
+    ]
+  },
+  {
+    "cardNumber": "OP11-055",
+    "features": {
+      "evidence": [
+        "twoKCounter"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "twoKCounter"
+    ]
+  },
+  {
+    "cardNumber": "OP11-056",
+    "features": {
+      "evidence": [
+        "blocker"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "blocker"
+    ]
+  },
+  {
+    "cardNumber": "OP11-057",
+    "features": {
+      "evidence": [
+        "blocker",
+        "comboDependent"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "neutral",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": {
+          "requiredNames": [],
+          "requiredTraits": []
+        },
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "blocker"
+    ]
+  },
+  {
+    "cardNumber": "OP11-058",
+    "features": {
+      "evidence": [
+        "blocker",
+        "comboDependent"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "neutral",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "blocker",
+      "pressure"
+    ]
+  },
+  {
+    "cardNumber": "OP11-059",
+    "features": {
+      "evidence": [
+        "comboDependent",
+        "removal"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "neutral",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": []
+  },
+  {
+    "cardNumber": "OP11-060",
+    "features": {
+      "evidence": [
+        "comboDependent",
+        "searcher"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": true,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "neutral",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": true,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [
+        "Straw Hat Crew"
+      ],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": {
+          "requiredNames": [],
+          "requiredTraits": []
+        },
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": []
+  },
+  {
+    "cardNumber": "OP11-061",
+    "features": {
+      "evidence": [
+        "removal"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "removal"
+    ]
+  },
+  {
+    "cardNumber": "OP11-062",
+    "features": {
+      "evidence": [],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": []
+  },
+  {
+    "cardNumber": "OP11-063",
+    "features": {
+      "evidence": [
+        "comboDependent",
+        "removal",
+        "twoKCounter"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "incompatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [
+        "Impel Down"
+      ],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "twoKCounter"
+    ]
+  },
+  {
+    "cardNumber": "OP11-064",
+    "features": {
+      "evidence": [
+        "vanillaLike"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": true
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": true
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": []
+  },
+  {
+    "cardNumber": "OP11-065",
+    "features": {
+      "evidence": [
+        "blocker",
+        "comboDependent"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "neutral",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [
+        "Big Mom Pirates"
+      ],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": {
+          "requiredNames": [],
+          "requiredTraits": [
+            "Big Mom Pirates"
+          ]
+        },
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "blocker"
+    ]
+  },
+  {
+    "cardNumber": "OP11-066",
+    "features": {
+      "evidence": [
+        "removal"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": {
+          "requiredNames": [],
+          "requiredTraits": []
+        },
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "pressure",
+      "removal"
+    ]
+  },
+  {
+    "cardNumber": "OP11-067",
+    "features": {
+      "evidence": [
+        "blocker",
+        "boss",
+        "brick"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": true,
+        "boss": true,
+        "brick": true,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": true,
+        "boss": true,
+        "brick": true,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "blocker"
+    ]
+  },
+  {
+    "cardNumber": "OP11-068",
+    "features": {
+      "evidence": [
+        "twoKCounter"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "twoKCounter"
+    ]
+  },
+  {
+    "cardNumber": "OP11-069",
+    "features": {
+      "evidence": [
+        "comboDependent"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "incompatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [
+        "Big Mom Pirates"
+      ],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": []
+  },
+  {
+    "cardNumber": "OP11-070",
+    "features": {
+      "evidence": [
+        "searcher"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": true,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": true,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [
+        "Big Mom Pirates"
+      ],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": []
+  },
+  {
+    "cardNumber": "OP11-071",
+    "features": {
+      "evidence": [
+        "brick",
+        "draw",
+        "vanillaLike"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": true,
+        "comboDependent": false,
+        "draw": true,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": true
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": true,
+        "comboDependent": false,
+        "draw": true,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": true
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": {
+          "requiredNames": [],
+          "requiredTraits": []
+        },
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "draw",
+      "pressure"
+    ]
+  },
+  {
+    "cardNumber": "OP11-072",
+    "features": {
+      "evidence": [
+        "twoKCounter"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "twoKCounter"
+    ]
+  },
+  {
+    "cardNumber": "OP11-073",
+    "features": {
+      "evidence": [
+        "boss",
+        "brick",
+        "comboDependent",
+        "rush"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": true,
+        "brick": true,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": true,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "incompatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": true,
+        "brick": true,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [
+        "Big Mom Pirates"
+      ],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "boss"
+    ]
+  },
+  {
+    "cardNumber": "OP11-074",
+    "features": {
+      "evidence": [
+        "removal",
+        "twoKCounter"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": {
+          "requiredNames": [],
+          "requiredTraits": []
+        },
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "twoKCounter"
+    ]
+  },
+  {
+    "cardNumber": "OP11-075",
+    "features": {
+      "evidence": [
+        "brick",
+        "comboDependent",
+        "draw",
+        "twoForOne"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": true,
+        "comboDependent": true,
+        "draw": true,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": true,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "incompatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": true,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [
+        "Nico Robin"
+      ],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "draw"
+    ]
+  },
+  {
+    "cardNumber": "OP11-076",
+    "features": {
+      "evidence": [
+        "blocker",
+        "comboDependent"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "incompatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [
+        "Impel Down"
+      ],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "blocker",
+      "pressure"
+    ]
+  },
+  {
+    "cardNumber": "OP11-077",
+    "features": {
+      "evidence": [],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": []
+  },
+  {
+    "cardNumber": "OP11-078",
+    "features": {
+      "evidence": [
+        "twoKCounter"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "pressure",
+      "twoKCounter"
+    ]
+  },
+  {
+    "cardNumber": "OP11-079",
+    "features": {
+      "evidence": [
+        "draw"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": true,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": true,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "draw"
+    ]
+  },
+  {
+    "cardNumber": "OP11-080",
+    "features": {
+      "evidence": [
+        "comboDependent"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "neutral",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": []
+  },
+  {
+    "cardNumber": "OP11-081",
+    "features": {
+      "evidence": [
+        "removal"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": {
+          "requiredNames": [],
+          "requiredTraits": []
+        },
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "removal"
+    ]
+  },
+  {
+    "cardNumber": "OP11-082",
+    "features": {
+      "evidence": [
+        "comboDependent",
+        "twoKCounter"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "incompatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [
+        "Navy"
+      ],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "twoKCounter"
+    ]
+  },
+  {
+    "cardNumber": "OP11-083",
+    "features": {
+      "evidence": [
+        "blocker",
+        "twoKCounter"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "blocker",
+      "twoKCounter"
+    ]
+  },
+  {
+    "cardNumber": "OP11-084",
+    "features": {
+      "evidence": [],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "pressure"
+    ]
+  },
+  {
+    "cardNumber": "OP11-085",
+    "features": {
+      "evidence": [],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": []
+  },
+  {
+    "cardNumber": "OP11-086",
+    "features": {
+      "evidence": [
+        "vanillaLike"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": true
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": true
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "pressure"
+    ]
+  },
+  {
+    "cardNumber": "OP11-087",
+    "features": {
+      "evidence": [
+        "twoKCounter"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "pressure",
+      "twoKCounter"
+    ]
+  },
+  {
+    "cardNumber": "OP11-088",
+    "features": {
+      "evidence": [
+        "blocker",
+        "comboDependent"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "neutral",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "blocker",
+      "pressure"
+    ]
+  },
+  {
+    "cardNumber": "OP11-089",
+    "features": {
+      "evidence": [
+        "vanillaLike"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": true
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": true
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "pressure"
+    ]
+  },
+  {
+    "cardNumber": "OP11-090",
+    "features": {
+      "evidence": [
+        "blocker"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "blocker"
+    ]
+  },
+  {
+    "cardNumber": "OP11-091",
+    "features": {
+      "evidence": [
+        "twoKCounter"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "pressure",
+      "twoKCounter"
+    ]
+  },
+  {
+    "cardNumber": "OP11-092",
+    "features": {
+      "evidence": [
+        "brick",
+        "draw"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": true,
+        "comboDependent": false,
+        "draw": true,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": true,
+        "comboDependent": false,
+        "draw": true,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "draw"
+    ]
+  },
+  {
+    "cardNumber": "OP11-093",
+    "features": {
+      "evidence": [
+        "twoKCounter"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "twoKCounter"
+    ]
+  },
+  {
+    "cardNumber": "OP11-094",
+    "features": {
+      "evidence": [
+        "vanillaLike"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": true
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": true
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": []
+  },
+  {
+    "cardNumber": "OP11-095",
+    "features": {
+      "evidence": [
+        "boss",
+        "brick",
+        "comboDependent",
+        "removal"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": true,
+        "brick": true,
+        "comboDependent": true,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "neutral",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": true,
+        "brick": true,
+        "comboDependent": true,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": {
+          "requiredNames": [],
+          "requiredTraits": []
+        },
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "removal"
+    ]
+  },
+  {
+    "cardNumber": "OP11-096",
+    "features": {
+      "evidence": [
+        "blocker",
+        "comboDependent"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "neutral",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [
+        "Navy"
+      ],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": {
+          "requiredNames": [],
+          "requiredTraits": [
+            "Navy"
+          ]
+        },
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "blocker"
+    ]
+  },
+  {
+    "cardNumber": "OP11-097",
+    "features": {
+      "evidence": [
+        "comboDependent"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "neutral",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": []
+  },
+  {
+    "cardNumber": "OP11-098",
+    "features": {
+      "evidence": [
+        "removal"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "removal"
+    ]
+  },
+  {
+    "cardNumber": "OP11-099",
+    "features": {
+      "evidence": [
+        "searcher"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": true,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": true,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [
+        "Navy"
+      ],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": []
+  },
+  {
+    "cardNumber": "OP11-100",
+    "features": {
+      "evidence": [
+        "comboDependent",
+        "draw",
+        "twoKCounter"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": true,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "incompatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "requiredNames": [
+        "Shirahoshi"
+      ],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "draw",
+      "twoKCounter"
+    ]
+  },
+  {
+    "cardNumber": "OP11-101",
+    "features": {
+      "evidence": [
+        "blocker",
+        "comboDependent"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "neutral",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [
+        "Supernovas"
+      ],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "blocker"
+    ]
+  },
+  {
+    "cardNumber": "OP11-102",
+    "features": {
+      "evidence": [
+        "comboDependent",
+        "twoKCounter"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "neutral",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "twoKCounter"
+    ]
+  },
+  {
+    "cardNumber": "OP11-103",
+    "features": {
+      "evidence": [
+        "brick",
+        "comboDependent",
+        "removal"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": true,
+        "comboDependent": true,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "incompatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": true,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": true
+      },
+      "requiredNames": [
+        "Shirahoshi"
+      ],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "pressure",
+      "removal"
+    ]
+  },
+  {
+    "cardNumber": "OP11-104",
+    "features": {
+      "evidence": [
+        "blocker",
+        "searcher"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": true,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": true,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [
+        "Fish-Man Island"
+      ],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "blocker"
+    ]
+  },
+  {
+    "cardNumber": "OP11-105",
+    "features": {
+      "evidence": [
+        "twoKCounter"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "pressure",
+      "twoKCounter"
+    ]
+  },
+  {
+    "cardNumber": "OP11-106",
+    "features": {
+      "evidence": [
+        "removal",
+        "twoKCounter"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "removal",
+      "twoKCounter"
+    ]
+  },
+  {
+    "cardNumber": "OP11-107",
+    "features": {
+      "evidence": [
+        "blocker",
+        "comboDependent"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "incompatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [
+        "Shirahoshi"
+      ],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "blocker",
+      "pressure"
+    ]
+  },
+  {
+    "cardNumber": "OP11-108",
+    "features": {
+      "evidence": [
+        "brick",
+        "comboDependent",
+        "draw",
+        "twoForOne"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": true,
+        "comboDependent": true,
+        "draw": true,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": true,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "incompatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": true,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": true
+      },
+      "requiredNames": [
+        "Shirahoshi"
+      ],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "draw",
+      "pressure"
+    ]
+  },
+  {
+    "cardNumber": "OP11-109",
+    "features": {
+      "evidence": [
+        "comboDependent",
+        "draw"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": true,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "neutral",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": true,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [
+        "Camie"
+      ],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": {
+          "requiredNames": [
+            "Camie"
+          ],
+          "requiredTraits": []
+        },
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "draw"
+    ]
+  },
+  {
+    "cardNumber": "OP11-110",
+    "features": {
+      "evidence": [
+        "brick",
+        "comboDependent",
+        "removal"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": true,
+        "comboDependent": true,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "neutral",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": true,
+        "comboDependent": true,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "pressure",
+      "removal"
+    ]
+  },
+  {
+    "cardNumber": "OP11-111",
+    "features": {
+      "evidence": [
+        "twoKCounter"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": true,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "twoKCounter"
+    ]
+  },
+  {
+    "cardNumber": "OP11-112",
+    "features": {
+      "evidence": [
+        "blocker",
+        "comboDependent"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "incompatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": true,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [
+        "Shirahoshi"
+      ],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "blocker"
+    ]
+  },
+  {
+    "cardNumber": "OP11-113",
+    "features": {
+      "evidence": [
+        "vanillaLike"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": true
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": true
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "pressure"
+    ]
+  },
+  {
+    "cardNumber": "OP11-114",
+    "features": {
+      "evidence": [
+        "comboDependent",
+        "removal"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "neutral",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": {
+          "requiredNames": [],
+          "requiredTraits": []
+        },
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "removal"
+    ]
+  },
+  {
+    "cardNumber": "OP11-115",
+    "features": {
+      "evidence": [
+        "comboDependent",
+        "removal"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "incompatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [
+        "Shirahoshi"
+      ],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "removal"
+    ]
+  },
+  {
+    "cardNumber": "OP11-116",
+    "features": {
+      "evidence": [],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": []
+  },
+  {
+    "cardNumber": "OP11-117",
+    "features": {
+      "evidence": [
+        "comboDependent"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": true,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "incompatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": false,
+        "brick": false,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [
+        "Shirahoshi"
+      ],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": []
+  },
+  {
+    "cardNumber": "OP11-118",
+    "features": {
+      "evidence": [
+        "boss",
+        "brick",
+        "removal",
+        "rush"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": true,
+        "brick": true,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": true,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": true,
+        "brick": true,
+        "comboDependent": false,
+        "draw": false,
+        "removal": true,
+        "rush": true,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": []
+  },
+  {
+    "cardNumber": "OP11-119",
+    "features": {
+      "evidence": [
+        "boss",
+        "brick"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": true,
+        "brick": true,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": true,
+        "brick": true,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "boss"
+    ]
+  },
+  {
+    "cardNumber": "ST16-004",
+    "features": {
+      "evidence": [
+        "boss",
+        "brick"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": true,
+        "brick": true,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": true,
+        "brick": true,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": [
+      "boss",
+      "removal"
+    ]
+  },
+  {
+    "cardNumber": "ST18-005",
+    "features": {
+      "evidence": [
+        "boss",
+        "brick"
+      ],
+      "flags": {
+        "banish": false,
+        "blocker": false,
+        "boss": true,
+        "brick": true,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "rainbowLuffyCompatibility": "compatible",
+      "rainbowUsableFlags": {
+        "banish": false,
+        "blocker": false,
+        "boss": true,
+        "brick": true,
+        "comboDependent": false,
+        "draw": false,
+        "removal": false,
+        "rush": false,
+        "searcher": false,
+        "twoForOne": false,
+        "twoKCounter": false,
+        "vanillaLike": false
+      },
+      "requiredNames": [],
+      "requiredTraits": [],
+      "searchableNames": [],
+      "searchableTraits": [],
+      "supportRequirementsByFlag": {
+        "banish": null,
+        "blocker": null,
+        "draw": null,
+        "removal": null,
+        "rush": null,
+        "searcher": null,
+        "twoForOne": null
+      }
+    },
+    "reviewStatus": "suggested",
+    "roles": []
+  }
+]

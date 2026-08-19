@@ -1,0 +1,4160 @@
+[
+  {
+    "attribute": "Slash/Special",
+    "cardNumber": "EB01-003",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Red"
+    ],
+    "cost": 4,
+    "counter": 0,
+    "effect": "[Rush] (This card can attack on the turn in which it is played.)[When Attacking] If your opponent has 2 or less Life cards, this Character gains +2000 power during this turn.",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "Kid & Killer",
+    "power": 5000,
+    "rarity": "R",
+    "setMembership": [
+      "EB01",
+      "OP14"
+    ],
+    "traits": [
+      "Supernovas",
+      "Kid Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "EB01-023",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Blue"
+    ],
+    "cost": 4,
+    "counter": 0,
+    "effect": "[On Play] Draw 1 card.",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "Edward Weevil",
+    "power": 6000,
+    "rarity": "R",
+    "setMembership": [
+      "EB01",
+      "OP14"
+    ],
+    "traits": [
+      "The Seven Warlords of the Sea"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Strike",
+    "cardNumber": "EB04-011",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Green"
+    ],
+    "cost": 7,
+    "counter": 1000,
+    "effect": "[Rush: Character] (This card can attack Characters on the turn in which it is played.) <br/> [On Play] Draw a card for each of your {Neptunian} type Characters. Then, trash the same number of cards from your hand. <br/>",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "Scaled Neptunian",
+    "power": 8000,
+    "rarity": "C",
+    "setMembership": [
+      "EB04",
+      "OP14"
+    ],
+    "traits": [
+      "Neptunian"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "EB04-012",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Green"
+    ],
+    "cost": 7,
+    "counter": 0,
+    "effect": "[Activate: Main] [Once Per Turn] If this Character was played on this turn, set your {Land of Wano} type Leader as active.",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "Kikunojo",
+    "power": 8000,
+    "rarity": "SR",
+    "setMembership": [
+      "EB04",
+      "OP14"
+    ],
+    "traits": [
+      "Land of Wano",
+      "The Akazaya Nine"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Special",
+    "cardNumber": "EB04-013",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Green"
+    ],
+    "cost": 8,
+    "counter": 0,
+    "effect": "[On Play] If your Leader has the {Minks} type, set up to 2 of your {Minks} type Characters and your Leader as active.",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "Carrot",
+    "power": 9000,
+    "rarity": "SR",
+    "setMembership": [
+      "EB04",
+      "OP14"
+    ],
+    "traits": [
+      "Minks"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Wisdom",
+    "cardNumber": "EB04-014",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Green"
+    ],
+    "cost": 3,
+    "counter": 0,
+    "effect": "[Blocker] (After your opponent declares an attack, you may rest this card to make it the new target of the attack.) <br/> [Activate: Main] [Once Per Turn] Give up to 1 rested DON!! card to your {Land of Wano} type Leader.",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "Kouzuki Sukiyaki",
+    "power": 0,
+    "rarity": "C",
+    "setMembership": [
+      "EB04",
+      "OP14"
+    ],
+    "traits": [
+      "Land of Wano",
+      "Kouzuki Clan"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Strike",
+    "cardNumber": "EB04-015",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Green"
+    ],
+    "cost": 7,
+    "counter": 0,
+    "effect": "[Blocker] <br/> [On K.O.] You may rest 1 of your cards: If your Leader has the {Fish-Man} or {Merfolk} type, play up to 1 green Character card with a cost of 6 or less from your hand.",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "Jinbe",
+    "power": 8000,
+    "rarity": "R",
+    "setMembership": [
+      "EB04",
+      "OP14"
+    ],
+    "traits": [
+      "Fish-Man",
+      "Fish-Man Island",
+      "The Sun Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Strike",
+    "cardNumber": "EB04-016",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Green"
+    ],
+    "cost": 5,
+    "counter": 0,
+    "effect": "[Activate: Main] Set up to 1 of your DON!! cards as active. Then, you cannot set DON!! cards as active using Character effects during this turn. <br/> [When Attacking] If you have 3 or more {Neptunian} type Characters, rest up to 1 of your opponent's Characters with a cost of 8 or less.",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "Bird Neptunian",
+    "power": 7000,
+    "rarity": "C",
+    "setMembership": [
+      "EB04",
+      "OP14"
+    ],
+    "traits": [
+      "Neptunian"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Strike",
+    "cardNumber": "EB04-017",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Green"
+    ],
+    "cost": 6,
+    "counter": 1000,
+    "effect": "[Your Turn] If you have 3 or more {Minks} type Characters, give all of your opponent's Characters −1 cost. <br/> [On Play] If your Leader has the {Minks} type, play up to 1 {Minks} type Character card with a cost of 5 or less from your hand.",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "Mystoms",
+    "power": 5000,
+    "rarity": "C",
+    "setMembership": [
+      "EB04",
+      "OP14"
+    ],
+    "traits": [
+      "Minks",
+      "Big Mom Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Wisdom",
+    "cardNumber": "EB04-018",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Green"
+    ],
+    "cost": 4,
+    "counter": 2000,
+    "effect": "[On Play] You may rest this Character: K.O. up to 1 of your opponent's rested Characters with 8000 power or less.",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "Megalo",
+    "power": 4000,
+    "rarity": "R",
+    "setMembership": [
+      "EB04",
+      "OP14"
+    ],
+    "traits": [
+      "Animal",
+      "Fish-Man Island"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "",
+    "cardNumber": "EB04-019",
+    "cardType": "EVENT",
+    "colors": [
+      "Green"
+    ],
+    "cost": 1,
+    "counter": 0,
+    "effect": "[Main] You may rest 1 of your cards: If your Leader has the {Minks} type, give up to 1 of your opponent's Characters −3 cost during this turn. <br/> [Counter] Up to 1 of your {Minks} type Leader or Character cards gains +3000 power during this battle.",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "Eleclaw",
+    "power": 0,
+    "rarity": "R",
+    "setMembership": [
+      "EB04",
+      "OP14"
+    ],
+    "traits": [
+      "Minks"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "",
+    "cardNumber": "EB04-020",
+    "cardType": "EVENT",
+    "colors": [
+      "Green"
+    ],
+    "cost": 1,
+    "counter": 0,
+    "effect": "[Counter] Up to 1 of your {Fish-Man} type Leader or Character cards gains +3000 power during this battle. Then, set up to 1 of your {Fish-Man} type Characters as active.",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "Shark Brick Fist",
+    "power": 0,
+    "rarity": "C",
+    "setMembership": [
+      "EB04",
+      "OP14"
+    ],
+    "traits": [
+      "Fish-Man",
+      "Fish-Man Island",
+      "The Sun Pirates"
+    ],
+    "trigger": "[Trigger] Rest up to 1 of your opponent's Characters with a cost of 4 or less.",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Wisdom",
+    "cardNumber": "EB04-021",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Blue"
+    ],
+    "cost": 3,
+    "counter": 1000,
+    "effect": "[On Play] If your Leader is [Nefeltari Vivi], draw 2 cards and trash 1 card from your hand. <br/> [Activate: Main] [Once Per Turn] You may trash 1 card from your hand: Give up to 1 rested DON!! card to your Leader or 1 of your Characters.",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "Igaram",
+    "power": 4000,
+    "rarity": "C",
+    "setMembership": [
+      "EB04",
+      "OP14"
+    ],
+    "traits": [
+      "Alabasta"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "EB04-022",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Blue"
+    ],
+    "cost": 5,
+    "counter": 0,
+    "effect": "[On Play] You may trash 2 cards from your hand: If your opponent has 6 or more cards in their hand, your opponent places 2 cards from their hand at the bottom of their deck in any order. <br/> [DON!! x1] [When Attacking] You may trash 1 card from your hand: Give up to 1 of your opponent's Characters −2000 power during this turn.",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "Issho",
+    "power": 7000,
+    "rarity": "R",
+    "setMembership": [
+      "EB04",
+      "OP14"
+    ],
+    "traits": [
+      "Dressrosa",
+      "Navy"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "EB04-023",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Blue"
+    ],
+    "cost": 8,
+    "counter": 0,
+    "effect": "[Double Attack] (This card deals 2 damage.) <br/> [On Play] You may give your active Leader −5000 power during this turn: Draw 2 cards.",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "Chaka & Pell",
+    "power": 9000,
+    "rarity": "R",
+    "setMembership": [
+      "EB04",
+      "OP14"
+    ],
+    "traits": [
+      "Alabasta"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Wisdom",
+    "cardNumber": "EB04-024",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Blue"
+    ],
+    "cost": 2,
+    "counter": 2000,
+    "effect": "[Activate: Main] You may rest this Character and trash 1 card from your hand: Up to 1 of your {Alabasta} type Characters gains [Unblockable] during this turn. <br/> (This card cannot be blocked.)",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "Terracotta",
+    "power": 0,
+    "rarity": "C",
+    "setMembership": [
+      "EB04",
+      "OP14"
+    ],
+    "traits": [
+      "Alabasta"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "EB04-025",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Blue"
+    ],
+    "cost": 7,
+    "counter": 1000,
+    "effect": "[On Play] Play up to 1 {Alabasta} type Character card with a cost of 8 or less other than [Nefeltari Vivi] from your hand. Then, your opponent places 1 card from their hand at the bottom of their deck.",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "Nefeltari Vivi",
+    "power": 4000,
+    "rarity": "SR",
+    "setMembership": [
+      "EB04",
+      "OP14"
+    ],
+    "traits": [
+      "Alabasta"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Special",
+    "cardNumber": "EB04-026",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Blue"
+    ],
+    "cost": 4,
+    "counter": 0,
+    "effect": "[On Play] Place up to 1 of your opponent's Characters with a cost of 1 or less at the bottom of the owner's deck. <br/> [When Attacking] Draw 1 card and trash 1 card from your hand.",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "Bluegrass",
+    "power": 6000,
+    "rarity": "C",
+    "setMembership": [
+      "EB04",
+      "OP14"
+    ],
+    "traits": [
+      "Egghead",
+      "Navy"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Special",
+    "cardNumber": "EB04-027",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Blue"
+    ],
+    "cost": 5,
+    "counter": 0,
+    "effect": "[On Play] Draw 2 cards and trash 1 card from your hand.",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "Boa Hancock",
+    "power": 7000,
+    "rarity": "R",
+    "setMembership": [
+      "EB04",
+      "OP14"
+    ],
+    "traits": [
+      "The Seven Warlords of the Sea",
+      "Kuja Pirates"
+    ],
+    "trigger": "[Trigger] Play up to 1 Character card with 5000 power or less and a [Trigger] from your hand.",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "",
+    "cardNumber": "EB04-028",
+    "cardType": "EVENT",
+    "colors": [
+      "Blue"
+    ],
+    "cost": 5,
+    "counter": 0,
+    "effect": "[Main] You may trash 1 card from your hand: If your Leader has the {Navy} type, up to 2 of your opponent's Characters with 10000 power or less cannot attack until the end of your opponent's next End Phase.",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "Ice Time",
+    "power": 0,
+    "rarity": "R",
+    "setMembership": [
+      "EB04",
+      "OP14",
+      "ST33"
+    ],
+    "traits": [
+      "Navy"
+    ],
+    "trigger": "[Trigger] Return up to 1 Character with a cost of 5 or less to the owner's hand.",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "",
+    "cardNumber": "EB04-029",
+    "cardType": "EVENT",
+    "colors": [
+      "Blue"
+    ],
+    "cost": 1,
+    "counter": 0,
+    "effect": "[Main] If your Leader is [Sanji], look at 3 cards from the top of your deck; reveal up to 1 [Sanji] or Event card and add it to your hand. Then, trash the rest. <br/> [Counter] You may trash 1 card from your hand: Up to 1 of your [Sanji] cards gains +4000 power during this battle.",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "I Heard the Sound...of a Lady's Teardrops Falling",
+    "power": 0,
+    "rarity": "C",
+    "setMembership": [
+      "EB04",
+      "OP14"
+    ],
+    "traits": [
+      "Punk Hazard",
+      "Straw Hat Crew"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Strike",
+    "cardNumber": "EB04-030",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Purple"
+    ],
+    "cost": 7,
+    "counter": 0,
+    "effect": "If this Character would be K.O.'d, you may return 1 DON!! card from your field to your DON!! deck instead. <br/> [On Play] DON!! −2: If your Leader has the {Animal Kingdom Pirates} type, this Character gains [Rush] during this turn. Then, rest up to 1 of your opponent's Characters with a cost of 7 or less.",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "Kaido",
+    "power": 9000,
+    "rarity": "R",
+    "setMembership": [
+      "EB04",
+      "OP14"
+    ],
+    "traits": [
+      "The Four Emperors",
+      "Animal Kingdom Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Special",
+    "cardNumber": "EB04-031",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Purple"
+    ],
+    "cost": 6,
+    "counter": 0,
+    "effect": "If this Character would be K.O.'d, you may return 1 DON!! card from your field to your DON!! deck instead. <br/> [Activate: Main] [Once Per Turn] If your Leader has the {Animal Kingdom Pirates} type and you have no other [King] Characters, add up to 1 DON!! card from your DON!! deck and set it as active, and add up to 1 additional DON!! card and rest it.",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "King",
+    "power": 7000,
+    "rarity": "R",
+    "setMembership": [
+      "EB04",
+      "OP14"
+    ],
+    "traits": [
+      "Lunarian",
+      "Animal Kingdom Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Strike",
+    "cardNumber": "EB04-032",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Purple"
+    ],
+    "cost": 1,
+    "counter": 1000,
+    "effect": "[On Play] You may trash 1 {Animal Kingdom Pirates} type card from your hand: Draw 2 cards. <br/> [Activate: Main] [Once Per Turn] You may rest 2 of your DON!! cards: If your Leader has the {Animal Kingdom Pirates} type, add up to 1 DON!! card from your DON!! deck and rest it.",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "Queen",
+    "power": 1000,
+    "rarity": "R",
+    "setMembership": [
+      "EB04",
+      "OP14"
+    ],
+    "traits": [
+      "Animal Kingdom Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Strike",
+    "cardNumber": "EB04-033",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Purple"
+    ],
+    "cost": 5,
+    "counter": 1000,
+    "effect": "[On Play] DON!! −1: If you have 3 or more {Foxy Pirates} type Characters, K.O. up to 1 of your opponent's Characters with 6000 base power or less.",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "Groggy Monsters",
+    "power": 6000,
+    "rarity": "C",
+    "setMembership": [
+      "EB04",
+      "OP14"
+    ],
+    "traits": [
+      "Giant",
+      "Fish-Man",
+      "Foxy Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Wisdom",
+    "cardNumber": "EB04-034",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Purple"
+    ],
+    "cost": 2,
+    "counter": 1000,
+    "effect": "[Blocker] <br/> [On Your Opponent's Attack] [Once Per Turn] You may trash 1 card from your hand: If you have 4 or more Events in your trash, up to 1 of your Leader or Character cards gains +2000 power during this battle.",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "Charlotte Pudding",
+    "power": 1000,
+    "rarity": "C",
+    "setMembership": [
+      "EB04",
+      "OP14"
+    ],
+    "traits": [
+      "Big Mom Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "EB04-035",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Purple"
+    ],
+    "cost": 3,
+    "counter": 1000,
+    "effect": "[Blocker] <br/> [Your Turn] [Once Per Turn] When a DON!! card on your field is returned to your DON!! deck, if your Leader has the {Kid Pirates} type, add up to 1 DON!! card from your DON!! deck and rest it.",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "Hitokiri Kamazo",
+    "power": 4000,
+    "rarity": "C",
+    "setMembership": [
+      "EB04",
+      "OP14"
+    ],
+    "traits": [
+      "SMILE",
+      "Supernovas",
+      "Kid Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Special",
+    "cardNumber": "EB04-036",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Purple"
+    ],
+    "cost": 8,
+    "counter": 0,
+    "effect": "[On Play] DON!! −1: If your Leader has the {Foxy Pirates} type, draw 2 cards and trash 1 card from your hand. Then, rest up to 1 of your opponent's Characters with a cost of 9 or less. <br/> [Activate: Main] [Once Per Turn] Add up to 1 DON!! card from your DON!! deck and rest it.",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "Foxy",
+    "power": 9000,
+    "rarity": "SR",
+    "setMembership": [
+      "EB04",
+      "OP14"
+    ],
+    "traits": [
+      "Foxy Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Wisdom",
+    "cardNumber": "EB04-037",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Purple"
+    ],
+    "cost": 1,
+    "counter": 1000,
+    "effect": "[On Play] If your Leader has the {Foxy Pirates} type, look at 5 cards from the top of your deck; reveal up to 1 {Foxy Pirates} type card and add it to your hand. Then, place the rest at the bottom of your deck in any order.",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "Porche",
+    "power": 2000,
+    "rarity": "C",
+    "setMembership": [
+      "EB04",
+      "OP14"
+    ],
+    "traits": [
+      "Foxy Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Special/Wisdom",
+    "cardNumber": "EB04-038",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Purple"
+    ],
+    "cost": 6,
+    "counter": 0,
+    "effect": "Under the rules of this game, also treat this card's name as [Trafalgar Law] and [Donquixote Rosinante]. <br/> [Blocker] <br/> [On Play] If the number of DON!! cards on your field is equal to or less than the number on your opponent's field, draw 1 card. Then, add up to 1 DON!! card from your DON!! deck and set it as active.",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "Rosinante & Law",
+    "power": 8000,
+    "rarity": "SR",
+    "setMembership": [
+      "EB04",
+      "OP14"
+    ],
+    "traits": [
+      "Navy",
+      "Donquixote Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Special",
+    "cardNumber": "EB04-039",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Purple"
+    ],
+    "cost": 7,
+    "counter": 0,
+    "effect": "[On Play] Add up to 1 DON!! card from your DON!! deck and set it as active. <br/> [Activate: Main] You may trash this Character: Play up to 1 {Kid Pirates} type Character card with a cost of 5 or less from your hand.",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "Eustass\"Captain\"Kid",
+    "power": 8000,
+    "rarity": "R",
+    "setMembership": [
+      "EB04",
+      "OP14"
+    ],
+    "traits": [
+      "Supernovas",
+      "Kid Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "",
+    "cardNumber": "EB04-040",
+    "cardType": "EVENT",
+    "colors": [
+      "Purple"
+    ],
+    "cost": 1,
+    "counter": 0,
+    "effect": "[Main] You may rest 6 of your DON!! cards: Up to 1 of your [Kaido] cards gains +3000 power during this turn. Then, rest up to 1 of your opponent's Characters. <br/> [Counter] DON!! −1: Your Leader gains +4000 power during this battle.",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "Flame Dragon Torch",
+    "power": 0,
+    "rarity": "R",
+    "setMembership": [
+      "EB04",
+      "OP14"
+    ],
+    "traits": [
+      "The Four Emperors",
+      "Animal Kingdom Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "",
+    "cardNumber": "EB04-041",
+    "cardType": "EVENT",
+    "colors": [
+      "Purple"
+    ],
+    "cost": 3,
+    "counter": 0,
+    "effect": "[Main] If your Leader is [Sanji] and you have 4 or more DON!! cards on your field, play up to 1 [Sanji] with 6000 power or less from your hand or trash.",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "Stealth Black",
+    "power": 0,
+    "rarity": "C",
+    "setMembership": [
+      "EB04",
+      "OP14"
+    ],
+    "traits": [
+      "Straw Hat Crew"
+    ],
+    "trigger": "[Trigger] Draw 2 cards and trash 1 card from your hand.",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Special",
+    "cardNumber": "OP06-093",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Black"
+    ],
+    "cost": 4,
+    "counter": 2000,
+    "effect": "[On Play] If your opponent has 5 or more cards in their hand, choose one: <br/> • Your opponent trashes 1 card from their hand. <br/> • Give up to 1 of your opponent's Characters −3 cost during this turn.",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "Perona",
+    "power": 5000,
+    "rarity": "SR",
+    "setMembership": [
+      "OP06",
+      "OP14"
+    ],
+    "traits": [
+      "Thriller Bark Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Wisdom",
+    "cardNumber": "OP07-046",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Blue"
+    ],
+    "cost": 1,
+    "counter": 1000,
+    "effect": "[On Play] Look at 5 cards from the top of your deck; reveal up to 1 {The Seven Warlords of the Sea} type card and add it to your hand. Then, place the rest at the bottom of your deck in any order.",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "Sengoku",
+    "power": 2000,
+    "rarity": "R",
+    "setMembership": [
+      "OP07",
+      "OP14"
+    ],
+    "traits": [
+      "Navy"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "OP09-051",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Blue"
+    ],
+    "cost": 10,
+    "counter": 0,
+    "effect": "[On Play] Place up to 1 of your opponent's Characters at the bottom of the owner's deck. Then, if you do not have 5 Characters with a cost of 5 or more, place this Character at the bottom of the owner's deck.",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "Buggy",
+    "power": 12000,
+    "rarity": "R",
+    "setMembership": [
+      "OP09",
+      "OP14",
+      "ST25"
+    ],
+    "traits": [
+      "The Four Emperors",
+      "Cross Guild"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Special",
+    "cardNumber": "OP10-065",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Purple"
+    ],
+    "cost": 1,
+    "counter": 1000,
+    "effect": "[Activate: Main] You may rest 1 of your DON!! cards and this Character: Look at 5 cards from the top of your deck; reveal up to 1 {Donquixote Pirates} type card and add it to your hand. Then, place the rest at the bottom of your deck in any order.",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "Sugar",
+    "power": 1000,
+    "rarity": "R",
+    "setMembership": [
+      "OP10",
+      "OP14"
+    ],
+    "traits": [
+      "Donquixote Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "OP12-030",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Green"
+    ],
+    "cost": 8,
+    "counter": 0,
+    "effect": "[Blocker] <br/> [On Play] Set up to 4 of your DON!! cards as active. Then, you cannot play Character cards with a base cost of 7 or more during this turn.",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "Dracule Mihawk",
+    "power": 8000,
+    "rarity": "SR",
+    "setMembership": [
+      "OP12",
+      "OP14"
+    ],
+    "traits": [
+      "Muggy Kingdom",
+      "The Seven Warlords of the Sea"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Special",
+    "cardNumber": "OP12-108",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Yellow"
+    ],
+    "cost": 1,
+    "counter": 1000,
+    "effect": "[On Play] Look at 5 cards from the top of your deck; reveal up to 1 [Trafalgar Law] and add it to your hand. Then, place the rest at the bottom of your deck in any order.",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "Donquixote Rosinante",
+    "power": 2000,
+    "rarity": "R",
+    "setMembership": [
+      "OP12",
+      "OP14"
+    ],
+    "traits": [
+      "Navy",
+      "Donquixote Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "OP14-001",
+    "cardType": "LEADER",
+    "colors": [
+      "Red"
+    ],
+    "cost": null,
+    "counter": 0,
+    "effect": "[Activate: Main] [Once Per Turn] Select 2 of your {Supernovas} or {Heart Pirates} type Characters. Swap the base power of the selected Characters with each other during this turn.",
+    "entryShortcut": "001",
+    "isSpecialReprint": false,
+    "life": 5,
+    "name": "Trafalgar Law",
+    "power": 5000,
+    "rarity": "L",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "The Seven Warlords of the Sea",
+      "Supernovas",
+      "Heart Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Strike",
+    "cardNumber": "OP14-002",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Red"
+    ],
+    "cost": 3,
+    "counter": 1000,
+    "effect": "[When Attacking] If this Character has 5000 power or more, draw 1 card and K.O. up to 1 of your opponent's Characters with 3000 base power or less.",
+    "entryShortcut": "002",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Urouge",
+    "power": 2000,
+    "rarity": "UC",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Supernovas",
+      "Fallen Monk Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Ranged",
+    "cardNumber": "OP14-003",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Red"
+    ],
+    "cost": 1,
+    "counter": 1000,
+    "effect": "This Character cannot be K.O.'d by effects of your opponent's Characters with 5000 base power or less.",
+    "entryShortcut": "003",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Capone\"Gang\"Bege",
+    "power": 2000,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Supernovas",
+      "Firetank Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "OP14-004",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Red"
+    ],
+    "cost": 2,
+    "counter": 1000,
+    "effect": "If this Character has 5000 power or more, this Character gains [Rush]. <br/> (This card can attack on the turn in which it is played.)",
+    "entryShortcut": "004",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Cavendish",
+    "power": 2000,
+    "rarity": "UC",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Dressrosa",
+      "Supernovas",
+      "Beautiful Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "OP14-005",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Red"
+    ],
+    "cost": 1,
+    "counter": 1000,
+    "effect": "[Activate: Main] [Once Per Turn] Give up to 1 rested DON!! card to your Leader or 1 of your Characters.",
+    "entryShortcut": "005",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Killer",
+    "power": 1000,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Supernovas",
+      "Kid Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Ranged",
+    "cardNumber": "OP14-006",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Red"
+    ],
+    "cost": 2,
+    "counter": 1000,
+    "effect": "[When Attacking] If this Character has 5000 power or more, give up to 1 of your opponent's Characters −2000 power during this turn.",
+    "entryShortcut": "006",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Shachi & Penguin",
+    "power": 2000,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Heart Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Special",
+    "cardNumber": "OP14-007",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Red"
+    ],
+    "cost": 6,
+    "counter": 2000,
+    "effect": "",
+    "entryShortcut": "007",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Jewelry Bonney",
+    "power": 7000,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Supernovas",
+      "Bonney Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Special",
+    "cardNumber": "OP14-008",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Red"
+    ],
+    "cost": 3,
+    "counter": 1000,
+    "effect": "",
+    "entryShortcut": "008",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Scratchmen Apoo",
+    "power": 5000,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Supernovas",
+      "On-Air Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "OP14-009",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Red"
+    ],
+    "cost": 9,
+    "counter": 0,
+    "effect": "[Rush] <br/> [On Your Opponent's Attack] [Once Per Turn] You may trash 2 cards from your hand: Select your Leader and 1 Character. Swap the base power of the selected cards with each other during this battle.",
+    "entryShortcut": "009",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Trafalgar Law",
+    "power": 10000,
+    "rarity": "SR",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "The Seven Warlords of the Sea",
+      "Supernovas",
+      "Heart Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "OP14-010",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Red"
+    ],
+    "cost": 1,
+    "counter": 1000,
+    "effect": "[On K.O.] Look at 5 cards from the top of your deck; play up to 1 {Supernovas} type Character card with 2000 power or less other than [Basil Hawkins]. Then, place the rest at the bottom of your deck in any order.",
+    "entryShortcut": "010",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Basil Hawkins",
+    "power": 2000,
+    "rarity": "UC",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Supernovas",
+      "Hawkins Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Special",
+    "cardNumber": "OP14-011",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Red"
+    ],
+    "cost": 2,
+    "counter": 2000,
+    "effect": "[DON!! x2] This Character gains [Blocker]. <br/> (After your opponent declares an attack, you may rest this card to make it the new target of the attack.)",
+    "entryShortcut": "011",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Bartolomeo",
+    "power": 2000,
+    "rarity": "UC",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Dressrosa",
+      "Supernovas",
+      "Barto Club"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Strike",
+    "cardNumber": "OP14-012",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Red"
+    ],
+    "cost": 2,
+    "counter": 1000,
+    "effect": "[When Attacking] If this Character has 5000 power or more, give up to 2 rested DON!! cards to your Leader or 1 of your Characters.",
+    "entryShortcut": "012",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Bepo",
+    "power": 2000,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Minks",
+      "Heart Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Strike",
+    "cardNumber": "OP14-013",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Red"
+    ],
+    "cost": 1,
+    "counter": 1000,
+    "effect": "[On Play] Look at 5 cards from the top of your deck; reveal up to 1 {Supernovas} type card other than [Monkey.D.Luffy] and add it to your hand. Then, place the rest at the bottom of your deck in any order. <br/> [When Attacking] Give up to 1 of your opponent's Characters −1000 power during this turn.",
+    "entryShortcut": "013",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Monkey.D.Luffy",
+    "power": 0,
+    "rarity": "SR",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Supernovas",
+      "Straw Hat Crew"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Special",
+    "cardNumber": "OP14-014",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Red"
+    ],
+    "cost": 4,
+    "counter": 1000,
+    "effect": "[Blocker] <br/> [On Play] If your Leader has the {Supernovas} type, play up to 1 red Character card with 2000 power or less from your hand.",
+    "entryShortcut": "014",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Eustass\"Captain\"Kid",
+    "power": 5000,
+    "rarity": "R",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Supernovas",
+      "Kid Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "OP14-015",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Red"
+    ],
+    "cost": 7,
+    "counter": 0,
+    "effect": "[Rush] (This card can attack on the turn in which it is played.) <br/> [When Attacking] Give up to 1 of your opponent's Characters −1000 power during this turn.",
+    "entryShortcut": "015",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Roronoa Zoro",
+    "power": 8000,
+    "rarity": "R",
+    "setMembership": [
+      "OP14",
+      "ST31"
+    ],
+    "traits": [
+      "Supernovas",
+      "Straw Hat Crew"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "OP14-016",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Red"
+    ],
+    "cost": 5,
+    "counter": 0,
+    "effect": "[Opponent's Turn] [Once Per Turn] If your {Supernovas} type Character would be removed from the field by your opponent's effect, you may give your Leader −2000 power during this turn instead. <br/> [DON!! x1] [When Attacking] Give up to 1 of your opponent's Characters −2000 power during this turn.",
+    "entryShortcut": "016",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "X.Drake",
+    "power": 7000,
+    "rarity": "R",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Supernovas",
+      "Navy",
+      "Drake Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "",
+    "cardNumber": "OP14-017",
+    "cardType": "EVENT",
+    "colors": [
+      "Red"
+    ],
+    "cost": 3,
+    "counter": 0,
+    "effect": "[Main] Select 2 of your opponent's Characters with 9000 base power or less. Swap the base power of the selected Characters with each other during this turn.",
+    "entryShortcut": "017",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Chambres",
+    "power": 0,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "The Seven Warlords of the Sea",
+      "Supernovas",
+      "Heart Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "",
+    "cardNumber": "OP14-018",
+    "cardType": "EVENT",
+    "colors": [
+      "Red"
+    ],
+    "cost": 1,
+    "counter": 0,
+    "effect": "[Counter] If there is a Character with 8000 power or more, up to 1 of your Leader or Character cards gains +4000 power during this battle.",
+    "entryShortcut": "018",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Time for the Counterattack",
+    "power": 0,
+    "rarity": "R",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "The Seven Warlords of the Sea",
+      "Supernovas",
+      "Heart Pirates"
+    ],
+    "trigger": "[Trigger] Play up to 1 red Character card with 2000 power or less from your hand.",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "",
+    "cardNumber": "OP14-019",
+    "cardType": "EVENT",
+    "colors": [
+      "Red"
+    ],
+    "cost": 1,
+    "counter": 0,
+    "effect": "[Main] Look at 4 cards from the top of your deck; reveal up to 1 {Supernovas} or {Straw Hat Crew} type Character card and add it to your hand. Then, place the rest at the bottom of your deck in any order.",
+    "entryShortcut": "019",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "I Have a Plan to Take Down One of the Four Emperors!!",
+    "power": 0,
+    "rarity": "UC",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "The Seven Warlords of the Sea",
+      "Supernovas",
+      "Heart Pirates"
+    ],
+    "trigger": "[Trigger] Draw 1 card.",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "OP14-020",
+    "cardType": "LEADER",
+    "colors": [
+      "Green"
+    ],
+    "cost": null,
+    "counter": 0,
+    "effect": "If your opponent's Leader has the <Slash> attribute, this Leader gains +1000 power. <br/> [Activate: Main] [Once Per Turn] You may rest 1 of your cards: If there is a Character with a cost of 5 or more, set up to 3 of your DON!! cards as active. Then, you cannot play Character cards during this turn.",
+    "entryShortcut": "020",
+    "isSpecialReprint": false,
+    "life": 5,
+    "name": "Dracule Mihawk",
+    "power": 5000,
+    "rarity": "L",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "The Seven Warlords of the Sea"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "OP14-021",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Green"
+    ],
+    "cost": 6,
+    "counter": 1000,
+    "effect": "[Your Turn] When this Character becomes rested, you may add 1 card from the top of your Life cards to your hand. If you do, up to 1 of your opponent's rested Characters or Stages will not become active in your opponent's next Refresh Phase.",
+    "entryShortcut": "021",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Issho",
+    "power": 7000,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Dressrosa",
+      "Navy"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Ranged",
+    "cardNumber": "OP14-022",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Green"
+    ],
+    "cost": 4,
+    "counter": 1000,
+    "effect": "[End of Your Turn] If your Leader has the {FILM} or {Straw Hat Crew} type, set up to 2 of your DON!! cards as active.",
+    "entryShortcut": "022",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Usopp",
+    "power": 5000,
+    "rarity": "UC",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "FILM",
+      "Straw Hat Crew"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "OP14-023",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Green"
+    ],
+    "cost": 1,
+    "counter": 2000,
+    "effect": "[End of Your Turn] Set this Character as active.",
+    "entryShortcut": "023",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Kikunojo",
+    "power": 2000,
+    "rarity": "R",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Land of Wano",
+      "The Akazaya Nine"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "OP14-024",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Green"
+    ],
+    "cost": 4,
+    "counter": 1000,
+    "effect": "[On Play] Set up to 3 of your DON!! cards as active. Then, you cannot play Character cards during this turn. <br/> [On K.O.] Rest up to 1 of your opponent's cards.",
+    "entryShortcut": "024",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Kin'emon",
+    "power": 5000,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Land of Wano",
+      "The Akazaya Nine"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "OP14-025",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Green"
+    ],
+    "cost": 7,
+    "counter": 0,
+    "effect": "[On Play] If your Leader is [Kuro], play up to 1 {East Blue} type Character card with a cost of 6 or less from your hand.",
+    "entryShortcut": "025",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Kuro",
+    "power": 8000,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "East Blue",
+      "Black Cat Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "OP14-026",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Green"
+    ],
+    "cost": 4,
+    "counter": 2000,
+    "effect": "[Opponent's Turn] If this Character is rested, this Character gains +2000 power.",
+    "entryShortcut": "026",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Kouzuki Oden",
+    "power": 5000,
+    "rarity": "UC",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Land of Wano",
+      "Kouzuki Clan"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "OP14-027",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Green"
+    ],
+    "cost": 7,
+    "counter": 0,
+    "effect": "[Your Turn] When this Character becomes rested, rest up to 1 of your opponent's Characters with 7000 base power or less. <br/> [Opponent's Turn] If this Character is rested, give all of your opponent's Characters −1000 power.",
+    "entryShortcut": "027",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Shanks",
+    "power": 9000,
+    "rarity": "R",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "East Blue",
+      "The Four Emperors",
+      "Red-Haired Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "OP14-028",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Green"
+    ],
+    "cost": 2,
+    "counter": 1000,
+    "effect": "[Your Turn] When this Character becomes rested, K.O. up to 1 of your opponent's rested Characters with a cost of 2 or less.",
+    "entryShortcut": "028",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Johnny",
+    "power": 2000,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "East Blue"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "OP14-029",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Green"
+    ],
+    "cost": 5,
+    "counter": 1000,
+    "effect": "[Opponent's Turn] If this Character would be removed from the field by your opponent's effect, you may rest 1 of your cards instead. <br/> [Activate: Main] [Once Per Turn] You may rest 2 of your cards: This Character gains +2000 power until the end of your opponent's next End Phase.",
+    "entryShortcut": "029",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Tashigi",
+    "power": 6000,
+    "rarity": "R",
+    "setMembership": [
+      "OP14",
+      "OP16"
+    ],
+    "traits": [
+      "Navy"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "OP14-030",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Green"
+    ],
+    "cost": 6,
+    "counter": 2000,
+    "effect": "",
+    "entryShortcut": "030",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Chaka & Pell",
+    "power": 7000,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Alabasta"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Special",
+    "cardNumber": "OP14-031",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Green"
+    ],
+    "cost": 4,
+    "counter": 1000,
+    "effect": "[Blocker] <br/> [On Play] Rest up to 2 of your opponent's Characters with a cost of 8 or less. Then, set up to 5 of your DON!! cards as active at the end of this turn.",
+    "entryShortcut": "031",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Nami",
+    "power": 2000,
+    "rarity": "SR",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "FILM",
+      "Straw Hat Crew"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "OP14-032",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Green"
+    ],
+    "cost": 3,
+    "counter": 2000,
+    "effect": "[Your Turn] When this Character becomes rested, rest up to 1 of your opponent's Characters with a cost of 4 or less.",
+    "entryShortcut": "032",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Humandrill",
+    "power": 4000,
+    "rarity": "UC",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Animal",
+      "Muggy Kingdom"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Special",
+    "cardNumber": "OP14-033",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Green"
+    ],
+    "cost": 5,
+    "counter": 1000,
+    "effect": "[On Play] Up to 2 of your opponent's Characters with a cost of 5 or less cannot be rested until the end of your opponent's next End Phase. <br/> [On K.O.] You may rest 1 of your cards: Play up to 1 green Character card with a cost of 5 or less from your hand.",
+    "entryShortcut": "033",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Perona",
+    "power": 6000,
+    "rarity": "SR",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Muggy Kingdom",
+      "Thriller Bark Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Strike",
+    "cardNumber": "OP14-034",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Green"
+    ],
+    "cost": 3,
+    "counter": 1000,
+    "effect": "[Your Turn] All of your green {Straw Hat Crew} type Characters with a base cost of 4 or more gain +1000 power. <br/> [Once Per Turn] If your {Straw Hat Crew} type Character would be K.O.'d by your opponent's effect, you may rest 1 of your Characters instead.",
+    "entryShortcut": "034",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Monkey.D.Luffy",
+    "power": 3000,
+    "rarity": "R",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "FILM",
+      "Supernovas",
+      "Straw Hat Crew"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "OP14-035",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Green"
+    ],
+    "cost": 2,
+    "counter": 1000,
+    "effect": "[Your Turn] When this Character becomes rested, up to 1 of your opponent's rested Characters with a cost of 4 or less will not become active in your opponent's next Refresh Phase.",
+    "entryShortcut": "035",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Yosaku",
+    "power": 2000,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "East Blue"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "",
+    "cardNumber": "OP14-036",
+    "cardType": "EVENT",
+    "colors": [
+      "Green"
+    ],
+    "cost": 1,
+    "counter": 0,
+    "effect": "[Counter] You may rest 1 of your cards: Up to 1 of your Leader or Character cards gains +4000 power during this battle.",
+    "entryShortcut": "036",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Strive to Surpass me, Roronoa Zoro!!!",
+    "power": 0,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "East Blue",
+      "The Seven Warlords of the Sea"
+    ],
+    "trigger": "[Trigger] You may rest 1 of your cards: Rest up to 1 of your opponent's Characters with 7000 base power or less.",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "",
+    "cardNumber": "OP14-037",
+    "cardType": "EVENT",
+    "colors": [
+      "Green"
+    ],
+    "cost": 1,
+    "counter": 0,
+    "effect": "[Main] You may rest 3 of your cards: K.O. up to 1 of your opponent's rested Characters with 7000 base power or less. <br/> [Counter] Your Leader gains +3000 power during this battle.",
+    "entryShortcut": "037",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "For Fun",
+    "power": 0,
+    "rarity": "R",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "East Blue",
+      "The Seven Warlords of the Sea"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "",
+    "cardNumber": "OP14-038",
+    "cardType": "EVENT",
+    "colors": [
+      "Green"
+    ],
+    "cost": 1,
+    "counter": 0,
+    "effect": "[Main] You may rest 2 of your cards: Draw 1 card and rest up to 1 of your opponent's Characters with 7000 base power or less. <br/> [Counter] Your Leader gains +3000 power during this battle.",
+    "entryShortcut": "038",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "I Never Bother to Remember the Faces of Trash",
+    "power": 0,
+    "rarity": "UC",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "The Seven Warlords of the Sea"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "",
+    "cardNumber": "OP14-039",
+    "cardType": "STAGE",
+    "colors": [
+      "Green"
+    ],
+    "cost": 1,
+    "counter": 0,
+    "effect": "[On Play] If your Leader is [Dracule Mihawk], draw 1 card. <br/> [End of Your Turn] If your Leader is [Dracule Mihawk], set up to 1 of your DON!! cards as active.",
+    "entryShortcut": "039",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Coffin Boat",
+    "power": 0,
+    "rarity": "UC",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "East Blue",
+      "The Seven Warlords of the Sea"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Strike",
+    "cardNumber": "OP14-040",
+    "cardType": "LEADER",
+    "colors": [
+      "Blue"
+    ],
+    "cost": null,
+    "counter": 0,
+    "effect": "[Activate: Main] You may trash 1 card from your hand: Give up to 2 rested DON!! cards to 1 of your {Fish-Man} or {Merfolk} type Leader or Character cards.",
+    "entryShortcut": "040",
+    "isSpecialReprint": false,
+    "life": 5,
+    "name": "Jinbe",
+    "power": 5000,
+    "rarity": "L",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Fish-Man",
+      "The Seven Warlords of the Sea",
+      "The Sun Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Special",
+    "cardNumber": "OP14-041",
+    "cardType": "LEADER",
+    "colors": [
+      "Blue",
+      "Yellow"
+    ],
+    "cost": null,
+    "counter": 0,
+    "effect": "[Opponent's Turn] When you play a Character, draw 1 card. <br/> [DON!! x1] [Once Per Turn] When one of your {Amazon Lily} or {Kuja Pirates} type Characters with 5000 base power or more is K.O.'d, add up to 1 card from the top of your opponent's Life cards to the owner's hand.",
+    "entryShortcut": "041",
+    "isSpecialReprint": false,
+    "life": 4,
+    "name": "Boa Hancock",
+    "power": 5000,
+    "rarity": "L",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "The Seven Warlords of the Sea",
+      "Kuja Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "OP14-042",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Blue"
+    ],
+    "cost": 1,
+    "counter": 0,
+    "effect": "[On Play] If your Leader has the {Fish-Man} type, look at 4 cards from the top of your deck; reveal up to 1 card with a cost of 2 or more and add it to your hand. Then, place the rest at the bottom of your deck in any order.",
+    "entryShortcut": "042",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Arlong",
+    "power": 3000,
+    "rarity": "R",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Fish-Man",
+      "The Sun Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "OP14-043",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Blue"
+    ],
+    "cost": 4,
+    "counter": 1000,
+    "effect": "[On Play] Play up to 1 {Fish-Man} or {Merfolk} type Character card with a cost of 3 or less from your hand. <br/> [On K.O.] Draw 1 card.",
+    "entryShortcut": "043",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Aladine",
+    "power": 5000,
+    "rarity": "R",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Merfolk",
+      "The Sun Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Special",
+    "cardNumber": "OP14-044",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Blue"
+    ],
+    "cost": 8,
+    "counter": 1000,
+    "effect": "[Blocker] <br/> [On Play] Reveal 1 card from the top of your deck. If that card's type includes \"Whitebeard Pirates\", draw 2 cards and trash 1 card from your hand.",
+    "entryShortcut": "044",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Edward.Newgate",
+    "power": 8000,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "The Four Emperors",
+      "Whitebeard Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Strike",
+    "cardNumber": "OP14-045",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Blue"
+    ],
+    "cost": 3,
+    "counter": 1000,
+    "effect": "When a card is trashed from your hand by an effect, this Character gains [Rush] during this turn. <br/> (This card can attack on the turn in which it is played.) <br/> [On K.O.] Draw 1 card.",
+    "entryShortcut": "045",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Kuroobi",
+    "power": 3000,
+    "rarity": "UC",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Fish-Man",
+      "The Sun Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Wisdom",
+    "cardNumber": "OP14-046",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Blue"
+    ],
+    "cost": 2,
+    "counter": 2000,
+    "effect": "[Activate: Main] You may trash this Character: Up to 1 of your {Fish-Man} or {Merfolk} type Leader or Character cards gains +2000 power during this turn.",
+    "entryShortcut": "046",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Koala",
+    "power": 0,
+    "rarity": "UC",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Foolshout Island"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Wisdom",
+    "cardNumber": "OP14-047",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Blue"
+    ],
+    "cost": 4,
+    "counter": 1000,
+    "effect": "[Blocker] <br/> [On Play] Draw 1 card and play up to 1 {Fish-Man} or {Merfolk} type Character card with a cost of 3 or less from your hand.",
+    "entryShortcut": "047",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Shirahoshi",
+    "power": 0,
+    "rarity": "R",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Merfolk",
+      "Fish-Man Island"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "OP14-048",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Blue"
+    ],
+    "cost": 8,
+    "counter": 0,
+    "effect": "[On Play] Return up to 1 of your opponent's Characters to the owner's hand. Then, trash all cards from your hand.",
+    "entryShortcut": "048",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Shiryu",
+    "power": 10000,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Impel Down"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Strike",
+    "cardNumber": "OP14-049",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Blue"
+    ],
+    "cost": 8,
+    "counter": 0,
+    "effect": "When a card is trashed from your hand by an effect, this Character gains [Rush] during this turn. <br/> [On Play] You may rest 2 of your DON!! cards: Draw 2 cards and return up to 1 Character with a cost of 7 or less to the owner's hand.",
+    "entryShortcut": "049",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Jinbe",
+    "power": 10000,
+    "rarity": "SR",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Fish-Man",
+      "The Seven Warlords of the Sea",
+      "The Sun Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Ranged",
+    "cardNumber": "OP14-050",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Blue"
+    ],
+    "cost": 1,
+    "counter": 0,
+    "effect": "[On Play] If your Leader has the {Fish-Man} type, draw 1 card.",
+    "entryShortcut": "050",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Chew",
+    "power": 3000,
+    "rarity": "UC",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Fish-Man",
+      "The Sun Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "OP14-051",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Blue"
+    ],
+    "cost": 1,
+    "counter": 0,
+    "effect": "[DON!! x2] [On K.O.] Draw 1 card.",
+    "entryShortcut": "051",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Hatchan",
+    "power": 3000,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Fish-Man",
+      "The Sun Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "OP14-052",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Blue"
+    ],
+    "cost": 5,
+    "counter": 1000,
+    "effect": "[Blocker] <br/> [On Play] You may trash 3 cards from your hand: Play up to 1 {Impel Down} type Character card with a cost of 6 or less from your hand.",
+    "entryShortcut": "052",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Hannyabal",
+    "power": 6000,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Impel Down"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "OP14-053",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Blue"
+    ],
+    "cost": 3,
+    "counter": 1000,
+    "effect": "[Blocker] <br/> [Opponent's Turn] If you have 7 or less cards in your hand, this Character's base power becomes the same as your Leader's base power.",
+    "entryShortcut": "053",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Vista",
+    "power": 4000,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Whitebeard Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Strike",
+    "cardNumber": "OP14-054",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Blue"
+    ],
+    "cost": 6,
+    "counter": 1000,
+    "effect": "[On Play] If your Leader has the {Fish-Man} type, draw 3 cards. <br/> [End of Your Turn] Trash cards from your hand until you have 5 cards in your hand.",
+    "entryShortcut": "054",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Fisher Tiger",
+    "power": 7000,
+    "rarity": "UC",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Fish-Man",
+      "The Sun Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Strike",
+    "cardNumber": "OP14-055",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Blue"
+    ],
+    "cost": 5,
+    "counter": 2000,
+    "effect": "",
+    "entryShortcut": "055",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "The Macro Gang",
+    "power": 6000,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Fish-Man",
+      "The Sun Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Strike",
+    "cardNumber": "OP14-056",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Blue"
+    ],
+    "cost": 3,
+    "counter": 2000,
+    "effect": "This Character cannot attack. <br/> When a card is trashed from your hand by an effect, this Character's effect is negated during this turn.",
+    "entryShortcut": "056",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Wadatsumi",
+    "power": 5000,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Fish-Man",
+      "The Sun Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "",
+    "cardNumber": "OP14-057",
+    "cardType": "EVENT",
+    "colors": [
+      "Blue"
+    ],
+    "cost": 2,
+    "counter": 0,
+    "effect": "[Main] All of your {Fish-Man} or {Merfolk} type Leader and Character cards gain +1000 power during this turn.",
+    "entryShortcut": "057",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Don't Worry!! I'm Here!!",
+    "power": 0,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Fish-Man",
+      "The Seven Warlords of the Sea",
+      "The Sun Pirates"
+    ],
+    "trigger": "[Trigger] Draw 2 cards.",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "",
+    "cardNumber": "OP14-058",
+    "cardType": "EVENT",
+    "colors": [
+      "Blue"
+    ],
+    "cost": 2,
+    "counter": 0,
+    "effect": "[Main] You may rest 3 of your DON!! cards: Play up to 1 {Fish-Man} type Character card with a cost of 3 or less from your hand. Then, return up to 1 Character with 6000 base power to the owner's hand. <br/> [Counter] Draw 1 card and your Leader gains +3000 power during this battle.",
+    "entryShortcut": "058",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Ocean Current Shoulder Throw",
+    "power": 0,
+    "rarity": "R",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Fish-Man",
+      "The Seven Warlords of the Sea",
+      "The Sun Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "",
+    "cardNumber": "OP14-059",
+    "cardType": "EVENT",
+    "colors": [
+      "Blue"
+    ],
+    "cost": 1,
+    "counter": 0,
+    "effect": "[Main] If your Leader is [Jinbe] and you have 2 or less cards in your hand, draw 2 cards.",
+    "entryShortcut": "059",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Please Take Me with You!! I Can Be of Great Help to You!!",
+    "power": 0,
+    "rarity": "UC",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Fish-Man",
+      "The Seven Warlords of the Sea",
+      "The Sun Pirates"
+    ],
+    "trigger": "[Trigger] Return up to 1 Character with a cost of 4 or less to the owner's hand.",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Special",
+    "cardNumber": "OP14-060",
+    "cardType": "LEADER",
+    "colors": [
+      "Purple"
+    ],
+    "cost": null,
+    "counter": 0,
+    "effect": "[On Your Opponent's Attack] [Once Per Turn] DON!! −1: Select your Leader or 1 of your {Donquixote Pirates} type Characters. Change the attack target to the selected card.",
+    "entryShortcut": "060",
+    "isSpecialReprint": false,
+    "life": 5,
+    "name": "Donquixote Doflamingo",
+    "power": 5000,
+    "rarity": "L",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "The Seven Warlords of the Sea",
+      "Donquixote Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Strike",
+    "cardNumber": "OP14-061",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Purple"
+    ],
+    "cost": 5,
+    "counter": 0,
+    "effect": "[Once Per Turn] If your {Donquixote Pirates} type Character would be removed from the field by your opponent's effect, you may return 1 DON!! card from your field to your DON!! deck instead. <br/> [When Attacking] DON!! −1: Give up to 1 of your opponent's Characters −2000 power during this turn.",
+    "entryShortcut": "061",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Vergo",
+    "power": 7000,
+    "rarity": "R",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Punk Hazard",
+      "Navy",
+      "Donquixote Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Special",
+    "cardNumber": "OP14-062",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Purple"
+    ],
+    "cost": 3,
+    "counter": 1000,
+    "effect": "[On K.O.] DON!! −1 (You may return the specified number of DON!! cards from your field to your DON!! deck.): K.O. or rest up to 1 of your opponent's Characters with a base power of 6000 or less.",
+    "entryShortcut": "062",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Gladius",
+    "power": 4000,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Donquixote Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Special",
+    "cardNumber": "OP14-063",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Purple"
+    ],
+    "cost": 4,
+    "counter": 1000,
+    "effect": "[On Play] Add up to 1 DON!! card from your DON!! deck and set it as active. <br/> [On K.O.] If your opponent has 6 or more DON!! cards on their field, play up to 1 {Donquixote Pirates} type Character card with a cost of 5 or less from your hand.",
+    "entryShortcut": "063",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Sugar",
+    "power": 1000,
+    "rarity": "R",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Donquixote Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Special",
+    "cardNumber": "OP14-064",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Purple"
+    ],
+    "cost": 3,
+    "counter": 1000,
+    "effect": "[On K.O.] Add up to 1 DON!! card from your DON!! deck and rest it. Then, K.O. up to 1 of your opponent's Characters with a base power of 0.",
+    "entryShortcut": "064",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Giolla",
+    "power": 1000,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Donquixote Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Special",
+    "cardNumber": "OP14-065",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Purple"
+    ],
+    "cost": 4,
+    "counter": 1000,
+    "effect": "[On K.O.] Your opponent returns 1 DON!! card from their field to their DON!! deck.",
+    "entryShortcut": "065",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Senor Pink",
+    "power": 5000,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Donquixote Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "OP14-066",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Purple"
+    ],
+    "cost": 6,
+    "counter": 1000,
+    "effect": "",
+    "entryShortcut": "066",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Diamante",
+    "power": 8000,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Donquixote Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Strike",
+    "cardNumber": "OP14-067",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Purple"
+    ],
+    "cost": 1,
+    "counter": 1000,
+    "effect": "[On K.O.] Add up to 1 DON!! card from your DON!! deck and rest it, look at 5 cards from the top of your deck; reveal up to 1 {Donquixote Pirates} type card and add it to your hand. Then, place the rest at the bottom of your deck in any order.",
+    "entryShortcut": "067",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Dellinger",
+    "power": 2000,
+    "rarity": "UC",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Donquixote Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Special",
+    "cardNumber": "OP14-068",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Purple"
+    ],
+    "cost": 5,
+    "counter": 2000,
+    "effect": "[Opponent's Turn] [Once Per Turn] When a DON!! card on your field is returned to your DON!! deck, if your Leader has the {Donquixote Pirates} type, add up to 1 DON!! card from your DON!! deck and rest it.",
+    "entryShortcut": "068",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Trebol",
+    "power": 5000,
+    "rarity": "UC",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Donquixote Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Special",
+    "cardNumber": "OP14-069",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Purple"
+    ],
+    "cost": 10,
+    "counter": 0,
+    "effect": "[On Play] DON!! −3: Choose one: <br/> • If your Leader has the {Donquixote Pirates} type, K.O. up to 1 of your opponent's Characters with a cost of 8 or less. <br/> • Up to 3 of your opponent's Characters with a cost of 7 or less cannot be rested until the end of your opponent's next End Phase.",
+    "entryShortcut": "069",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Donquixote Doflamingo",
+    "power": 10000,
+    "rarity": "SR",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "The Seven Warlords of the Sea",
+      "Donquixote Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Strike",
+    "cardNumber": "OP14-070",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Purple"
+    ],
+    "cost": 2,
+    "counter": 1000,
+    "effect": "When this Character becomes rested by your opponent's Character's effect, you may return 1 DON!! card from your field to your DON!! deck. If you do, set this Character as active. <br/> [Blocker]",
+    "entryShortcut": "070",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Buffalo",
+    "power": 1000,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Donquixote Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Strike",
+    "cardNumber": "OP14-071",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Purple"
+    ],
+    "cost": 5,
+    "counter": 1000,
+    "effect": "[End of Your Turn] If your Leader has the {Donquixote Pirates} type, add up to 1 DON!! card from your DON!! deck and set it as active.",
+    "entryShortcut": "071",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Pica",
+    "power": 6000,
+    "rarity": "UC",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Donquixote Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Special",
+    "cardNumber": "OP14-072",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Purple"
+    ],
+    "cost": 4,
+    "counter": 1000,
+    "effect": "[On Play] Add up to 1 DON!! card from your DON!! deck and set it as active. <br/> [On K.O.] DON!! −1: Add up to 1 card from the top of your deck to the top of your Life cards. <br/>",
+    "entryShortcut": "072",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Baby 5",
+    "power": 1000,
+    "rarity": "UC",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Donquixote Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Strike",
+    "cardNumber": "OP14-073",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Purple"
+    ],
+    "cost": 6,
+    "counter": 2000,
+    "effect": "",
+    "entryShortcut": "073",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Machvise",
+    "power": 7000,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Donquixote Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Special",
+    "cardNumber": "OP14-074",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Purple"
+    ],
+    "cost": 5,
+    "counter": 1000,
+    "effect": "[On Play] If your Leader has the {Donquixote Pirates} type, add up to 1 DON!! card from your DON!! deck and set it as active. <br/> [On K.O.] Draw 2 cards and trash 1 card from your hand. Then, add up to 2 DON!! cards from your DON!! deck and rest them.",
+    "entryShortcut": "074",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Monet",
+    "power": 6000,
+    "rarity": "R",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Punk Hazard",
+      "Donquixote Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Strike",
+    "cardNumber": "OP14-075",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Purple"
+    ],
+    "cost": 3,
+    "counter": 1000,
+    "effect": "[On K.O.] Add up to 1 DON!! card from your DON!! deck and rest it. Then, give up to 1 of your opponent's Characters −2000 power during this turn.",
+    "entryShortcut": "075",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Lao.G",
+    "power": 4000,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Donquixote Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "",
+    "cardNumber": "OP14-076",
+    "cardType": "EVENT",
+    "colors": [
+      "Purple"
+    ],
+    "cost": 1,
+    "counter": 0,
+    "effect": "[Main] You may rest 2 of your DON!! cards: If your Leader has the {Donquixote Pirates} type, add up to 1 DON!! card from your DON!! deck and rest it. <br/> [Counter] Your Leader gains +3000 power during this battle.",
+    "entryShortcut": "076",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Ever White",
+    "power": 0,
+    "rarity": "R",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "The Seven Warlords of the Sea",
+      "Donquixote Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "",
+    "cardNumber": "OP14-077",
+    "cardType": "EVENT",
+    "colors": [
+      "Purple"
+    ],
+    "cost": 2,
+    "counter": 0,
+    "effect": "[Counter] Up to 1 of your Leader or Character cards gains +4000 power during this battle. Then, if your opponent has a Character with 6000 power or more, add up to 1 DON!! card from your DON!! deck and rest it.",
+    "entryShortcut": "077",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Penta-Chromatic String",
+    "power": 0,
+    "rarity": "UC",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "The Seven Warlords of the Sea",
+      "Donquixote Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "",
+    "cardNumber": "OP14-078",
+    "cardType": "EVENT",
+    "colors": [
+      "Purple"
+    ],
+    "cost": 2,
+    "counter": 0,
+    "effect": "[Counter] DON!! −1: If your Leader has the {Donquixote Pirates} type, up to 1 of your Leader or Character cards gains +2000 power during this battle. Then, that card gains an additional +2000 power during this turn.",
+    "entryShortcut": "078",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Bullet String",
+    "power": 0,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "The Seven Warlords of the Sea",
+      "Donquixote Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Special",
+    "cardNumber": "OP14-079",
+    "cardType": "LEADER",
+    "colors": [
+      "Black"
+    ],
+    "cost": null,
+    "counter": 0,
+    "effect": "All of your opponent's Characters cannot be removed from the field by your effects. <br/> [Activate: Main] [Once Per Turn] You may K.O. 1 of your Characters with a type including \"Baroque Works\": Give up to 1 of your opponent's Characters −10 cost during this turn. Then, you may trash 2 cards from the top of your deck.",
+    "entryShortcut": "079",
+    "isSpecialReprint": false,
+    "life": 5,
+    "name": "Crocodile",
+    "power": 5000,
+    "rarity": "L",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "The Seven Warlords of the Sea",
+      "Baroque Works"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Special",
+    "cardNumber": "OP14-080",
+    "cardType": "LEADER",
+    "colors": [
+      "Black",
+      "Yellow"
+    ],
+    "cost": null,
+    "counter": 0,
+    "effect": "[Activate: Main] [Once Per Turn] You may K.O. 1 of your {Thriller Bark Pirates} type Characters: Your Leader and all of your Characters gain +1000 power during this turn. <br/> [When Attacking] You may trash 3 cards from your hand: Add up to 1 card from the top of your deck to the top of your Life cards.",
+    "entryShortcut": "080",
+    "isSpecialReprint": false,
+    "life": 4,
+    "name": "Gecko Moria",
+    "power": 5000,
+    "rarity": "L",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "The Seven Warlords of the Sea",
+      "Thriller Bark Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Special",
+    "cardNumber": "OP14-081",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Black"
+    ],
+    "cost": 1,
+    "counter": 1000,
+    "effect": "[On Play] Trash 3 cards from the top of your deck. <br/> [On K.O.] K.O. up to 1 of your opponent's Characters with a base cost of 1.",
+    "entryShortcut": "081",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Spider Mice",
+    "power": 1000,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Thriller Bark Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "OP14-082",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Black"
+    ],
+    "cost": 2,
+    "counter": 1000,
+    "effect": "[On K.O.] All of your {Thriller Bark Pirates} type Characters gain +4 cost until the end of your opponent's next End Phase.",
+    "entryShortcut": "082",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Oinkchuck",
+    "power": 3000,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Thriller Bark Pirates"
+    ],
+    "trigger": "[Trigger] Play up to 1 {Thriller Bark Pirates} type Character card with a cost of 2 or less from your trash rested.",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "OP14-083",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Black"
+    ],
+    "cost": 1,
+    "counter": 2000,
+    "effect": "[Activate: Main] You may trash this Character: Give up to 1 of your opponent's 0 cost Characters −3000 power during this turn.",
+    "entryShortcut": "083",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Ms. Wednesday",
+    "power": 1000,
+    "rarity": "UC",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Baroque Works"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Strike",
+    "cardNumber": "OP14-084",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Black"
+    ],
+    "cost": 7,
+    "counter": 0,
+    "effect": "[On Play] If your Leader's type includes \"Baroque Works\", play up to 1 Character card with a type including \"Baroque Works\" and a cost of 4 or less and up to 1 Character card with a type including \"Baroque Works\" and a cost of 1 from your trash.",
+    "entryShortcut": "084",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Ms. All Sunday",
+    "power": 8000,
+    "rarity": "SR",
+    "setMembership": [
+      "OP14",
+      "OP16"
+    ],
+    "traits": [
+      "Baroque Works"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Wisdom",
+    "cardNumber": "OP14-085",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Black"
+    ],
+    "cost": 1,
+    "counter": 2000,
+    "effect": "[On K.O.] Draw 2 cards and trash 2 cards from your hand.",
+    "entryShortcut": "085",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Miss.Goldenweek(Marianne)",
+    "power": 2000,
+    "rarity": "UC",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Baroque Works"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "OP14-086",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Black"
+    ],
+    "cost": 5,
+    "counter": 1000,
+    "effect": "If you have 7 or more cards in your trash, this Character gains +1000 power, and all of your Characters with a type including \"Baroque Works\" gain +2 cost. <br/>",
+    "entryShortcut": "086",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Miss Doublefinger(Zala)",
+    "power": 6000,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Baroque Works"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Strike",
+    "cardNumber": "OP14-087",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Black"
+    ],
+    "cost": 1,
+    "counter": 1000,
+    "effect": "[On Play] If your Leader's type includes \"Baroque Works\", look at 4 cards from the top of your deck; reveal up to 1 card with a type including \"Baroque Works\" other than [Miss.Valentine(Mikita)] and add it to your hand. Then, trash the rest.",
+    "entryShortcut": "087",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Miss.Valentine(Mikita)",
+    "power": 2000,
+    "rarity": "R",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Baroque Works"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "OP14-088",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Black"
+    ],
+    "cost": 1,
+    "counter": 2000,
+    "effect": "[On K.O.] If your Leader's type includes \"Baroque Works\", draw 1 card and K.O. up to 1 of your opponent's Stages with a cost of 1.",
+    "entryShortcut": "088",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Miss.MerryChristmas(Drophy)",
+    "power": 2000,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Baroque Works"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "OP14-089",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Black"
+    ],
+    "cost": 3,
+    "counter": 0,
+    "effect": "[On K.O.] Draw 2 cards and trash 2 cards from your hand.",
+    "entryShortcut": "089",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Ryuma",
+    "power": 5000,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Land of Wano",
+      "Thriller Bark Pirates"
+    ],
+    "trigger": "[Trigger] Play up to 1 {Thriller Bark Pirates} type Character card with a cost of 4 or less from your trash rested.",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "OP14-090",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Black"
+    ],
+    "cost": 5,
+    "counter": 1000,
+    "effect": "If there is a Character with a cost of 0 or with a cost of 8 or more, this Character can attack Characters on the turn in which it is played. <br/> [On Play] Rest up to 1 of your opponent's Characters with a cost of 0.",
+    "entryShortcut": "090",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Mr.1(Daz.Bonez)",
+    "power": 6000,
+    "rarity": "R",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Baroque Works"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Strike",
+    "cardNumber": "OP14-091",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Black"
+    ],
+    "cost": 4,
+    "counter": 1000,
+    "effect": "[On K.O.] Play up to 1 Character card with a type including \"Baroque Works\" and a cost of 5 or less other than [Mr.2.Bon.Kurei(Bentham)] from your hand or trash.",
+    "entryShortcut": "091",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Mr.2.Bon.Kurei(Bentham)",
+    "power": 5000,
+    "rarity": "SR",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Baroque Works"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Special",
+    "cardNumber": "OP14-092",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Black"
+    ],
+    "cost": 4,
+    "counter": 0,
+    "effect": "[Opponent's Turn] [Once Per Turn] If this Character would be K.O.'d, you may place 3 cards from your trash at the bottom of your deck in any order instead.",
+    "entryShortcut": "092",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Mr.3(Galdino)",
+    "power": 6000,
+    "rarity": "R",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Baroque Works"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Strike",
+    "cardNumber": "OP14-093",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Black"
+    ],
+    "cost": 4,
+    "counter": 1000,
+    "effect": "[Blocker] <br/> [On K.O.] Add up to 1 Character card with a type including \"Baroque Works\" and a cost of 8 or less from your trash to your hand.",
+    "entryShortcut": "093",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Mr.4(Babe)",
+    "power": 5000,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Baroque Works"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Special",
+    "cardNumber": "OP14-094",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Black"
+    ],
+    "cost": 5,
+    "counter": 1000,
+    "effect": "[Blocker] (After your opponent declares an attack, you may rest this card to make it the new target of the attack.) <br/> [On Play] If there is a Character with a cost of 0 or with a cost of 8 or more, draw 2 cards and trash 1 card from your hand.",
+    "entryShortcut": "094",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Mr.5(Gem)",
+    "power": 6000,
+    "rarity": "UC",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Baroque Works"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Strike",
+    "cardNumber": "OP14-095",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Black"
+    ],
+    "cost": 5,
+    "counter": 2000,
+    "effect": "",
+    "entryShortcut": "095",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Mr.9",
+    "power": 6000,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Baroque Works"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "",
+    "cardNumber": "OP14-096",
+    "cardType": "EVENT",
+    "colors": [
+      "Black"
+    ],
+    "cost": 1,
+    "counter": 0,
+    "effect": "[Main] You may rest 2 of your DON!! cards: Negate the effect of up to 1 of your opponent's Characters with a cost of 5 or less during this turn. <br/> [Counter] If you have 10 or more cards in your trash, up to 1 of your Leader or Character cards gains +4000 power during this battle.",
+    "entryShortcut": "096",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Ground Death",
+    "power": 0,
+    "rarity": "R",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "The Seven Warlords of the Sea",
+      "Baroque Works"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "",
+    "cardNumber": "OP14-097",
+    "cardType": "EVENT",
+    "colors": [
+      "Black"
+    ],
+    "cost": 1,
+    "counter": 0,
+    "effect": "[Main] Look at 3 cards from the top of your deck; reveal up to 1 {Thriller Bark Pirates} type card other than [Hurry Up and Make Me the Pirate King!] and add it to your hand. Then, trash the rest.",
+    "entryShortcut": "097",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Hurry Up and Make Me the Pirate King!",
+    "power": 0,
+    "rarity": "UC",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "The Seven Warlords of the Sea",
+      "Thriller Bark Pirates"
+    ],
+    "trigger": "[Trigger] Activate this card's [Main] effect.",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "",
+    "cardNumber": "OP14-098",
+    "cardType": "EVENT",
+    "colors": [
+      "Black"
+    ],
+    "cost": 1,
+    "counter": 0,
+    "effect": "[Main] If there is a Character with a cost of 0 or with a cost of 8 or more, all of your Characters with a type including \"Baroque Works\" gain +3 cost until the end of your opponent's next End Phase. <br/> [Counter] Your Leader gains +3000 power during this battle.",
+    "entryShortcut": "098",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Crescent Cutlass",
+    "power": 0,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Impel Down",
+      "Former Baroque Works"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "",
+    "cardNumber": "OP14-099",
+    "cardType": "EVENT",
+    "colors": [
+      "Black"
+    ],
+    "cost": 1,
+    "counter": 0,
+    "effect": "[Main] Look at 3 cards from the top of your deck; reveal up to 1 card with a type including \"Baroque Works\" other than [Disappointed?] and add it to your hand. Then, trash the rest.",
+    "entryShortcut": "099",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Disappointed?",
+    "power": 0,
+    "rarity": "UC",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "The Seven Warlords of the Sea",
+      "Baroque Works"
+    ],
+    "trigger": "[Trigger] Activate this card's [Main] effect.",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Ranged",
+    "cardNumber": "OP14-100",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Yellow"
+    ],
+    "cost": 3,
+    "counter": 0,
+    "effect": "[On K.O.] Look at 3 cards from the top of your deck; reveal up to 1 {Thriller Bark Pirates} type card and add it to your hand. Then, place the rest at the bottom of your deck in any order.",
+    "entryShortcut": "100",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Absalom",
+    "power": 5000,
+    "rarity": "R",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Thriller Bark Pirates"
+    ],
+    "trigger": "[Trigger] Play up to 1 {Thriller Bark Pirates} type Character card with a cost of 4 or less from your trash rested.",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Strike",
+    "cardNumber": "OP14-101",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Yellow"
+    ],
+    "cost": 8,
+    "counter": 1000,
+    "effect": "",
+    "entryShortcut": "101",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Oars",
+    "power": 10000,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Giant",
+      "Thriller Bark Pirates"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Strike",
+    "cardNumber": "OP14-102",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Yellow"
+    ],
+    "cost": 1,
+    "counter": 2000,
+    "effect": "",
+    "entryShortcut": "102",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Kumacy",
+    "power": 2000,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Thriller Bark Pirates"
+    ],
+    "trigger": "[Trigger] Play up to 1 {Thriller Bark Pirates} type Character card with a cost of 4 or less from your trash rested.",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Wisdom",
+    "cardNumber": "OP14-103",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Yellow"
+    ],
+    "cost": 2,
+    "counter": 1000,
+    "effect": "[On Play] You may add 1 card from the top or bottom of your Life cards to your hand: Add up to 1 card from your hand to the top of your Life cards.",
+    "entryShortcut": "103",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Gloriosa (Grandma Nyon)",
+    "power": 0,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Amazon Lily"
+    ],
+    "trigger": "[Trigger] Play this card.",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Special",
+    "cardNumber": "OP14-104",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Yellow"
+    ],
+    "cost": 8,
+    "counter": 0,
+    "effect": "[On Play] Select up to 1 {Thriller Bark Pirates} type Character with a cost of 4 or less from your trash and play it or add it to the top of your Life cards face-up.",
+    "entryShortcut": "104",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Gecko Moria",
+    "power": 10000,
+    "rarity": "SR",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "The Seven Warlords of the Sea",
+      "Thriller Bark Pirates"
+    ],
+    "trigger": "[Trigger] Play up to 1 Character card with a cost of 4 or less from your trash.",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash/Special",
+    "cardNumber": "OP14-105",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Yellow"
+    ],
+    "cost": 6,
+    "counter": 2000,
+    "effect": "[Activate: Main] [Once Per Turn] You may reveal 3 {Amazon Lily} or {Kuja Pirates} type cards from your hand: Give your Leader and all of your Characters up to 1 rested DON!! card each.",
+    "entryShortcut": "105",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Gorgon Sisters",
+    "power": 5000,
+    "rarity": "UC",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "The Seven Warlords of the Sea",
+      "Kuja Pirates"
+    ],
+    "trigger": "[Trigger] If your Leader has the {Kuja Pirates} type, play this card.",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Strike",
+    "cardNumber": "OP14-106",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Yellow"
+    ],
+    "cost": 3,
+    "counter": 1000,
+    "effect": "[Blocker] (After your opponent declares an attack, you may rest this card to make it the new target of the attack.)",
+    "entryShortcut": "106",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Salome",
+    "power": 1000,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Animal",
+      "Amazon Lily"
+    ],
+    "trigger": "[Trigger] Play this card.",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Wisdom",
+    "cardNumber": "OP14-107",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Yellow"
+    ],
+    "cost": 6,
+    "counter": 2000,
+    "effect": "[On Play] If your opponent has 3 or less Life cards, draw 2 cards and trash 2 cards from your hand.",
+    "entryShortcut": "107",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Shakuyaku",
+    "power": 5000,
+    "rarity": "UC",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Amazon Lily"
+    ],
+    "trigger": "[Trigger] If your Leader has the {Kuja Pirates} type, play this card.",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "OP14-108",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Yellow"
+    ],
+    "cost": 6,
+    "counter": 1000,
+    "effect": "[On Play] If your Leader is multicolored and your opponent has 3 or less Life cards, K.O. up to 1 of your opponent's Characters with 7000 base power or less.",
+    "entryShortcut": "108",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Silvers Rayleigh",
+    "power": 6000,
+    "rarity": "R",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Former Roger Pirates"
+    ],
+    "trigger": "[Trigger] Activate this card's [On Play] effect.",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "OP14-109",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Yellow"
+    ],
+    "cost": 3,
+    "counter": 1000,
+    "effect": "[Blocker]",
+    "entryShortcut": "109",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Victoria Cindry",
+    "power": 1000,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Thriller Bark Pirates"
+    ],
+    "trigger": "[Trigger] Play up to 1 {Thriller Bark Pirates} type Character card with a cost of 4 or less from your trash rested.",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Wisdom",
+    "cardNumber": "OP14-110",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Yellow"
+    ],
+    "cost": 4,
+    "counter": 1000,
+    "effect": "[On K.O.] Play up to 1 Character card with a cost of 4 or less and a [Trigger] other than [Dr. Hogback] from your trash.",
+    "entryShortcut": "110",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Dr. Hogback",
+    "power": 5000,
+    "rarity": "R",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Thriller Bark Pirates"
+    ],
+    "trigger": "[Trigger] Play up to 1 {Thriller Bark Pirates} type Character card with a cost of 4 or less from your trash rested.",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Special",
+    "cardNumber": "OP14-111",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Yellow"
+    ],
+    "cost": 4,
+    "counter": 1000,
+    "effect": "[On Play]/[On K.O.] Up to 1 of your opponent's Characters with a cost of 6 or less cannot attack until the end of your opponent's next End Phase.",
+    "entryShortcut": "111",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Perona",
+    "power": 5000,
+    "rarity": "R",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Thriller Bark Pirates"
+    ],
+    "trigger": "[Trigger] Play up to 1 {Thriller Bark Pirates} type Character card with a cost of 4 or less from your trash rested.",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Special",
+    "cardNumber": "OP14-112",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Yellow"
+    ],
+    "cost": 9,
+    "counter": 0,
+    "effect": "[On Play] If your Leader has the {The Seven Warlords of the Sea} type, add up to 1 card from the top of your deck to the top of your Life cards. Then, add up to 1 card from the top of your opponent's Life cards to the owner's hand.",
+    "entryShortcut": "112",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Boa Hancock",
+    "power": 10000,
+    "rarity": "SR",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "The Seven Warlords of the Sea",
+      "Kuja Pirates"
+    ],
+    "trigger": "[Trigger] Play up to 1 Character card with 6000 power or less and a [Trigger] from your hand.",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Wisdom",
+    "cardNumber": "OP14-113",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Yellow"
+    ],
+    "cost": 3,
+    "counter": 0,
+    "effect": "[On Play] Look at 5 cards from the top of your deck; reveal up to 1 {Amazon Lily} or {Kuja Pirates} type card and add it to your hand. Then, place the rest at the bottom of your deck in any order and trash 1 card from your hand.",
+    "entryShortcut": "113",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Marguerite",
+    "power": 5000,
+    "rarity": "UC",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Amazon Lily"
+    ],
+    "trigger": "[Trigger] If your Leader has the {Kuja Pirates} type, play this card.",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Ranged",
+    "cardNumber": "OP14-114",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Yellow"
+    ],
+    "cost": 4,
+    "counter": 1000,
+    "effect": "[Activate: Main] [Once Per Turn] Give up to 1 rested DON!! card to 1 of your {Kuja Pirates} type Leader or Character cards.",
+    "entryShortcut": "114",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Ran",
+    "power": 5000,
+    "rarity": "UC",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Kuja Pirates"
+    ],
+    "trigger": "[Trigger] If your Leader has the {Kuja Pirates} type, play this card.",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Ranged",
+    "cardNumber": "OP14-115",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Yellow"
+    ],
+    "cost": 5,
+    "counter": 1000,
+    "effect": "[Opponent's Turn] [On K.O.] Add up to 1 card from the top of your deck to the top of your Life cards. Then, you take 1 damage.",
+    "entryShortcut": "115",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Rindo",
+    "power": 5000,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Kuja Pirates"
+    ],
+    "trigger": "[Trigger] If your Leader has the {Kuja Pirates} type, play this card.",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "",
+    "cardNumber": "OP14-116",
+    "cardType": "EVENT",
+    "colors": [
+      "Yellow"
+    ],
+    "cost": 4,
+    "counter": 0,
+    "effect": "[Counter] Up to 1 of your Leader or Character cards gains +2000 power during this battle. Then, play up to 1 {Amazon Lily} or {Kuja Pirates} type Character card with a cost of 4 or less from your hand.",
+    "entryShortcut": "116",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Salamander",
+    "power": 0,
+    "rarity": "C",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Kuja Pirates"
+    ],
+    "trigger": "[Trigger] Draw 1 card.",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "",
+    "cardNumber": "OP14-117",
+    "cardType": "EVENT",
+    "colors": [
+      "Yellow"
+    ],
+    "cost": 1,
+    "counter": 0,
+    "effect": "[Counter] Up to 1 of your {Thriller Bark Pirates} type Leader or Character cards gains +3000 power during this battle.",
+    "entryShortcut": "117",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Brick Bat",
+    "power": 0,
+    "rarity": "UC",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "Thriller Bark Pirates"
+    ],
+    "trigger": "[Trigger] Play up to 1 {Thriller Bark Pirates} type Character card with a cost of 4 or less from your trash rested.",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "",
+    "cardNumber": "OP14-118",
+    "cardType": "EVENT",
+    "colors": [
+      "Yellow"
+    ],
+    "cost": 1,
+    "counter": 0,
+    "effect": "[Counter] If you have 2 or less Life cards, up to 1 of your opponent's active Characters cannot attack during this turn.",
+    "entryShortcut": "118",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "You'll Frighten Me... ♡",
+    "power": 0,
+    "rarity": "R",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "The Seven Warlords of the Sea",
+      "Kuja Pirates"
+    ],
+    "trigger": "[Trigger] Play up to 1 Character card with 6000 power or less and a [Trigger] from your hand.",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "OP14-119",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Green"
+    ],
+    "cost": 9,
+    "counter": 0,
+    "effect": "[Your Turn] When this Character becomes rested, up to 1 of your opponent's Characters with a cost of 9 or less cannot be rested until the end of your opponent's next End Phase. <br/> [On Your Opponent's Attack] [Once Per Turn] You may trash 1 card from your hand: Up to 1 of your Leader or Character cards gains +2000 power during this battle.",
+    "entryShortcut": "119",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Dracule Mihawk",
+    "power": 10000,
+    "rarity": "SEC",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "The Seven Warlords of the Sea"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Special",
+    "cardNumber": "OP14-120",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Black"
+    ],
+    "cost": 8,
+    "counter": 0,
+    "effect": "[On Play] Up to 1 of your opponent's Characters with a cost of 9 or less cannot attack until the end of your opponent's next End Phase. Then, if your opponent has a Character with a cost of 0 or with a cost of 8 or more, draw 1 card. <br/> [On K.O.] You may trash 1 card from your hand: Play this Character card from your trash.",
+    "entryShortcut": "120",
+    "isSpecialReprint": false,
+    "life": null,
+    "name": "Crocodile",
+    "power": 10000,
+    "rarity": "SEC",
+    "setMembership": [
+      "OP14"
+    ],
+    "traits": [
+      "The Seven Warlords of the Sea",
+      "Baroque Works"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  },
+  {
+    "attribute": "Slash",
+    "cardNumber": "PRB02-006",
+    "cardType": "CHARACTER",
+    "colors": [
+      "Green"
+    ],
+    "cost": 4,
+    "counter": 2000,
+    "effect": "[Opponent's Turn] If this Character would be rested by your opponent's Character's effect, you may rest 1 of your other Characters instead. <br/> [Blocker]",
+    "entryShortcut": null,
+    "isSpecialReprint": true,
+    "life": null,
+    "name": "Roronoa Zoro",
+    "power": 4000,
+    "rarity": "R",
+    "setMembership": [
+      "OP14",
+      "PRB02"
+    ],
+    "traits": [
+      "Supernovas",
+      "Straw Hat Crew"
+    ],
+    "trigger": "",
+    "variantsCollapsed": 1
+  }
+]

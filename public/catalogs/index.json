@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 1,
+  "sets": [
+    {
+      "label": "OP01",
+      "manifestPath": "/catalogs/op01/manifest.json",
+      "readiness": "needs-review",
+      "setId": "OP01",
+      "sourceSha256": "360eb0fa0e568b3e120721b6ef8b1a9ce8e4a87748a4a278c6a31ed73ec68d10"
+    },
+    {
+      "label": "OP02",
+      "manifestPath": "/catalogs/op02/manifest.json",
+      "readiness": "needs-review",
+      "setId": "OP02",
+      "sourceSha256": "360eb0fa0e568b3e120721b6ef8b1a9ce8e4a87748a4a278c6a31ed73ec68d10"
+    },
+    {
+      "label": "OP03",
+      "manifestPath": "/catalogs/op03/manifest.json",
+      "readiness": "needs-review",
+      "setId": "OP03",
+      "sourceSha256": "360eb0fa0e568b3e120721b6ef8b1a9ce8e4a87748a4a278c6a31ed73ec68d10"
+    },
+    {
+      "label": "OP04",
+      "manifestPath": "/catalogs/op04/manifest.json",
+      "readiness": "needs-review",
+      "setId": "OP04",
+      "sourceSha256": "360eb0fa0e568b3e120721b6ef8b1a9ce8e4a87748a4a278c6a31ed73ec68d10"
+    },
+    {
+      "label": "OP05",
+      "manifestPath": "/catalogs/op05/manifest.json",
+      "readiness": "needs-review",
+      "setId": "OP05",
+      "sourceSha256": "360eb0fa0e568b3e120721b6ef8b1a9ce8e4a87748a4a278c6a31ed73ec68d10"
+    },
+    {
+      "label": "OP06",
+      "manifestPath": "/catalogs/op06/manifest.json",
+      "readiness": "needs-review",
+      "setId": "OP06",
+      "sourceSha256": "360eb0fa0e568b3e120721b6ef8b1a9ce8e4a87748a4a278c6a31ed73ec68d10"
+    },
+    {
+      "label": "OP07",
+      "manifestPath": "/catalogs/op07/manifest.json",
+      "readiness": "needs-review",
+      "setId": "OP07",
+      "sourceSha256": "360eb0fa0e568b3e120721b6ef8b1a9ce8e4a87748a4a278c6a31ed73ec68d10"
+    },
+    {
+      "label": "OP08",
+      "manifestPath": "/catalogs/op08/manifest.json",
+      "readiness": "needs-review",
+      "setId": "OP08",
+      "sourceSha256": "360eb0fa0e568b3e120721b6ef8b1a9ce8e4a87748a4a278c6a31ed73ec68d10"
+    },
+    {
+      "label": "OP09",
+      "manifestPath": "/catalogs/op09/manifest.json",
+      "readiness": "needs-review",
+      "setId": "OP09",
+      "sourceSha256": "360eb0fa0e568b3e120721b6ef8b1a9ce8e4a87748a4a278c6a31ed73ec68d10"
+    },
+    {
+      "label": "OP10",
+      "manifestPath": "/catalogs/op10/manifest.json",
+      "readiness": "needs-review",
+      "setId": "OP10",
+      "sourceSha256": "360eb0fa0e568b3e120721b6ef8b1a9ce8e4a87748a4a278c6a31ed73ec68d10"
+    },
+    {
+      "label": "OP11",
+      "manifestPath": "/catalogs/op11/manifest.json",
+      "readiness": "needs-review",
+      "setId": "OP11",
+      "sourceSha256": "360eb0fa0e568b3e120721b6ef8b1a9ce8e4a87748a4a278c6a31ed73ec68d10"
+    },
+    {
+      "label": "OP12",
+      "manifestPath": "/catalogs/op12/manifest.json",
+      "readiness": "needs-review",
+      "setId": "OP12",
+      "sourceSha256": "360eb0fa0e568b3e120721b6ef8b1a9ce8e4a87748a4a278c6a31ed73ec68d10"
+    },
+    {
+      "label": "OP13",
+      "manifestPath": "/catalogs/op13/manifest.json",
+      "readiness": "needs-review",
+      "setId": "OP13",
+      "sourceSha256": "360eb0fa0e568b3e120721b6ef8b1a9ce8e4a87748a4a278c6a31ed73ec68d10"
+    },
+    {
+      "label": "OP14",
+      "manifestPath": "/catalogs/op14/manifest.json",
+      "readiness": "needs-review",
+      "setId": "OP14",
+      "sourceSha256": "360eb0fa0e568b3e120721b6ef8b1a9ce8e4a87748a4a278c6a31ed73ec68d10"
+    },
+    {
+      "label": "OP15",
+      "manifestPath": "/catalogs/op15/manifest.json",
+      "readiness": "needs-review",
+      "setId": "OP15",
+      "sourceSha256": "360eb0fa0e568b3e120721b6ef8b1a9ce8e4a87748a4a278c6a31ed73ec68d10"
+    },
+    {
+      "label": "OP16",
+      "manifestPath": "/catalogs/op16/manifest.json",
+      "readiness": "needs-review",
+      "setId": "OP16",
+      "sourceSha256": "360eb0fa0e568b3e120721b6ef8b1a9ce8e4a87748a4a278c6a31ed73ec68d10"
+    },
+    {
+      "label": "OP17",
+      "manifestPath": "/catalogs/op17/manifest.json",
+      "readiness": "needs-review",
+      "setId": "OP17",
+      "sourceSha256": "360eb0fa0e568b3e120721b6ef8b1a9ce8e4a87748a4a278c6a31ed73ec68d10"
+    }
+  ]
+}

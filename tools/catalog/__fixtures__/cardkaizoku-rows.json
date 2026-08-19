@@ -1,0 +1,132 @@
+[
+  {
+    "cardNumber": "OP16-001",
+    "cardName": "Example Leader",
+    "cost": "5",
+    "attribute": "Special",
+    "cardType": "LEADER",
+    "power": "5000",
+    "counter": "-",
+    "color": " Red / Green / - / ",
+    "feature": "Example Fleet / Test Region / - / ",
+    "text": "[Your Turn] Apply a synthetic leader effect.",
+    "rarity": "L",
+    "trigger": "-",
+    "cardSet": " op16 ",
+    "bucketImg": "https://must-not-leak.test/leader-bucket.png",
+    "cardImg": "https://must-not-leak.test/leader-card.png",
+    "jp_cardName": "must-not-leak",
+    "jp_text": "must-not-leak"
+  },
+  {
+    "cardNumber": "OP16-005",
+    "cardName": "Example Blocker",
+    "cost": "8",
+    "attribute": "Slash",
+    "cardType": "CHARACTER",
+    "power": "8000",
+    "counter": "1000",
+    "color": "Red",
+    "feature": "Example Crew",
+    "text": "[Blocker]",
+    "rarity": "UC",
+    "trigger": "",
+    "cardSet": "OP16"
+  },
+  {
+    "cardNumber": "OP16-005",
+    "cardName": "Example Blocker",
+    "cost": "8",
+    "attribute": "Slash",
+    "cardType": "CHARACTER",
+    "power": "8000",
+    "counter": "1000",
+    "color": "Red",
+    "feature": "Example Crew",
+    "text": "[Blocker]",
+    "rarity": "TR",
+    "trigger": "",
+    "cardSet": "OP16",
+    "products": [
+      {
+        "cardSet": " PRB02 ",
+        "price": 99,
+        "url": "https://must-not-leak.test/variant"
+      }
+    ]
+  },
+  {
+    "cardNumber": "OP16-090",
+    "cardName": "Example Event",
+    "cost": "2",
+    "attribute": "",
+    "cardType": "EVENT",
+    "power": "",
+    "counter": "-",
+    "color": "Red / -",
+    "feature": "Example Fleet / ",
+    "text": "[Main] Apply a synthetic event effect.",
+    "rarity": "",
+    "trigger": "[Trigger] Apply a synthetic trigger effect.",
+    "cardSet": "OP16"
+  },
+  {
+    "cardNumber": "OP16-100",
+    "cardName": "Example Stage",
+    "cost": "0",
+    "attribute": "",
+    "cardType": "STAGE",
+    "power": "-",
+    "counter": "",
+    "color": "Blue",
+    "feature": "Example Organization",
+    "text": "[Activate: Main] Apply a synthetic stage effect.",
+    "rarity": "C",
+    "trigger": "-",
+    "cardSet": "OP16"
+  },
+  {
+    "cardNumber": "OP10-045",
+    "cardName": "Example Reprint",
+    "cost": "5",
+    "attribute": "Slash",
+    "cardType": "CHARACTER",
+    "power": "6000",
+    "counter": "1000",
+    "color": "Green / Purple",
+    "feature": "Example Crew / Example Alliance",
+    "text": "[On Play] Apply a synthetic character effect.",
+    "rarity": "SR",
+    "trigger": "-",
+    "cardSet": "OP10",
+    "bucketImg": "must-not-leak.jpg",
+    "cardImg": "must-not-leak-card.jpg",
+    "jp_cardName": "must-not-leak",
+    "jp_rarity": "must-not-leak",
+    "products": [
+      {
+        "cardSet": "OP16",
+        "rarity": "SP",
+        "price": 999,
+        "url": "https://must-not-leak.test"
+      },
+      {
+        "cardSet": "not-a-set",
+        "price": 1000
+      }
+    ]
+  },
+  {},
+  {
+    "cardNumber": "OP15-001",
+    "cardSet": "OP15",
+    "cardName": 42,
+    "cost": null
+  },
+  {
+    "cardNumber": "not-a-card",
+    "cardSet": "OP16",
+    "cardName": 42,
+    "cost": null
+  }
+]

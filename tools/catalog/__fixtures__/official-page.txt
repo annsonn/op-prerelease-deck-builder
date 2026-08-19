@@ -1,0 +1,83 @@
+TEXT VIEW
+OP16-005 | UC | CHARACTER
+Example Blocker
+Life
+-
+Cost
+8
+Attribute
+Slash
+Power
+8000
+Counter
+1000
+Color
+Red
+Block
+5
+Type
+Example Crew
+Effect
+[On Play] Apply a synthetic power-reduction effect.
+[Blocker]
+Trigger
+-
+Card Set(s)
+-EXAMPLE TEST SET- [OP-16]
+[javascript:void(0);]
+CARD VIEW
+
+TEXT VIEW
+OP16-005 | UC | CHARACTER
+Example Blocker
+Life
+-
+Cost
+8
+Attribute
+Slash
+Power
+8000
+Counter
+1000
+Color
+Red
+Block
+5
+Type
+Example Crew
+Effect
+[On Play] Apply a synthetic power-reduction effect.
+[Blocker]
+Trigger
+-
+Card Set(s)
+-EXAMPLE TEST SET- [OP-16]
+CARD VIEW
+
+TEXT VIEW
+EB04-054 | SP CARD | CHARACTER
+Example Reprint
+Life
+-
+Cost
+7
+Attribute
+Strike
+Power
+7000
+Counter
+1000
+Color
+Yellow
+Block
+4
+Type
+Example Lab/Example Fleet
+Effect
+[On Play] Apply a synthetic life-card effect.
+Trigger
+-
+Card Set(s)
+-EXAMPLE TEST SET- [OP-16]
+CARD VIEW

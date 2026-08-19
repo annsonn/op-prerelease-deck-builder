@@ -1,0 +1,9 @@
+{
+  "language": "en",
+  "readiness": "needs-review",
+  "schemaVersion": 1,
+  "setId": "OP08",
+  "source": "https://cdn.cardkaizoku.com/card_data_v20260813T061527.json",
+  "sourceSha256": "360eb0fa0e568b3e120721b6ef8b1a9ce8e4a87748a4a278c6a31ed73ec68d10",
+  "sourceType": "cardkaizoku-json"
+}

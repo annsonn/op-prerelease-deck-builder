@@ -1,0 +1,516 @@
+import { describe, expect, it, vi } from 'vitest'
+
+import type { RuntimeCatalogIndexEntry } from '../../shared/catalog-index.js'
+import type { PlayableCard, StrategySuggestion } from '../../shared/catalog.js'
+import { classifyCardFeatures } from '../../shared/card-features.js'
+
+import {
+  browserSha256,
+  loadCatalogIndex,
+  loadRuntimeCatalog,
+} from './load-catalog.js'
+
+const encoder = new TextEncoder()
+const sourceSha256 = 'a'.repeat(64)
+
+const entry: RuntimeCatalogIndexEntry = {
+  setId: 'OP16',
+  label: 'OP16',
+  manifestPath: '/catalogs/op16/manifest.json',
+  sourceSha256,
+  readiness: 'needs-review',
+}
+
+function card(
+  cardNumber: string,
+  overrides: Partial<PlayableCard> = {},
+): PlayableCard {
+  return {
+    cardNumber,
+    name: `${cardNumber} Test Card`,
+    rarity: 'C',
+    cardType: 'CHARACTER',
+    colors: ['Red'],
+    cost: 3,
+    life: null,
+    power: 4000,
+    counter: 1000,
+    attribute: 'Strike',
+    traits: ['Test Crew'],
+    effect: '',
+    trigger: '',
+    setMembership: ['OP16'],
+    variantsCollapsed: 1,
+    entryShortcut: cardNumber.startsWith('OP16-')
+      ? cardNumber.slice(-3)
+      : null,
+    isSpecialReprint: !cardNumber.startsWith('OP16-'),
+    ...overrides,
+  }
+}
+
+function suggestion(cardNumber: string): StrategySuggestion {
+  return {
+    cardNumber,
+    roles: ['pressure'],
+    reviewStatus: 'suggested',
+  }
+}
+
+interface RuntimeFixture {
+  artifacts: Record<string, string>
+  fetcher: typeof fetch
+  rebuildChecksums: () => Promise<void>
+}
+
+async function runtimeFixture(): Promise<RuntimeFixture> {
+  const cards = [
+    card('OP16-005'),
+    card('OP10-045', {
+      cost: 8,
+      power: 9000,
+      counter: 2000,
+      effect:
+        '[Blocker] Draw 2 cards. [Rush] K.O. up to 1 of your opponent\'s Characters.',
+    }),
+  ]
+  const artifacts: Record<string, string> = {
+    '/catalogs/op16/manifest.json': `${JSON.stringify({
+      schemaVersion: 1,
+      setId: 'OP16',
+      language: 'en',
+      source: 'https://cdn.example.test/cards.json',
+      sourceType: 'cardkaizoku-json',
+      sourceSha256,
+      readiness: 'needs-review',
+    })}\n`,
+    '/catalogs/op16/cards.json': `${JSON.stringify(cards)}\n`,
+    '/catalogs/op16/set-contents.json': `${JSON.stringify(
+      cards.map(({ cardNumber }) => cardNumber),
+    )}\n`,
+    '/catalogs/op16/strategy-suggestions.json': `${JSON.stringify(
+      cards.map(({ cardNumber }) => suggestion(cardNumber)),
+    )}\n`,
+    '/catalogs/op16/checksums.json': '',
+  }
+
+  const rebuildChecksums = async (): Promise<void> => {
+    const checksums = Object.fromEntries(
+      await Promise.all(
+        [
+          'manifest.json',
+          'cards.json',
+          'set-contents.json',
+          'strategy-suggestions.json',
+        ].map(async (filename) => [
+          filename,
+          await browserSha256(
+            encoder.encode(artifacts[`/catalogs/op16/${filename}`]),
+          ),
+        ]),
+      ),
+    )
+    artifacts['/catalogs/op16/checksums.json'] = `${JSON.stringify(checksums)}\n`
+  }
+  await rebuildChecksums()
+
+  const fetcher = vi.fn(async (input: RequestInfo | URL) => {
+    const path = typeof input === 'string' ? input : input.toString()
+    const body = artifacts[path]
+    return {
+      ok: body !== undefined,
+      status: body === undefined ? 404 : 200,
+      statusText: body === undefined ? 'Not Found' : 'OK',
+      arrayBuffer: async () => encoder.encode(body ?? '').buffer,
+    } as Response
+  }) as unknown as typeof fetch
+
+  return { artifacts, fetcher, rebuildChecksums }
+}
+
+function runtimeIndex(): unknown {
+  return {
+    schemaVersion: 1,
+    sets: Array.from({ length: 17 }, (_, index) => {
+      const setId = `OP${String(index + 1).padStart(2, '0')}`
+      return {
+        setId,
+        label: setId,
+        manifestPath: `/catalogs/${setId.toLowerCase()}/manifest.json`,
+        sourceSha256,
+        readiness: 'needs-review',
+      }
+    }),
+  }
+}
+
+function fetchText(body: string, ok = true): typeof fetch {
+  return vi.fn(async () => ({
+    ok,
+    status: ok ? 200 : 503,
+    statusText: ok ? 'OK' : 'Service Unavailable',
+    arrayBuffer: async () => encoder.encode(body).buffer,
+  })) as unknown as typeof fetch
+}
+
+describe('browserSha256', () => {
+  it('returns the lowercase SHA-256 digest of the exact bytes', async () => {
+    await expect(browserSha256(encoder.encode('abc'))).resolves.toBe(
+      'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad',
+    )
+  })
+})
+
+describe('loadCatalogIndex', () => {
+  it('loads and validates the complete runtime index', async () => {
+    const fetcher = fetchText(JSON.stringify(runtimeIndex()))
+
+    const index = await loadCatalogIndex(fetcher)
+
+    expect(index.sets).toHaveLength(17)
+    expect(index.sets[15]).toEqual(entry)
+    expect(fetcher).toHaveBeenCalledWith('/catalogs/index.json')
+  })
+
+  it('rejects an unsuccessful HTTP response', async () => {
+    await expect(loadCatalogIndex(fetchText('', false))).rejects.toThrow(
+      /catalog index.*503/i,
+    )
+  })
+
+  it('rejects malformed index JSON', async () => {
+    await expect(loadCatalogIndex(fetchText('{not json'))).rejects.toThrow(
+      /catalog index.*malformed JSON/i,
+    )
+  })
+
+  it('rejects an index that does not match the shared schema', async () => {
+    await expect(
+      loadCatalogIndex(fetchText(JSON.stringify({ schemaVersion: 1, sets: [] }))),
+    ).rejects.toThrow(/catalog index.*schema/i)
+  })
+})
+
+describe('loadRuntimeCatalog', () => {
+  it('validates artifacts and splits normal shortcuts from special reprints', async () => {
+    const { fetcher } = await runtimeFixture()
+
+    const catalog = await loadRuntimeCatalog(entry, fetcher)
+
+    expect(catalog.manifest.setId).toBe('OP16')
+    expect(catalog.cards.map(({ cardNumber }) => cardNumber)).toEqual([
+      'OP16-005',
+      'OP10-045',
+    ])
+    expect(catalog.cardsByNumber.get('OP16-005')?.name).toBe(
+      'OP16-005 Test Card',
+    )
+    expect(catalog.normalCardsByShortcut.get('005')?.cardNumber).toBe('OP16-005')
+    expect(catalog.specialCards.map(({ cardNumber }) => cardNumber)).toEqual([
+      'OP10-045',
+    ])
+    expect(catalog.suggestionsByCardNumber.get('OP10-045')?.roles).toEqual([
+      'pressure',
+    ])
+    expect(Object.isFrozen(catalog.cards)).toBe(true)
+    expect(Object.isFrozen(catalog.specialCards)).toBe(true)
+    expect(Object.isFrozen(catalog.strategySuggestions)).toBe(true)
+  })
+
+  it('uses detached, deeply frozen feature metadata from enriched suggestions', async () => {
+    const { artifacts, fetcher, rebuildChecksums } = await runtimeFixture()
+    const cards = JSON.parse(
+      artifacts['/catalogs/op16/cards.json']!,
+    ) as PlayableCard[]
+    // Swap the distinct classifications so fallback reclassification cannot
+    // accidentally satisfy the enriched-metadata contract.
+    const firstFeatures = classifyCardFeatures(cards[1]!)
+    const secondFeatures = classifyCardFeatures(cards[0]!)
+    artifacts['/catalogs/op16/strategy-suggestions.json'] = `${JSON.stringify([
+      { ...suggestion(cards[0]!.cardNumber), features: firstFeatures },
+      { ...suggestion(cards[1]!.cardNumber), features: secondFeatures },
+    ])}\n`
+    await rebuildChecksums()
+
+    const catalog = await loadRuntimeCatalog(entry, fetcher)
+    const firstSupplied = catalog.strategySuggestions[0]!.features!
+    const secondSupplied = catalog.strategySuggestions[1]!.features!
+    const firstResolved = catalog.featuresByCardNumber.get('OP16-005')!
+    const secondResolved = catalog.featuresByCardNumber.get('OP10-045')!
+
+    expect(firstSupplied).toEqual(firstFeatures)
+    expect(secondSupplied).toEqual(secondFeatures)
+    expect(firstResolved).toEqual(firstFeatures)
+    expect(secondResolved).toEqual(secondFeatures)
+    expect(firstFeatures).not.toEqual(secondFeatures)
+    expect(firstResolved).not.toEqual(secondResolved)
+    expect(firstResolved).not.toBe(firstSupplied)
+    expect(secondResolved).not.toBe(secondSupplied)
+    for (const [resolved, supplied] of [
+      [firstResolved, firstSupplied],
+      [secondResolved, secondSupplied],
+    ] as const) {
+      if (
+        !('rainbowUsableFlags' in supplied) ||
+        !('supportRequirementsByFlag' in supplied)
+      ) {
+        throw new Error('expected current enriched feature metadata')
+      }
+      expect(resolved.flags).not.toBe(supplied.flags)
+      expect(resolved.rainbowUsableFlags).not.toBe(
+        supplied.rainbowUsableFlags,
+      )
+      expect(resolved.supportRequirementsByFlag).not.toBe(
+        supplied.supportRequirementsByFlag,
+      )
+      expect(resolved.searchableTraits).not.toBe(supplied.searchableTraits)
+      expect(Object.isFrozen(resolved)).toBe(true)
+      expect(Object.isFrozen(resolved.flags)).toBe(true)
+      expect(Object.isFrozen(resolved.rainbowUsableFlags)).toBe(true)
+      expect(Object.isFrozen(resolved.supportRequirementsByFlag)).toBe(true)
+      for (const requirement of Object.values(
+        resolved.supportRequirementsByFlag,
+      )) {
+        if (requirement === null) continue
+        expect(Object.isFrozen(requirement)).toBe(true)
+        expect(Object.isFrozen(requirement.requiredNames)).toBe(true)
+        expect(Object.isFrozen(requirement.requiredTraits)).toBe(true)
+      }
+      expect(Object.isFrozen(resolved.searchableTraits)).toBe(true)
+      expect(Object.isFrozen(resolved.searchableNames)).toBe(true)
+      expect(Object.isFrozen(resolved.requiredTraits)).toBe(true)
+      expect(Object.isFrozen(resolved.requiredNames)).toBe(true)
+      expect(Object.isFrozen(resolved.evidence)).toBe(true)
+    }
+  })
+
+  it('reclassifies enriched features created before rainbow usable flags', async () => {
+    const { artifacts, fetcher, rebuildChecksums } = await runtimeFixture()
+    const cards = JSON.parse(
+      artifacts['/catalogs/op16/cards.json']!,
+    ) as PlayableCard[]
+    const firstFeatures = classifyCardFeatures(cards[0]!)
+    const secondFeatures = classifyCardFeatures(cards[1]!)
+    const { rainbowUsableFlags: _rainbowUsableFlags, ...legacyFeatures } =
+      secondFeatures
+    artifacts['/catalogs/op16/strategy-suggestions.json'] = `${JSON.stringify([
+      { ...suggestion(cards[0]!.cardNumber), features: legacyFeatures },
+      suggestion(cards[1]!.cardNumber),
+    ])}\n`
+    await rebuildChecksums()
+
+    const catalog = await loadRuntimeCatalog(entry, fetcher)
+    const suppliedFeatures = catalog.strategySuggestions[0]!.features!
+    const resolvedFeatures = catalog.featuresByCardNumber.get('OP16-005')!
+
+    expect(suppliedFeatures).toEqual(legacyFeatures)
+    expect('rainbowUsableFlags' in suppliedFeatures).toBe(false)
+    expect(resolvedFeatures).toEqual(firstFeatures)
+    expect(resolvedFeatures).not.toEqual(secondFeatures)
+    expect(Object.isFrozen(resolvedFeatures)).toBe(true)
+    expect(Object.isFrozen(resolvedFeatures.rainbowUsableFlags)).toBe(true)
+  })
+
+  it('reclassifies enriched features created before per-claim support requirements', async () => {
+    const { artifacts, fetcher, rebuildChecksums } = await runtimeFixture()
+    const cards = JSON.parse(
+      artifacts['/catalogs/op16/cards.json']!,
+    ) as PlayableCard[]
+    const currentFeatures = classifyCardFeatures(cards[0]!)
+    const {
+      supportRequirementsByFlag: _supportRequirementsByFlag,
+      ...preSupportRequirementsFeatures
+    } = currentFeatures
+    artifacts['/catalogs/op16/strategy-suggestions.json'] = `${JSON.stringify([
+      {
+        ...suggestion(cards[0]!.cardNumber),
+        features: preSupportRequirementsFeatures,
+      },
+      suggestion(cards[1]!.cardNumber),
+    ])}\n`
+    await rebuildChecksums()
+
+    const catalog = await loadRuntimeCatalog(entry, fetcher)
+    const suppliedFeatures = catalog.strategySuggestions[0]!.features!
+    const resolvedFeatures = catalog.featuresByCardNumber.get('OP16-005')!
+
+    expect(suppliedFeatures).toEqual(preSupportRequirementsFeatures)
+    expect('supportRequirementsByFlag' in suppliedFeatures).toBe(false)
+    expect(resolvedFeatures).toEqual(currentFeatures)
+    expect(Object.isFrozen(resolvedFeatures.supportRequirementsByFlag)).toBe(
+      true,
+    )
+  })
+
+  it('classifies legacy suggestions without adding features to the suggestions', async () => {
+    const { artifacts, fetcher } = await runtimeFixture()
+    const cards = JSON.parse(
+      artifacts['/catalogs/op16/cards.json']!,
+    ) as PlayableCard[]
+    const firstFeatures = classifyCardFeatures(cards[0]!)
+    const secondFeatures = classifyCardFeatures(cards[1]!)
+
+    const catalog = await loadRuntimeCatalog(entry, fetcher)
+
+    expect(catalog.strategySuggestions.every(({ features }) => features === undefined)).toBe(
+      true,
+    )
+    expect(catalog.featuresByCardNumber.get('OP16-005')).toEqual(firstFeatures)
+    expect(catalog.featuresByCardNumber.get('OP10-045')).toEqual(secondFeatures)
+    expect(firstFeatures).not.toEqual(secondFeatures)
+  })
+
+  it('rejects a missing artifact response', async () => {
+    const { artifacts, fetcher } = await runtimeFixture()
+    delete artifacts['/catalogs/op16/cards.json']
+
+    await expect(loadRuntimeCatalog(entry, fetcher)).rejects.toThrow(
+      /cards\.json.*404/i,
+    )
+  })
+
+  it('rejects malformed artifact JSON', async () => {
+    const { artifacts, fetcher, rebuildChecksums } = await runtimeFixture()
+    artifacts['/catalogs/op16/cards.json'] = '{not json'
+    await rebuildChecksums()
+
+    await expect(loadRuntimeCatalog(entry, fetcher)).rejects.toThrow(
+      /cards\.json.*malformed JSON/i,
+    )
+  })
+
+  it('rejects an artifact that does not match its shared schema', async () => {
+    const { artifacts, fetcher, rebuildChecksums } = await runtimeFixture()
+    artifacts['/catalogs/op16/cards.json'] = `${JSON.stringify([
+      { unexpected: true },
+    ])}\n`
+    await rebuildChecksums()
+
+    await expect(loadRuntimeCatalog(entry, fetcher)).rejects.toThrow(
+      /cards\.json.*schema/i,
+    )
+  })
+
+  it('rejects a manifest whose identity differs from the index entry', async () => {
+    const { artifacts, fetcher, rebuildChecksums } = await runtimeFixture()
+    const manifest = JSON.parse(
+      artifacts['/catalogs/op16/manifest.json']!,
+    ) as Record<string, unknown>
+    artifacts['/catalogs/op16/manifest.json'] = `${JSON.stringify({
+      ...manifest,
+      setId: 'OP15',
+    })}\n`
+    await rebuildChecksums()
+
+    await expect(loadRuntimeCatalog(entry, fetcher)).rejects.toThrow(
+      /manifest.*identity.*index/i,
+    )
+  })
+
+  it('verifies checksums against the unparsed response bytes', async () => {
+    const { artifacts, fetcher } = await runtimeFixture()
+    artifacts['/catalogs/op16/cards.json'] = `${
+      artifacts['/catalogs/op16/cards.json']
+    } `
+
+    await expect(loadRuntimeCatalog(entry, fetcher)).rejects.toThrow(
+      /checksum mismatch.*cards\.json/i,
+    )
+  })
+
+  it('rejects duplicate card numbers', async () => {
+    const { artifacts, fetcher, rebuildChecksums } = await runtimeFixture()
+    const duplicate = card('OP16-005')
+    artifacts['/catalogs/op16/cards.json'] = `${JSON.stringify([
+      duplicate,
+      duplicate,
+    ])}\n`
+    artifacts['/catalogs/op16/set-contents.json'] = `${JSON.stringify([
+      'OP16-005',
+      'OP16-005',
+    ])}\n`
+    artifacts['/catalogs/op16/strategy-suggestions.json'] = `${JSON.stringify([
+      suggestion('OP16-005'),
+      suggestion('OP16-005'),
+    ])}\n`
+    await rebuildChecksums()
+
+    await expect(loadRuntimeCatalog(entry, fetcher)).rejects.toThrow(
+      /duplicate card number.*OP16-005/i,
+    )
+  })
+
+  it('rejects duplicate normal-card shortcuts', async () => {
+    const { artifacts, fetcher, rebuildChecksums } = await runtimeFixture()
+    const cards = [
+      card('OP16-005'),
+      card('OP16-006', { entryShortcut: '005' }),
+    ]
+    artifacts['/catalogs/op16/cards.json'] = `${JSON.stringify(cards)}\n`
+    artifacts['/catalogs/op16/set-contents.json'] = `${JSON.stringify(
+      cards.map(({ cardNumber }) => cardNumber),
+    )}\n`
+    artifacts['/catalogs/op16/strategy-suggestions.json'] = `${JSON.stringify(
+      cards.map(({ cardNumber }) => suggestion(cardNumber)),
+    )}\n`
+    await rebuildChecksums()
+
+    await expect(loadRuntimeCatalog(entry, fetcher)).rejects.toThrow(
+      /duplicate shortcut.*005/i,
+    )
+  })
+
+  it('rejects a special reprint that exposes a numeric shortcut', async () => {
+    const { artifacts, fetcher, rebuildChecksums } = await runtimeFixture()
+    const cards = [
+      card('OP16-005'),
+      card('OP10-045', { entryShortcut: '045' }),
+    ]
+    artifacts['/catalogs/op16/cards.json'] = `${JSON.stringify(cards)}\n`
+    await rebuildChecksums()
+
+    await expect(loadRuntimeCatalog(entry, fetcher)).rejects.toThrow(
+      /special reprint.*OP10-045.*shortcut/i,
+    )
+  })
+
+  it('rejects a card that is not a member of the selected set', async () => {
+    const { artifacts, fetcher, rebuildChecksums } = await runtimeFixture()
+    const cards = [
+      card('OP16-005'),
+      card('OP10-045', { setMembership: ['OP10'] }),
+    ]
+    artifacts['/catalogs/op16/cards.json'] = `${JSON.stringify(cards)}\n`
+    await rebuildChecksums()
+
+    await expect(loadRuntimeCatalog(entry, fetcher)).rejects.toThrow(
+      /card OP10-045.*missing OP16 membership/i,
+    )
+  })
+
+  it('rejects set contents that do not exactly match card order', async () => {
+    const { artifacts, fetcher, rebuildChecksums } = await runtimeFixture()
+    artifacts['/catalogs/op16/set-contents.json'] = `${JSON.stringify([
+      'OP10-045',
+      'OP16-005',
+    ])}\n`
+    await rebuildChecksums()
+
+    await expect(loadRuntimeCatalog(entry, fetcher)).rejects.toThrow(
+      /set contents.*match.*cards/i,
+    )
+  })
+
+  it('rejects a strategy suggestion for an unknown card', async () => {
+    const { artifacts, fetcher, rebuildChecksums } = await runtimeFixture()
+    artifacts['/catalogs/op16/strategy-suggestions.json'] = `${JSON.stringify([
+      suggestion('OP16-005'),
+      suggestion('OP16-999'),
+    ])}\n`
+    await rebuildChecksums()
+
+    await expect(loadRuntimeCatalog(entry, fetcher)).rejects.toThrow(
+      /strategy suggestion.*unknown card.*OP16-999/i,
+    )
+  })
+})

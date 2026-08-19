@@ -1,0 +1,36 @@
+[
+  {
+    "sourceRecordId": "OP17-005:0",
+    "cardNumber": "OP17-005",
+    "name": "Synthetic Test Card",
+    "rarity": "UC",
+    "cardType": "CHARACTER",
+    "colors": ["Red"],
+    "cost": 4,
+    "life": null,
+    "power": 5000,
+    "counter": 2000,
+    "attribute": "Strike",
+    "traits": ["Example Crew"],
+    "effect": "[Blocker]",
+    "trigger": "",
+    "setMembership": ["OP17"]
+  },
+  {
+    "sourceRecordId": "OP17-005:1",
+    "cardNumber": "OP17-005",
+    "name": "Synthetic Test Card",
+    "rarity": "TR",
+    "cardType": "CHARACTER",
+    "colors": ["Red"],
+    "cost": 4,
+    "life": null,
+    "power": 5000,
+    "counter": 2000,
+    "attribute": "Strike",
+    "traits": ["Example Crew"],
+    "effect": "[Blocker]",
+    "trigger": "",
+    "setMembership": ["OP17"]
+  }
+]

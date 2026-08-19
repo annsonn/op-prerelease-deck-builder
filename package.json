@@ -1,0 +1,60 @@
+{
+  "name": "one-piece-tcg-sealed-tourney-builder",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Offline-first One Piece TCG sealed deck builder and play guide",
+  "license": "MIT",
+  "keywords": [
+    "one-piece-card-game",
+    "sealed-deck",
+    "deck-builder"
+  ],
+  "type": "module",
+  "packageManager": "npm@11.16.0",
+  "engines": {
+    "node": "^22.22.2 || ^24.15.0 || >=26.0.0"
+  },
+  "overrides": {
+    "rolldown": "1.2.4"
+  },
+  "scripts": {
+    "dev": "vite",
+    "predev": "npm run catalog:check",
+    "build": "tsc -b && vite build",
+    "prebuild": "npm run catalog:check",
+    "catalog:import": "tsx tools/catalog/import.ts",
+    "catalog:derive": "tsx tools/catalog/derive.ts",
+    "catalog:validate": "tsx tools/catalog/validate-command.ts",
+    "catalog:build": "tsx tools/catalog/build.ts",
+    "catalog:sync": "tsx tools/catalog/sync-command.ts",
+    "catalog:check": "tsx tools/catalog/check-runtime.ts",
+    "strategy:evaluate": "tsx tools/evaluate-strategy.ts",
+    "lint": "oxlint",
+    "typecheck": "tsc -b && tsc -p tsconfig.tools.json",
+    "test": "vitest run",
+    "verify": "npm run lint && npm run typecheck && npm test && npm run catalog:check",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "html-to-text": "^9.0.5",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.4",
+    "@types/html-to-text": "^9.0.4",
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.4",
+    "jsdom": "^30.0.1",
+    "oxlint": "1.78.0",
+    "tsx": "^4.23.12",
+    "typescript": "~6.0.2",
+    "vite": "^8.2.0",
+    "vitest": "^4.1.10"
+  }
+}
