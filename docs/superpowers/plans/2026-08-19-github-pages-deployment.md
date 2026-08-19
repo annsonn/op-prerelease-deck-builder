@@ -16,6 +16,7 @@
 - Modify `src/catalog/load-catalog.test.ts`: prove local and GitHub Pages paths for the index and all runtime artifacts.
 - Modify `vite.config.ts`: use `VITE_BASE_PATH` for production asset URLs and `/` by default.
 - Create `vite.config.test.ts`: lock down default and configured Vite base-path behavior.
+- Modify `vitest.config.ts`: include the root Vite configuration test in the Node test project.
 - Modify `tsconfig.node.json`: type-check the Vite configuration test.
 - Modify `.github/workflows/ci.yml`: add manual dispatch, Pages artifact upload, and the dependent deployment job.
 - Modify `README.md`: document the deployed URL, automatic/manual triggers, and one-time Pages setting.
@@ -265,9 +266,10 @@ git commit -m "fix: support project-page catalog paths"
 **Files:**
 - Create: `vite.config.test.ts`
 - Modify: `vite.config.ts`
+- Modify: `vitest.config.ts`
 - Modify: `tsconfig.node.json`
 
-- [ ] **Step 1: Write the failing Vite base-path tests**
+- [x] **Step 1: Write the failing Vite base-path tests**
 
 Create `vite.config.test.ts`:
 
@@ -295,7 +297,18 @@ Set the `include` array in `tsconfig.node.json` to:
 "include": ["vite.config.ts", "vite.config.test.ts", "vitest.config.ts"]
 ```
 
-- [ ] **Step 2: Run the Vite configuration test and verify the missing export fails**
+Add the root configuration test to the Node project's `include` array in
+`vitest.config.ts`, preserving the existing `tools` and `shared` test globs:
+
+```ts
+include: [
+  'tools/**/*.test.ts',
+  'shared/**/*.test.ts',
+  'vite.config.test.ts',
+],
+```
+
+- [x] **Step 2: Run the Vite configuration test and verify the missing export fails**
 
 Run:
 
@@ -305,7 +318,7 @@ npm test -- vite.config.test.ts
 
 Expected: FAIL because `resolveBasePath` is not exported.
 
-- [ ] **Step 3: Implement the configured base path**
+- [x] **Step 3: Implement the configured base path**
 
 Update `vite.config.ts`:
 
@@ -323,7 +336,7 @@ export default defineConfig({
 })
 ```
 
-- [ ] **Step 4: Run the Vite test and Node configuration type-check**
+- [x] **Step 4: Run the Vite test and Node configuration type-check**
 
 Run:
 
@@ -334,7 +347,7 @@ npx tsc -b
 
 Expected: both commands exit successfully.
 
-- [ ] **Step 5: Build for Pages and inspect emitted asset paths**
+- [x] **Step 5: Build for Pages and inspect emitted asset paths**
 
 Run:
 
@@ -345,10 +358,10 @@ node -e "const fs=require('node:fs');const html=fs.readFileSync('dist/index.html
 
 Expected: build exits successfully and the Node assertion exits `0`.
 
-- [ ] **Step 6: Commit the Vite base configuration**
+- [x] **Step 6: Commit the Vite base configuration**
 
 ```bash
-git add vite.config.ts vite.config.test.ts tsconfig.node.json
+git add vite.config.ts vite.config.test.ts vitest.config.ts tsconfig.node.json docs/superpowers/plans/2026-08-19-github-pages-deployment.md
 git commit -m "build: configure GitHub Pages base path"
 ```
 

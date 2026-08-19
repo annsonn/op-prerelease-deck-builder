@@ -6,7 +6,11 @@ export default defineConfig({
       {
         test: {
           name: 'node',
-          include: ['tools/**/*.test.ts', 'shared/**/*.test.ts'],
+          include: [
+            'tools/**/*.test.ts',
+            'shared/**/*.test.ts',
+            'vite.config.test.ts',
+          ],
           environment: 'node',
         },
       },
