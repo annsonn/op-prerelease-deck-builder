@@ -8,31 +8,46 @@ images.
 
 ## Image Source
 
-Card Kaizoku exposes a stable English image pattern for every OP01-OP17 runtime
-card in the pinned 2026-08-19 snapshot:
+Limitless TCG currently exposes a deterministic English image pattern for the
+OP16 and OP17 cards needed by the initial release:
 
 ```text
-https://cdn.cardkaizoku.com/cards_en/<printed-prefix>/<card-number>.png
+https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/one-piece/<printed-prefix>/<card-number>_EN.webp
 ```
 
 A focused resolver module derives this URL from a validated printed card ID.
 For example, `OP17-005` resolves to
-`https://cdn.cardkaizoku.com/cards_en/OP17/OP17-005.png`; a special reprint such
-as `ST15-005` uses the `ST15` prefix.
+`https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/one-piece/OP17/OP17-005_EN.webp`;
+a special reprint such as `ST15-005` uses the `ST15` prefix.
+
+Live checks confirmed `200 image/webp` responses for representative OP16 and
+OP17 base cards, their boundary card numbers, and all six special reprints in
+the OP16 runtime catalog. The same URLs worked with no referrer and with the
+deployed GitHub Pages origin as referrer. This is a technically compatible
+public CDN path, not a documented image API contract or an explicit downstream
+reuse license, so the provider remains isolated and replaceable.
 
 The app does not add image URLs to `PlayableCard`, weaken runtime catalog
 privacy validation, generate another catalog artifact, or commit downloaded
 images. Card reveal therefore requires an internet connection and remains
 independent from offline gameplay catalog loading.
 
+The dialog visibly links to Limitless TCG as the image provider. `README.md`
+and `NOTICE` state that remotely served card artwork is third-party copyrighted
+material, is not bundled with the repository, and is not covered by the
+repository's MIT license.
+
 ## Module Design
 
 ### Image resolver
 
-`resolveCardImageUrl(cardNumber)` owns the Card Kaizoku host and path pattern.
+`resolveCardImageUrl(cardNumber)` owns the Limitless host and path pattern.
 Callers provide a full `PlayableCard` to the reveal interface; callers do not
 construct URLs themselves. The resolver validates the input with the existing
-printed-card schema and throws a descriptive error for malformed IDs.
+printed-card schema and throws a descriptive error for malformed IDs. Provider
+attribution text and URL live beside the resolver so changing the image source
+does not require changes throughout the UI. The provider link is
+`https://onepiece.limitlesstcg.com/cards`.
 
 ### Reveal controls
 
@@ -78,6 +93,9 @@ behind one small interface and prevents duplicate dialogs or eager image loads.
 - The image uses descriptive alt text and `referrerPolicy="no-referrer"`.
 - The displayed image is the standard reference printing; it is not guaranteed
   to match an alternate-art card physically opened by the user.
+- A visible `Images served by Limitless TCG` link identifies the remote image
+  provider and opens its card database in a new browser context with
+  `rel="noreferrer"`.
 
 ## Loading and Failure Behavior
 
@@ -99,12 +117,15 @@ needed. Desktop uses the same dialog and control hierarchy.
 
 ## Testing and Verification
 
-- Resolver tests cover OP, ST, EB, and PRB printed prefixes and reject malformed
-  IDs through the existing printed-card schema.
+- Resolver tests cover OP, ST, EB, and PRB printed prefixes using the Limitless
+  WebP path and reject malformed IDs through the existing printed-card schema.
+- A deterministic source-contract fixture covers representative OP16 and OP17
+  base cards plus every OP16 special-reprint mapping without adding live network
+  requests to the normal test suite.
 - Reveal-module tests cover accessible labels, click/tap, Enter and Space,
   dialog naming, alt text, lazy image creation, successful load, failure,
-  Retry, Close, Escape, backdrop dismissal, focus return, and scroll-lock
-  cleanup.
+  Retry, attribution, Close, Escape, backdrop dismissal, focus return, and
+  scroll-lock cleanup.
 - Pool tests cover latest-card and pool-row controls while confirming recent
   history does not gain controls.
 - Deck tests cover main-deck and expanded-Sideboard controls while confirming
@@ -112,7 +133,7 @@ needed. Desktop uses the same dialog and control hierarchy.
 - App integration tests cover one active dialog, switching cards, state/set
   changes, and duplicate card names.
 - Browser QA runs at Pixel 9 and desktop widths, checking row overflow, dialog
-  containment, touch targets, focus behavior, image loading/failure, and a
-  clean console.
+  containment, touch targets, focus behavior, real OP16/OP17 image loading,
+  failure behavior, attribution, and a clean console.
 - Full lint, TypeScript, Vitest, runtime catalog, and GitHub Pages production
   build gates remain required.
