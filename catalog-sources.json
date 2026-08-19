@@ -1,8 +1,8 @@
 {
   "cardKaizokuSnapshot": {
-    "source": "https://cdn.cardkaizoku.com/card_data_v20260813T061527.json",
-    "sha256": "360eb0fa0e568b3e120721b6ef8b1a9ce8e4a87748a4a278c6a31ed73ec68d10",
-    "cachePath": "tmp/catalog/source/card_data_v20260813T061527.json"
+    "source": "https://cdn.cardkaizoku.com/card_data_v20260819T101535.json",
+    "sha256": "66c0594fc4c5ad4d2aa5599836330a00fd98842d8b6d118dac765ebadbe8d594",
+    "cachePath": "tmp/catalog/source/card_data_v20260819T101535.json"
   },
   "sets": {
     "op01": {
