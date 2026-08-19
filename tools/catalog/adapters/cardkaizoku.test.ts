@@ -51,6 +51,22 @@ describe('inferCardKaizokuMemberships', () => {
       }),
     ).toEqual(['EB01', 'OP10', 'OP16'])
   })
+
+  it('normalizes the Card Kaizoku EB0304 alias to EB03', () => {
+    expect(
+      inferCardKaizokuMemberships({
+        cardSet: 'OP05',
+        products: [{ cardSet: ' eb0304 ' }],
+      }),
+    ).toEqual(['EB03', 'OP05'])
+
+    expect(
+      inferCardKaizokuMemberships({
+        cardSet: 'OP05',
+        products: [{ cardSet: 'EB0304' }, { cardSet: 'EB03' }],
+      }),
+    ).toEqual(['EB03', 'OP05'])
+  })
 })
 
 describe('adaptCardKaizokuRows', () => {

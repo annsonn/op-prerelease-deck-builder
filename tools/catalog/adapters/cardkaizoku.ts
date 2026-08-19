@@ -6,6 +6,9 @@ import type { CatalogSourceAdapter } from '../source-adapter.js'
 
 const printedCardIdPattern = /^[A-Z]{1,5}\d{0,2}-\d{3}$/
 const setMembershipPattern = /^(?:EB|OP|PRB|ST)\d{2}$/
+const setMembershipAliases: Readonly<Record<string, string>> = {
+  EB0304: 'EB03',
+}
 
 const candidateRowSchema = z.looseObject({
   cardNumber: z.string(),
@@ -38,7 +41,8 @@ function normalizedMembership(value: unknown): string | null {
   }
 
   const normalized = value.trim().toUpperCase()
-  return setMembershipPattern.test(normalized) ? normalized : null
+  const canonical = setMembershipAliases[normalized] ?? normalized
+  return setMembershipPattern.test(canonical) ? canonical : null
 }
 
 export function inferCardKaizokuMemberships(value: unknown): string[] {
