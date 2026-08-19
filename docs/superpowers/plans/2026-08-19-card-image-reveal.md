@@ -4,16 +4,16 @@
 
 **Goal:** Add a mobile-friendly eye button to eligible pool and deck card rows that opens one accessible dialog containing the card's standard English reference image.
 
-**Architecture:** Keep `PlayableCard` and the generated runtime catalogs unchanged. A pure resolver derives the Card Kaizoku image URL from a validated printed card ID; reusable reveal controls own presentation and modal behavior; `App` owns the single active card and passes an explicit `onReveal(card)` callback into pool and deck views.
+**Architecture:** Keep `PlayableCard` and the generated runtime catalogs unchanged. A pure resolver derives the Limitless TCG image URL from a validated printed card ID and owns provider attribution; reusable reveal controls own presentation and modal behavior; `App` owns the single active card and passes an explicit `onReveal(card)` callback into pool and deck views.
 
-**Tech Stack:** React 19, TypeScript 6, Zod 4, Vite 8, Vitest 4, Testing Library, Card Kaizoku English image CDN
+**Tech Stack:** React 19, TypeScript 6, Zod 4, Vite 8, Vitest 4, Testing Library, Limitless TCG English image CDN
 
 ---
 
 ## File map
 
-- Create `src/card-image/card-image-url.ts`: validate printed card IDs and derive the English CDN URL.
-- Create `src/card-image/card-image-url.test.ts`: cover OP, ST, EB, PRB, and malformed identifiers.
+- Modify `src/card-image/card-image-url.ts`: validate printed card IDs, derive the Limitless WebP URL, and expose provider attribution.
+- Modify `src/card-image/card-image-url.test.ts`: cover OP16/OP17, all OP16 special reprints, OP/ST/EB/PRB prefixes, attribution, and malformed identifiers.
 - Create `src/components/CardRevealButton.tsx`: render the reusable 48×48 eye action.
 - Create `src/components/CardRevealButton.test.tsx`: lock down labeling and activation.
 - Create `src/components/CardImageDialog.tsx`: render the single lazy image dialog and own loading, failure, dismissal, focus, and scroll behavior.
@@ -25,34 +25,63 @@
 - Modify `src/App.tsx`: own one active card, one dialog host, and closure on relevant app-state replacement.
 - Modify `src/App.test.tsx`: verify dialog integration, state reset, and duplicate-name labels.
 - Modify `src/App.css`: style the approved row-edge button and responsive dialog.
+- Modify `tools/repository-readiness.test.ts`: lock down public documentation and the no-bundled-images boundary.
+- Modify `README.md`: document remote image behavior, attribution, connectivity, and licensing scope.
+- Modify `NOTICE`: identify Limitless as the remote provider without implying affiliation or image licensing.
 - Modify this plan: check completed steps and record final verification evidence.
 
-### Task 1: Derive card image URLs without changing catalogs
+### Task 1: Switch the resolver to the Limitless image provider
 
 **Files:**
-- Create: `src/card-image/card-image-url.test.ts`
-- Create: `src/card-image/card-image-url.ts`
+- Modify: `src/card-image/card-image-url.test.ts`
+- Modify: `src/card-image/card-image-url.ts`
 
-- [x] **Step 1: Write the failing resolver tests**
+- [ ] **Step 1: Replace the old-provider expectations with failing Limitless contract tests**
 
-Create `src/card-image/card-image-url.test.ts`:
+Replace `src/card-image/card-image-url.test.ts` with:
 
 ```ts
 import { describe, expect, it } from 'vitest'
 
-import { resolveCardImageUrl } from './card-image-url.js'
+import {
+  CARD_IMAGE_PROVIDER_NAME,
+  CARD_IMAGE_PROVIDER_URL,
+  resolveCardImageUrl,
+} from './card-image-url.js'
+
+const op16SourceContract = [
+  'OP16-001',
+  'OP16-119',
+  'EB04-054',
+  'OP10-045',
+  'OP11-067',
+  'OP14-029',
+  'OP14-084',
+  'ST15-005',
+] as const
 
 describe('resolveCardImageUrl', () => {
   it.each([
+    ['OP16-005', 'OP16'],
     ['OP17-005', 'OP17'],
     ['ST15-005', 'ST15'],
     ['EB03-004', 'EB03'],
     ['PRB01-001', 'PRB01'],
-  ])('derives the English image URL for %s', (cardNumber, prefix) => {
+  ])('derives the Limitless English image URL for %s', (cardNumber, prefix) => {
     expect(resolveCardImageUrl(cardNumber)).toBe(
-      `https://cdn.cardkaizoku.com/cards_en/${prefix}/${cardNumber}.png`,
+      `https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/one-piece/${prefix}/${cardNumber}_EN.webp`,
     )
   })
+
+  it.each(op16SourceContract)(
+    'keeps the OP16 source contract deterministic for %s',
+    (cardNumber) => {
+      const [prefix] = cardNumber.split('-')
+      expect(resolveCardImageUrl(cardNumber)).toBe(
+        `https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/one-piece/${prefix}/${cardNumber}_EN.webp`,
+      )
+    },
+  )
 
   it.each(['op17-005', 'OP17-5', 'OP17-0005', 'OP17/005', ''])(
     'rejects malformed printed card ID %j',
@@ -62,10 +91,17 @@ describe('resolveCardImageUrl', () => {
       )
     },
   )
+
+  it('exposes the provider attribution beside the resolver', () => {
+    expect(CARD_IMAGE_PROVIDER_NAME).toBe('Limitless TCG')
+    expect(CARD_IMAGE_PROVIDER_URL).toBe(
+      'https://onepiece.limitlesstcg.com/cards',
+    )
+  })
 })
 ```
 
-- [x] **Step 2: Run the focused test and confirm the missing module fails**
+- [ ] **Step 2: Run the focused test and confirm the provider mismatch fails**
 
 Run:
 
@@ -73,16 +109,21 @@ Run:
 npm test -- src/card-image/card-image-url.test.ts
 ```
 
-Expected: FAIL because `card-image-url.ts` does not exist.
+Expected: FAIL because the current resolver still returns Card Kaizoku PNG URLs and does not export the Limitless provider constants.
 
-- [x] **Step 3: Implement the validated resolver**
+- [ ] **Step 3: Implement the validated Limitless resolver and attribution**
 
-Create `src/card-image/card-image-url.ts`:
+Replace `src/card-image/card-image-url.ts` with:
 
 ```ts
 import { printedCardIdSchema } from '../../shared/catalog.js'
 
-const CARD_IMAGE_ORIGIN = 'https://cdn.cardkaizoku.com'
+const CARD_IMAGE_ORIGIN =
+  'https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com'
+
+export const CARD_IMAGE_PROVIDER_NAME = 'Limitless TCG'
+export const CARD_IMAGE_PROVIDER_URL =
+  'https://onepiece.limitlesstcg.com/cards'
 
 export function resolveCardImageUrl(cardNumber: string): string {
   const parsed = printedCardIdSchema.safeParse(cardNumber)
@@ -91,11 +132,11 @@ export function resolveCardImageUrl(cardNumber: string): string {
   }
 
   const [prefix] = parsed.data.split('-')
-  return `${CARD_IMAGE_ORIGIN}/cards_en/${prefix}/${parsed.data}.png`
+  return `${CARD_IMAGE_ORIGIN}/one-piece/${prefix}/${parsed.data}_EN.webp`
 }
 ```
 
-- [x] **Step 4: Run the resolver tests and type-check the app**
+- [ ] **Step 4: Run the resolver tests and type-check the app**
 
 Run:
 
@@ -106,11 +147,11 @@ npx tsc -b
 
 Expected: resolver tests PASS and TypeScript exits zero.
 
-- [x] **Step 5: Commit the resolver**
+- [ ] **Step 5: Commit the provider correction**
 
 ```bash
 git add src/card-image/card-image-url.ts src/card-image/card-image-url.test.ts
-git commit -m "feat: resolve card image URLs"
+git commit -m "fix: use Limitless card images"
 ```
 
 ### Task 2: Build the reusable reveal button and accessible dialog
@@ -219,7 +260,7 @@ interface CardImageDialogProps {
 
 Use `userEvent`, `fireEvent`, and Testing Library role queries to cover:
 
-1. The dialog is named `Edward.Newgate, OP17-005`, renders exactly one image request, and the image has `alt="Edward.Newgate (OP17-005) card"`, the derived CDN `src`, and `referrerpolicy="no-referrer"`.
+1. The dialog is named `Edward.Newgate, OP17-005`, renders exactly one image request, and the image has `alt="Edward.Newgate (OP17-005) card"`, the derived Limitless WebP `src`, and `referrerpolicy="no-referrer"`.
 2. The loading status is initially visible; firing `load` on the image removes it and reveals the image.
 3. Firing `error` shows `Card image unavailable` and a 48px Retry button; Retry replaces the image DOM node with a fresh request and returns to loading state.
 4. Close button, Escape, and a click whose target is the backdrop call `onClose`; a click inside the dialog does not.
@@ -227,6 +268,7 @@ Use `userEvent`, `fireEvent`, and Testing Library role queries to cover:
 6. Mounting stores and sets `document.body.style.overflow` to `hidden`; unmount restores the exact previous value.
 7. Unmount restores focus to the element that was active before the dialog mounted.
 8. Rerendering with another card resets loading/error state and updates title, ID, alt text, and URL without producing a second dialog.
+9. The dialog exposes one visible `Images served by Limitless TCG` link with `href="https://onepiece.limitlesstcg.com/cards"`, `target="_blank"`, and `rel="noreferrer"` in loading, success, and failure states.
 
 The focus-return test must mount from a real trigger:
 
@@ -254,7 +296,7 @@ Expected: FAIL because `CardImageDialog.tsx` does not exist.
 
 - [ ] **Step 7: Implement the dialog**
 
-Create `src/components/CardImageDialog.tsx` using `createPortal` into `document.body`. Required internal state and refs:
+Create `src/components/CardImageDialog.tsx` using `createPortal` into `document.body`. Import `resolveCardImageUrl`, `CARD_IMAGE_PROVIDER_NAME`, and `CARD_IMAGE_PROVIDER_URL` from `../card-image/card-image-url.js`. Required internal state and refs:
 
 ```ts
 type ImageStatus = 'loading' | 'loaded' | 'failed'
@@ -344,6 +386,14 @@ Render this hierarchy through the portal:
     <p className="card-image-dialog__note">
       Standard reference printing; alternate art may look different.
     </p>
+    <a
+      className="card-image-dialog__attribution"
+      href={CARD_IMAGE_PROVIDER_URL}
+      target="_blank"
+      rel="noreferrer"
+    >
+      Images served by {CARD_IMAGE_PROVIDER_NAME}
+    </a>
   </div>
 </div>
 ```
@@ -453,6 +503,13 @@ Add to `src/App.css`:
   font-size: 0.75rem;
   line-height: 1.45;
   text-align: center;
+}
+
+.card-image-dialog__attribution {
+  justify-self: center;
+  color: var(--navy);
+  font-size: 0.75rem;
+  font-weight: 800;
 }
 ```
 
@@ -735,7 +792,106 @@ git add src/components/PoolReview.tsx src/components/PoolReview.test.tsx src/com
 git commit -m "feat: reveal card images from pool and deck"
 ```
 
-### Task 4: Verify responsive behavior and repository gates
+### Task 4: Document the remote provider and licensing boundary
+
+**Files:**
+- Modify: `tools/repository-readiness.test.ts`
+- Modify: `README.md`
+- Modify: `NOTICE`
+
+- [ ] **Step 1: Write the failing repository-documentation test**
+
+Extend the Node import in `tools/repository-readiness.test.ts`:
+
+```ts
+import { readFile, readdir } from 'node:fs/promises'
+```
+
+Add this test inside `describe('public repository readiness', ...)`:
+
+```ts
+test('documents remote card images without bundling an image archive', async () => {
+  const [readme, notice, publicEntries] = await Promise.all([
+    readRepositoryFile('README.md'),
+    readRepositoryFile('NOTICE'),
+    readdir(join(repositoryRoot, 'public')),
+  ])
+
+  expect(readme).toContain('## Card images')
+  expect(readme).toContain('Images served by Limitless TCG')
+  expect(readme).toMatch(/card reveal requires an internet connection/i)
+  expect(readme).toMatch(/not covered by this repository's MIT License/i)
+  expect(notice).toContain('Limitless TCG')
+  expect(notice).toMatch(/served remotely/i)
+  expect(publicEntries).not.toContain('card-images')
+})
+```
+
+- [ ] **Step 2: Run the focused test and confirm the missing documentation fails**
+
+Run:
+
+```bash
+npm test -- tools/repository-readiness.test.ts
+```
+
+Expected: FAIL because `README.md` has no Card images section, `NOTICE` does not identify Limitless, and the exact licensing boundary is absent.
+
+- [ ] **Step 3: Add the README image-source section**
+
+Insert after `## Catalogs and offline use` and its existing content:
+
+```markdown
+## Card images
+
+Card reveal requires an internet connection. The app derives the active card's
+English image URL and loads that image directly from Limitless TCG only after
+the user activates a View button. No card image archive is downloaded during
+build, committed to this repository, or included in the GitHub Pages artifact.
+
+[Images served by Limitless TCG](https://onepiece.limitlesstcg.com/cards). The
+remote URL format is not a documented API guarantee, so unavailable images fall
+back to an error state with Retry. Card artwork and other third-party material
+remain the property of their respective owners and are not covered by this
+repository's MIT License.
+```
+
+Keep the existing statement that runtime catalogs intentionally exclude source image URLs; remote card images remain a separate UI concern.
+
+- [ ] **Step 4: Extend NOTICE without implying affiliation or permission**
+
+Append to `NOTICE`:
+
+```text
+
+Card images displayed by the application are served remotely by Limitless TCG
+after a user requests a card preview. No card image files are distributed in
+this repository or licensed under its MIT License. Limitless TCG is an
+independent third-party provider and does not sponsor or endorse this project.
+```
+
+Also add `or Limitless TCG` to the existing non-affiliation sentence.
+
+- [ ] **Step 5: Run the documentation test and repository checks**
+
+Run:
+
+```bash
+npm test -- tools/repository-readiness.test.ts
+npm run lint
+git diff --check
+```
+
+Expected: all commands PASS.
+
+- [ ] **Step 6: Commit the documentation boundary**
+
+```bash
+git add tools/repository-readiness.test.ts README.md NOTICE
+git commit -m "docs: attribute remote card images"
+```
+
+### Task 5: Verify responsive behavior and repository gates
 
 **Files:**
 - Modify: `docs/superpowers/plans/2026-08-19-card-image-reveal.md`
@@ -769,7 +925,11 @@ Start the app with `npm run dev -- --host 127.0.0.1`, then verify at `412×915`:
 - pool quantity and Remove controls still work;
 - rows and page have no horizontal overflow;
 - the dialog fits inside the viewport and reserves a 5:7 image area;
-- image load, error, and Retry states are readable;
+- real OP16 base-card and special-reprint images load from the Limitless WebP
+  URLs, and an OP17 image is verified through the same dialog flow;
+- error and Retry states are readable;
+- the visible attribution opens `https://onepiece.limitlesstcg.com/cards` in a
+  new browser context without navigating the deck-builder tab;
 - Close, backdrop, Escape, Tab wrap, Shift+Tab wrap, and focus return work;
 - opening only one card causes only one image request; and
 - no console warnings or errors appear.
