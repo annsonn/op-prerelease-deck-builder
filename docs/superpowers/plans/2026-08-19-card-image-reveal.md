@@ -36,7 +36,7 @@
 - Modify: `src/card-image/card-image-url.test.ts`
 - Modify: `src/card-image/card-image-url.ts`
 
-- [ ] **Step 1: Replace the old-provider expectations with failing Limitless contract tests**
+- [x] **Step 1: Replace the old-provider expectations with failing Limitless contract tests**
 
 Replace `src/card-image/card-image-url.test.ts` with:
 
@@ -101,7 +101,7 @@ describe('resolveCardImageUrl', () => {
 })
 ```
 
-- [ ] **Step 2: Run the focused test and confirm the provider mismatch fails**
+- [x] **Step 2: Run the focused test and confirm the provider mismatch fails**
 
 Run:
 
@@ -111,7 +111,7 @@ npm test -- src/card-image/card-image-url.test.ts
 
 Expected: FAIL because the current resolver still returns Card Kaizoku PNG URLs and does not export the Limitless provider constants.
 
-- [ ] **Step 3: Implement the validated Limitless resolver and attribution**
+- [x] **Step 3: Implement the validated Limitless resolver and attribution**
 
 Replace `src/card-image/card-image-url.ts` with:
 
@@ -136,7 +136,7 @@ export function resolveCardImageUrl(cardNumber: string): string {
 }
 ```
 
-- [ ] **Step 4: Run the resolver tests and type-check the app**
+- [x] **Step 4: Run the resolver tests and type-check the app**
 
 Run:
 
@@ -147,7 +147,7 @@ npx tsc -b
 
 Expected: resolver tests PASS and TypeScript exits zero.
 
-- [ ] **Step 5: Commit the provider correction**
+- [x] **Step 5: Commit the provider correction**
 
 ```bash
 git add src/card-image/card-image-url.ts src/card-image/card-image-url.test.ts

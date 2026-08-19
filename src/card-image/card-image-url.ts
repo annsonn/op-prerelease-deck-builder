@@ -1,6 +1,11 @@
 import { printedCardIdSchema } from '../../shared/catalog.js'
 
-const CARD_IMAGE_ORIGIN = 'https://cdn.cardkaizoku.com'
+const CARD_IMAGE_ORIGIN =
+  'https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com'
+
+export const CARD_IMAGE_PROVIDER_NAME = 'Limitless TCG'
+export const CARD_IMAGE_PROVIDER_URL =
+  'https://onepiece.limitlesstcg.com/cards'
 
 export function resolveCardImageUrl(cardNumber: string): string {
   const parsed = printedCardIdSchema.safeParse(cardNumber)
@@ -9,5 +14,5 @@ export function resolveCardImageUrl(cardNumber: string): string {
   }
 
   const [prefix] = parsed.data.split('-')
-  return `${CARD_IMAGE_ORIGIN}/cards_en/${prefix}/${parsed.data}.png`
+  return `${CARD_IMAGE_ORIGIN}/one-piece/${prefix}/${parsed.data}_EN.webp`
 }
