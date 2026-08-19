@@ -140,7 +140,13 @@ Expected: lint and both TypeScript projects pass, all Vitest tests pass, runtime
 
 - [x] **Step 6: Review and commit the catalog refresh**
 
-Stage only the adapter, tests, pinned source configuration, plan, and sanitized `public/catalogs` outputs. Confirm no file under `tmp/` is tracked, then commit:
+Commit the Task 1 adapter and test changes separately:
+
+```bash
+git commit -m "fix: normalize Card Kaizoku EB0304 membership"
+```
+
+Then stage only `catalog-sources.json`, `tools/catalog/config.test.ts`, this plan, and the sanitized `public/catalogs` outputs. Confirm no file under `tmp/` is tracked, then commit the catalog refresh:
 
 ```bash
 git commit -m "data: refresh Card Kaizoku catalogs"
