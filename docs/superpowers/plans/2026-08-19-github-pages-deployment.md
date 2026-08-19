@@ -26,7 +26,7 @@
 - Modify: `src/catalog/load-catalog.test.ts`
 - Modify: `src/catalog/load-catalog.ts`
 
-- [ ] **Step 1: Write the failing path-join tests**
+- [x] **Step 1: Write the failing path-join tests**
 
 Import `resolveCatalogPath` and add this suite before `describe('loadCatalogIndex', ...)`:
 
@@ -49,7 +49,7 @@ describe('resolveCatalogPath', () => {
 })
 ```
 
-- [ ] **Step 2: Run the focused tests and verify the missing export fails**
+- [x] **Step 2: Run the focused tests and verify the missing export fails**
 
 Run:
 
@@ -59,7 +59,7 @@ npm test -- src/catalog/load-catalog.test.ts
 
 Expected: FAIL because `resolveCatalogPath` is not exported from `load-catalog.ts`.
 
-- [ ] **Step 3: Implement the minimal join helper**
+- [x] **Step 3: Implement the minimal join helper**
 
 Add to `src/catalog/load-catalog.ts` before `fetchBytes`:
 
@@ -70,7 +70,7 @@ export function resolveCatalogPath(path: string, baseUrl: string): string {
 }
 ```
 
-- [ ] **Step 4: Run the focused tests and verify the helper passes**
+- [x] **Step 4: Run the focused tests and verify the helper passes**
 
 Run:
 
@@ -80,7 +80,7 @@ npm test -- src/catalog/load-catalog.test.ts
 
 Expected: PASS for the two new path-join tests and every existing loader test.
 
-- [ ] **Step 5: Write failing integration tests for index and artifact prefixes**
+- [x] **Step 5: Write failing integration tests for index and artifact prefixes**
 
 Change the fixture's signature and artifact keys as follows; the empty default
 preserves every existing test path:
@@ -196,7 +196,7 @@ it('loads every artifact below the supplied Pages base path', async () => {
 })
 ```
 
-- [ ] **Step 6: Run the focused tests and verify the loader ignores the new base**
+- [x] **Step 6: Run the focused tests and verify the loader ignores the new base**
 
 Run:
 
@@ -206,7 +206,7 @@ npm test -- src/catalog/load-catalog.test.ts
 
 Expected: FAIL because both loader functions still fetch root-absolute paths and do not accept the base-path arguments.
 
-- [ ] **Step 7: Apply the base path to every loader fetch**
+- [x] **Step 7: Apply the base path to every loader fetch**
 
 Update the functions in `src/catalog/load-catalog.ts`:
 
@@ -242,7 +242,7 @@ Wrap its artifact path before `fetchBytes`:
 resolveCatalogPath(`${manifestDirectory}${filename}`, baseUrl)
 ```
 
-- [ ] **Step 8: Run focused and type checks**
+- [x] **Step 8: Run focused and type checks**
 
 Run:
 
@@ -253,7 +253,7 @@ npx tsc -b
 
 Expected: the loader suite passes and app TypeScript exits successfully.
 
-- [ ] **Step 9: Commit the catalog URL change**
+- [x] **Step 9: Commit the catalog URL change**
 
 ```bash
 git add src/catalog/load-catalog.ts src/catalog/load-catalog.test.ts

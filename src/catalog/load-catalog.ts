@@ -58,6 +58,11 @@ function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error)
 }
 
+export function resolveCatalogPath(path: string, baseUrl: string): string {
+  const normalizedBase = `${baseUrl.replace(/\/+$/, '')}/`
+  return `${normalizedBase}${path.replace(/^\/+/, '')}`
+}
+
 async function fetchBytes(
   path: string,
   label: string,
@@ -137,9 +142,15 @@ export async function browserSha256(bytes: Uint8Array): Promise<string> {
 
 export async function loadCatalogIndex(
   fetcher: typeof fetch = fetch,
+  baseUrl = '/',
 ): Promise<RuntimeCatalogIndex> {
-  const label = 'catalog index /catalogs/index.json'
-  const bytes = await fetchBytes('/catalogs/index.json', label, fetcher)
+  const logicalPath = '/catalogs/index.json'
+  const label = `catalog index ${logicalPath}`
+  const bytes = await fetchBytes(
+    resolveCatalogPath(logicalPath, baseUrl),
+    label,
+    fetcher,
+  )
   return parseSchema(
     runtimeCatalogIndexSchema,
     parseJson(bytes, label),
@@ -151,6 +162,7 @@ export async function loadRuntimeCatalog(
   entry: RuntimeCatalogIndexEntry,
   fetcher: typeof fetch = fetch,
   digest: (bytes: Uint8Array) => Promise<string> = browserSha256,
+  baseUrl = '/',
 ): Promise<RuntimeCatalog> {
   const validatedEntry = parseSchema(
     runtimeCatalogIndexEntrySchema,
@@ -166,7 +178,7 @@ export async function loadRuntimeCatalog(
       runtimeArtifactNames.map(async (filename) => [
         filename,
         await fetchBytes(
-          `${manifestDirectory}${filename}`,
+          resolveCatalogPath(`${manifestDirectory}${filename}`, baseUrl),
           `${validatedEntry.setId} ${filename}`,
           fetcher,
         ),

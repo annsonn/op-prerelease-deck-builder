@@ -8,6 +8,7 @@ import {
   browserSha256,
   loadCatalogIndex,
   loadRuntimeCatalog,
+  resolveCatalogPath,
 } from './load-catalog.js'
 
 const encoder = new TextEncoder()
@@ -63,7 +64,8 @@ interface RuntimeFixture {
   rebuildChecksums: () => Promise<void>
 }
 
-async function runtimeFixture(): Promise<RuntimeFixture> {
+async function runtimeFixture(basePath = ''): Promise<RuntimeFixture> {
+  const artifactRoot = `${basePath}/catalogs/op16`
   const cards = [
     card('OP16-005'),
     card('OP10-045', {
@@ -75,7 +77,7 @@ async function runtimeFixture(): Promise<RuntimeFixture> {
     }),
   ]
   const artifacts: Record<string, string> = {
-    '/catalogs/op16/manifest.json': `${JSON.stringify({
+    [`${artifactRoot}/manifest.json`]: `${JSON.stringify({
       schemaVersion: 1,
       setId: 'OP16',
       language: 'en',
@@ -84,14 +86,14 @@ async function runtimeFixture(): Promise<RuntimeFixture> {
       sourceSha256,
       readiness: 'needs-review',
     })}\n`,
-    '/catalogs/op16/cards.json': `${JSON.stringify(cards)}\n`,
-    '/catalogs/op16/set-contents.json': `${JSON.stringify(
+    [`${artifactRoot}/cards.json`]: `${JSON.stringify(cards)}\n`,
+    [`${artifactRoot}/set-contents.json`]: `${JSON.stringify(
       cards.map(({ cardNumber }) => cardNumber),
     )}\n`,
-    '/catalogs/op16/strategy-suggestions.json': `${JSON.stringify(
+    [`${artifactRoot}/strategy-suggestions.json`]: `${JSON.stringify(
       cards.map(({ cardNumber }) => suggestion(cardNumber)),
     )}\n`,
-    '/catalogs/op16/checksums.json': '',
+    [`${artifactRoot}/checksums.json`]: '',
   }
 
   const rebuildChecksums = async (): Promise<void> => {
@@ -105,12 +107,12 @@ async function runtimeFixture(): Promise<RuntimeFixture> {
         ].map(async (filename) => [
           filename,
           await browserSha256(
-            encoder.encode(artifacts[`/catalogs/op16/${filename}`]),
+            encoder.encode(artifacts[`${artifactRoot}/${filename}`]),
           ),
         ]),
       ),
     )
-    artifacts['/catalogs/op16/checksums.json'] = `${JSON.stringify(checksums)}\n`
+    artifacts[`${artifactRoot}/checksums.json`] = `${JSON.stringify(checksums)}\n`
   }
   await rebuildChecksums()
 
@@ -161,6 +163,32 @@ describe('browserSha256', () => {
   })
 })
 
+describe('resolveCatalogPath', () => {
+  it('preserves root-based catalog paths for local development', () => {
+    expect(resolveCatalogPath('/catalogs/index.json', '/')).toBe(
+      '/catalogs/index.json',
+    )
+  })
+
+  it('joins logical catalog paths to a Pages base without duplicate slashes', () => {
+    expect(
+      resolveCatalogPath(
+        '/catalogs/op16/manifest.json',
+        '/op-prerelease-deck-builder',
+      ),
+    ).toBe('/op-prerelease-deck-builder/catalogs/op16/manifest.json')
+  })
+
+  it('collapses repeated trailing slashes in the base path', () => {
+    expect(
+      resolveCatalogPath(
+        '/catalogs/index.json',
+        '/op-prerelease-deck-builder///',
+      ),
+    ).toBe('/op-prerelease-deck-builder/catalogs/index.json')
+  })
+})
+
 describe('loadCatalogIndex', () => {
   it('loads and validates the complete runtime index', async () => {
     const fetcher = fetchText(JSON.stringify(runtimeIndex()))
@@ -170,6 +198,16 @@ describe('loadCatalogIndex', () => {
     expect(index.sets).toHaveLength(17)
     expect(index.sets[15]).toEqual(entry)
     expect(fetcher).toHaveBeenCalledWith('/catalogs/index.json')
+  })
+
+  it('loads the index below the supplied Pages base path', async () => {
+    const fetcher = fetchText(JSON.stringify(runtimeIndex()))
+
+    await loadCatalogIndex(fetcher, '/op-prerelease-deck-builder/')
+
+    expect(fetcher).toHaveBeenCalledWith(
+      '/op-prerelease-deck-builder/catalogs/index.json',
+    )
   })
 
   it('rejects an unsuccessful HTTP response', async () => {
@@ -215,6 +253,26 @@ describe('loadRuntimeCatalog', () => {
     expect(Object.isFrozen(catalog.cards)).toBe(true)
     expect(Object.isFrozen(catalog.specialCards)).toBe(true)
     expect(Object.isFrozen(catalog.strategySuggestions)).toBe(true)
+  })
+
+  it('loads every artifact below the supplied Pages base path', async () => {
+    const basePath = '/op-prerelease-deck-builder'
+    const { fetcher } = await runtimeFixture(basePath)
+
+    await loadRuntimeCatalog(entry, fetcher, browserSha256, `${basePath}/`)
+
+    expect(fetcher).toHaveBeenCalledTimes(5)
+    for (const filename of [
+      'manifest.json',
+      'cards.json',
+      'set-contents.json',
+      'strategy-suggestions.json',
+      'checksums.json',
+    ]) {
+      expect(fetcher).toHaveBeenCalledWith(
+        `${basePath}/catalogs/op16/${filename}`,
+      )
+    }
   })
 
   it('uses detached, deeply frozen feature metadata from enriched suggestions', async () => {

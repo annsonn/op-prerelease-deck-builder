@@ -13,8 +13,23 @@ import type {
 } from '../shared/catalog.js'
 import { classifyCardFeatures } from '../shared/card-features.js'
 import App, { type CatalogApi } from './App.js'
-import type { RuntimeCatalog } from './catalog/load-catalog.js'
+import {
+  browserSha256,
+  type RuntimeCatalog,
+} from './catalog/load-catalog.js'
 import type { TestPoolGeneration } from './test-pool/generate-test-pool.js'
+
+const catalogLoaderMocks = vi.hoisted(() => ({
+  loadCatalogIndex: vi.fn(),
+  loadRuntimeCatalog: vi.fn(),
+}))
+
+vi.mock('./catalog/load-catalog.js', async (importOriginal) => {
+  const actual = await importOriginal<
+    typeof import('./catalog/load-catalog.js')
+  >()
+  return { ...actual, ...catalogLoaderMocks }
+})
 
 const sourceSha256 = 'a'.repeat(64)
 
@@ -179,6 +194,35 @@ async function commitQuantity(
   await user.type(input, String(quantity))
   await user.tab()
 }
+
+describe('default catalog API', () => {
+  it('passes the Vite base URL through the browser gateway', async () => {
+    const user = userEvent.setup()
+    catalogLoaderMocks.loadCatalogIndex.mockResolvedValue(runtimeIndex())
+    catalogLoaderMocks.loadRuntimeCatalog.mockResolvedValue(op16Catalog())
+
+    render(<App />)
+
+    await waitFor(() => {
+      expect(catalogLoaderMocks.loadCatalogIndex).toHaveBeenCalledWith(
+        fetch,
+        import.meta.env.BASE_URL,
+      )
+    })
+    await user.selectOptions(
+      await screen.findByRole('combobox', { name: 'Card set' }),
+      'OP16',
+    )
+    await waitFor(() => {
+      expect(catalogLoaderMocks.loadRuntimeCatalog).toHaveBeenCalledWith(
+        indexEntry(16),
+        fetch,
+        browserSha256,
+        import.meta.env.BASE_URL,
+      )
+    })
+  })
+})
 
 describe('sealed pool builder', () => {
   it('shows the test-pool utility only after the selected catalog loads', async () => {

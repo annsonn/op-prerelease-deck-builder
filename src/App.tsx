@@ -7,6 +7,7 @@ import type {
 import type { PlayableCard } from '../shared/catalog.js'
 import './App.css'
 import {
+  browserSha256,
   loadCatalogIndex,
   loadRuntimeCatalog,
   type RuntimeCatalog,
@@ -50,8 +51,14 @@ interface AppProps {
 }
 
 const defaultCatalogApi: CatalogApi = {
-  loadIndex: () => loadCatalogIndex(),
-  loadCatalog: (entry) => loadRuntimeCatalog(entry),
+  loadIndex: () => loadCatalogIndex(fetch, import.meta.env.BASE_URL),
+  loadCatalog: (entry) =>
+    loadRuntimeCatalog(
+      entry,
+      fetch,
+      browserSha256,
+      import.meta.env.BASE_URL,
+    ),
 }
 
 const defaultTestPoolApi: TestPoolApi = {
