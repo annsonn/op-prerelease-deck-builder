@@ -5,6 +5,8 @@ sealed pool into a deterministic 40-card deck, deck analysis, and a short play
 guide. It runs from committed static catalogs; installable PWA and airplane-mode
 support are still planned.
 
+**Live app:** [Open the deck builder](https://annsonn.github.io/op-prerelease-deck-builder/)
+
 ## What it does
 
 Choose a supported booster set, enter each opened card by its printed card
