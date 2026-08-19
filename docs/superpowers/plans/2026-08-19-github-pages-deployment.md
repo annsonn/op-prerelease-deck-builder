@@ -481,7 +481,7 @@ git commit -m "ci: deploy app to GitHub Pages"
 - Verify: `.github/workflows/ci.yml`
 - Verify: `README.md`
 
-- [ ] **Step 1: Run all repository gates**
+- [x] **Step 1: Run all repository gates**
 
 Run:
 
@@ -493,7 +493,7 @@ git diff --check
 
 Expected: lint, both TypeScript projects, all Vitest suites, the 17-set/85-file catalog check, the Pages production build, and the diff check all pass.
 
-- [ ] **Step 2: Start the Pages-path preview**
+- [x] **Step 2: Start the Pages-path preview**
 
 Run:
 
@@ -503,7 +503,7 @@ VITE_BASE_PATH=/op-prerelease-deck-builder/ npm run preview -- --host 127.0.0.1
 
 Expected: Vite serves the existing build and reports port `4173` unless that port is occupied.
 
-- [ ] **Step 3: Verify the deployed-path HTML and catalogs locally**
+- [x] **Step 3: Verify the deployed-path HTML and catalogs locally**
 
 Open:
 
@@ -513,7 +513,7 @@ http://127.0.0.1:4173/op-prerelease-deck-builder/
 
 Confirm the app renders, the set selector contains OP-01 through OP-17, OP-16 can be selected, and the browser console has no failed catalog requests or runtime errors.
 
-- [ ] **Step 4: Verify repository state**
+- [x] **Step 4: Verify repository state**
 
 Run:
 
