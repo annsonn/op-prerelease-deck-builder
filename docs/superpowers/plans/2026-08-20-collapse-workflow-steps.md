@@ -803,7 +803,7 @@ git add docs/superpowers/plans/2026-08-20-collapse-workflow-steps.md
 git commit -m "docs: verify collapsible workflow steps"
 ```
 
-- [ ] **Step 6: Request standards and spec review**
+- [x] **Step 6: Request standards and spec review**
 
 Dispatch independent reviewers against the feature branch’s merge-base with `main`. Resolve every Critical or Important finding, rerun the affected focused tests, and repeat review until both axes approve.
 
@@ -845,3 +845,6 @@ Verified in the `codex/collapse-workflow-steps` worktree on 2026-08-20.
   - Pointer activation reopened Setup, Entry, and Pool independently, preserving every other state; a second successful build closed all three again. Reopening Setup and selecting OP17 then kept Setup open, reopened Entry and Pool, reset Pool to 0 copies / 0 eligible, and removed the stale result.
   - Keyboard qualification: the in-app browser's Playwright `press`, coordinate-keypress, and DOM-keypress surfaces focused the native summaries but did not trigger their default Enter/Space toggle behavior, so keyboard activation is not claimed from rendered QA. The focused summaries did match `:focus-visible` and rendered the expected solid 3 px `rgba(37, 99, 184, 0.42)` outline; the visible ring was also confirmed in the rendered capture. Native summary pointer behavior and automated disclosure integration tests passed, but physical Enter/Space activation remains unverified in this environment.
   - At every measured state, `documentElement.scrollWidth === clientWidth === 1440`. Supported activations retained focus on the invoked summary or button, and captured console warning/error logs were empty.
+- Aggregate review against merge-base `239382e`:
+  - Spec axis: approved with no missing, partial, incorrect, or extra behavior.
+  - Standards axis: no documented-standard violations; one non-blocking duplication judgement call for the intentionally specialized WorkflowStep and PoolReview disclosure shells.
