@@ -643,7 +643,7 @@ git commit -m "feat: collapse pool after deck build"
 **Files:**
 - Modify: `docs/superpowers/plans/2026-08-20-collapsible-pool-review.md`
 
-- [ ] **Step 1: Run the complete automated quality gate**
+- [x] **Step 1: Run the complete automated quality gate**
 
 Run:
 
@@ -667,17 +667,26 @@ Start the app with `npm run dev -- --host 127.0.0.1`, load OP16, generate a 60-c
 - Adding a card after another build reopens the pool automatically.
 - There is no horizontal overflow and no unexpected console warning/error.
 
-- [ ] **Step 3: Run desktop browser QA at 1440×900**
+- [x] **Step 3: Run desktop browser QA at 1440×900**
 
 Repeat the successful build/collapse, manual reopen, and card-entry reopen flow. Verify the summary, pool content, sticky Build deck panel, generated deck, and card-image dialog remain visually separated and usable with no horizontal overflow or unexpected console warning/error.
 
-- [ ] **Step 4: Record verification evidence in this plan**
+- [x] **Step 4: Record verification evidence in this plan**
 
 Append a `## Verification evidence` section containing the exact test/build counts, the two viewport sizes, the exercised transitions, any saved screenshot paths under ignored `tmp/`, and any honestly qualified tooling limitation. Check off only steps actually completed.
 
-- [ ] **Step 5: Commit the verification record**
+- [x] **Step 5: Commit the verification record**
 
 ```bash
 git add docs/superpowers/plans/2026-08-20-collapsible-pool-review.md
 git commit -m "docs: complete collapsible pool review plan"
 ```
+
+## Verification evidence
+
+- Date and revision: 2026-08-20 (America/Toronto), feature commit `67a870606f5a7c148ef9a7cadaa6caad59ab7f96`.
+- Automated gate: the first sandboxed `npm run verify` reached clean lint and app/tools TypeScript checks plus 51/51 Vitest files and 782/782 tests, then exited 1 when `tsx` could not create its catalog IPC socket (`listen EPERM`). The permitted rerun exited 0 with the same 51/51 files and 782/782 tests plus `Runtime catalogs ready: 17 sets, 85 files`. The first sandboxed production build stopped at the same prebuild IPC limitation; the permitted `npm run build -- --base=/op-prerelease-deck-builder/` rerun exited 0, validated 17 sets / 85 files, transformed 126 modules, and produced `dist/index.html` 0.64 kB (gzip 0.36 kB), CSS 22.52 kB (gzip 5.42 kB), and JavaScript 336.76 kB (gzip 101.15 kB). `git diff --check` exited 0.
+- Mobile QA, exactly 412×915 at `http://127.0.0.1:5173/`: OP16 loaded, the 60-card development pool opened with visible `60 copies` / `58 eligible` totals, and Build deck produced `Strategy sealed build`, Main deck 40, Sideboard 18, and a closed pool. The closed summary remained visible; after the mutation pass it showed `61 copies` / `59 eligible`. Its computed box was 354×48 px, and `documentElement.scrollWidth` equaled `window.innerWidth` at 412 px. Pointer/touch-style clicks opened and closed the native summary. A keyboard-focused summary had a visible computed `3px solid rgba(37, 99, 184, 0.42)` outline with a 3 px offset. Reopening exposed usable Undo, quantity, Remove, Latest accepted card, Recent accepted entries, and View card controls; the card image loaded in its dialog and the Close button dismissed it. A second Build deck closed the pool, then adding short card number `005` reported `Added Thatch. Copy 1.`, reopened the pool, and removed the stale generated deck. The warning/error console was empty.
+- Mobile keyboard limitation: the in-app Browser's Enter and Space injection did not activate the focused pool `<summary>`; the same injected keys also did not activate the separate, uncontrolled native Sideboard `<summary>`. Focus and `:focus-visible` styling were observable, but native Enter/Space toggling could not be verified through this browser surface. Mobile Step 2 therefore remains unchecked rather than overstating coverage.
+- Desktop QA, exactly 1440×900 at the same URL: a reload reset the app, then OP16 → 60-card development pool → Build deck again showed the generated deck and closed the pool. The closed pool panel was 688×98 px and its summary was 638×48 px; the summary, Build deck panel, and generated deck remained distinct and usable in the rendered view. Manual click reopened the pool and exposed its controls. The card-image dialog loaded its image and Close control, measured 420×671.3984375 px at `(510, 114.296875)`, remained fully within the viewport, and closed successfully. A separate reset/build/add-`005` pass closed and then reopened the pool, cleared the stale deck, and reported `Added Thatch. Copy 1.` with `61 copies` / `61 eligible`. `documentElement.scrollWidth` equaled `window.innerWidth` at 1440 px in both the built and reopened/mutated states. Both desktop warning/error console reads were empty.
+- Ignored, uncommitted screenshots: `/Users/anschung/Documents/ChatGPT/one piece tcg sealed tourney builder/.worktrees/collapsible-pool-review/tmp/qa/collapsible-pool-review/mobile-412x915-built-closed.png`, `/Users/anschung/Documents/ChatGPT/one piece tcg sealed tourney builder/.worktrees/collapsible-pool-review/tmp/qa/collapsible-pool-review/desktop-1440x900-built-closed.png`, and `/Users/anschung/Documents/ChatGPT/one piece tcg sealed tourney builder/.worktrees/collapsible-pool-review/tmp/qa/collapsible-pool-review/desktop-1440x900-card-dialog.png`. `.gitignore` rule `tmp/` covers all three.
