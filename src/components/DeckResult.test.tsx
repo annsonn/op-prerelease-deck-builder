@@ -3,6 +3,10 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
 import type { PlayableCard } from '../../shared/catalog.js'
+import {
+  classifyCardFeatures,
+  type CardFeatures,
+} from '../../shared/card-features.js'
 import type { StrategyDeckSolution } from '../solver/types.js'
 import { DeckResult } from './DeckResult.js'
 
@@ -18,7 +22,7 @@ const mainCard: PlayableCard = {
   counter: 1000,
   attribute: 'Strike',
   traits: ['Test Crew'],
-  effect: '',
+  effect: 'If your Leader is [Nami], this Character gains [Blocker].',
   trigger: '',
   setMembership: ['OP16'],
   variantsCollapsed: 1,
@@ -38,7 +42,7 @@ const sideboardCard: PlayableCard = {
   counter: null,
   attribute: '',
   traits: ['Test Crew'],
-  effect: 'Test effect.',
+  effect: '[Blocker]',
   trigger: '',
   setMembership: ['OP16'],
   variantsCollapsed: 1,
@@ -52,6 +56,7 @@ const secondMainCard: PlayableCard = {
   name: 'Second Main Card',
   colors: ['Green'],
   cost: 6,
+  effect: '',
   entryShortcut: '007',
 }
 
@@ -61,8 +66,16 @@ const secondSideboardCard: PlayableCard = {
   name: 'Second Sideboard Card',
   colors: ['Purple'],
   cost: 2,
+  effect: '',
   entryShortcut: '008',
 }
+
+const featuresByCardNumber: ReadonlyMap<string, CardFeatures> = new Map([
+  [mainCard.cardNumber, classifyCardFeatures(mainCard)],
+  [secondMainCard.cardNumber, classifyCardFeatures(secondMainCard)],
+  [sideboardCard.cardNumber, classifyCardFeatures(sideboardCard)],
+  [secondSideboardCard.cardNumber, classifyCardFeatures(secondSideboardCard)],
+])
 
 const solution: StrategyDeckSolution = {
   label: 'Strategy sealed build',
@@ -239,7 +252,13 @@ const solution: StrategyDeckSolution = {
 
 describe('DeckResult', () => {
   it('wires analysis into the chart and insights while replacing old summaries', () => {
-    render(<DeckResult solution={solution} onReveal={vi.fn()} />)
+    render(
+      <DeckResult
+        solution={solution}
+        featuresByCardNumber={featuresByCardNumber}
+        onReveal={vi.fn()}
+      />,
+    )
 
     expect(
       screen.getByRole('heading', { name: 'Cost and color curve' }),
@@ -273,7 +292,13 @@ describe('DeckResult', () => {
   })
 
   it('places the play guide after insights and before the Main deck', () => {
-    render(<DeckResult solution={solution} onReveal={vi.fn()} />)
+    render(
+      <DeckResult
+        solution={solution}
+        featuresByCardNumber={featuresByCardNumber}
+        onReveal={vi.fn()}
+      />,
+    )
 
     const insights = screen.getByRole('region', { name: 'Weaknesses' }).closest(
       '.deck-insights',
@@ -291,7 +316,13 @@ describe('DeckResult', () => {
   })
 
   it('keeps Main deck full width with colors, printed stats, quantity, and score', () => {
-    render(<DeckResult solution={solution} onReveal={vi.fn()} />)
+    render(
+      <DeckResult
+        solution={solution}
+        featuresByCardNumber={featuresByCardNumber}
+        onReveal={vi.fn()}
+      />,
+    )
 
     const mainDeck = screen.getByRole('region', { name: 'Main deck' })
     expect(mainDeck).toHaveClass('main-deck')
@@ -312,17 +343,39 @@ describe('DeckResult', () => {
     expect(mainRows[0]).toHaveTextContent('Score 17')
     expect(mainRows[1]).toHaveTextContent('38×')
     expect(mainRows[1]).toHaveTextContent('Score 16')
-    const colors = within(mainRows[0]).getByRole('group', {
+    expect(featuresByCardNumber.get(mainCard.cardNumber)?.flags.blocker).toBe(
+      true,
+    )
+    expect(
+      featuresByCardNumber.get(mainCard.cardNumber)?.rainbowUsableFlags.blocker,
+    ).toBe(false)
+    const metadata = mainRows[0].querySelector<HTMLElement>(
+      '.deck-line__metadata',
+    )
+    expect(metadata).not.toBeNull()
+    const colors = within(metadata!).getByRole('group', {
       name: 'Card colors',
     })
     expect(colors).toHaveTextContent('Red / Blue')
     expect(colors.querySelectorAll('.card-color-rail__segment')).toHaveLength(2)
+    expect(
+      metadata!.querySelector('.deck-line__blocker-label'),
+    ).toHaveTextContent('Blocker')
+    expect(
+      mainRows[1].querySelector('.deck-line__blocker-label'),
+    ).not.toBeInTheDocument()
     expect(mainDeck.querySelector('.deck-line--colored')).toBeInTheDocument()
   })
 
   it('keeps Sideboard hidden until its native disclosure is opened', async () => {
     const user = userEvent.setup()
-    render(<DeckResult solution={solution} onReveal={vi.fn()} />)
+    render(
+      <DeckResult
+        solution={solution}
+        featuresByCardNumber={featuresByCardNumber}
+        onReveal={vi.fn()}
+      />,
+    )
 
     const summary = screen.getByText('Sideboard · 2 cards')
     const details = summary.closest('details')
@@ -370,6 +423,12 @@ describe('DeckResult', () => {
     expect(sideboardRows[1]).toHaveTextContent('1×')
     expect(sideboardRows[1]).toHaveTextContent('Score 10')
     expect(
+      featuresByCardNumber.get(sideboardCard.cardNumber)?.flags.blocker,
+    ).toBe(true)
+    expect(
+      sideboardRows[0].querySelector('.deck-line__blocker-label'),
+    ).not.toBeInTheDocument()
+    expect(
       within(sideboard).queryByRole('group', { name: 'Card colors' }),
     ).not.toBeInTheDocument()
 
@@ -382,6 +441,7 @@ describe('DeckResult', () => {
     render(
       <DeckResult
         solution={{ ...solution, sideboard: [] }}
+        featuresByCardNumber={featuresByCardNumber}
         onReveal={vi.fn()}
       />,
     )
@@ -407,6 +467,7 @@ describe('DeckResult', () => {
           ...solution,
           playGuide: { ...solution.playGuide, sideboardSuggestions: [] },
         }}
+        featuresByCardNumber={featuresByCardNumber}
         onReveal={vi.fn()}
       />,
     )
@@ -423,7 +484,13 @@ describe('DeckResult', () => {
   it('reveals Main and actual Sideboard cards but not suggestions', async () => {
     const user = userEvent.setup()
     const onReveal = vi.fn()
-    render(<DeckResult solution={solution} onReveal={onReveal} />)
+    render(
+      <DeckResult
+        solution={solution}
+        featuresByCardNumber={featuresByCardNumber}
+        onReveal={onReveal}
+      />,
+    )
 
     const mainDeck = screen.getByRole('region', { name: 'Main deck' })
     for (const card of [mainCard, secondMainCard]) {
@@ -463,5 +530,20 @@ describe('DeckResult', () => {
       name: 'Sideboard suggestions',
     })
     expect(within(suggestions).queryAllByRole('button')).toHaveLength(0)
+  })
+
+  it('throws when a Main deck card is missing classified features', () => {
+    const missingMainFeature = new Map(featuresByCardNumber)
+    missingMainFeature.delete(mainCard.cardNumber)
+
+    expect(() =>
+      render(
+        <DeckResult
+          solution={solution}
+          featuresByCardNumber={missingMainFeature}
+          onReveal={vi.fn()}
+        />,
+      ),
+    ).toThrowError('Missing card features for OP16-005.')
   })
 })

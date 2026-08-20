@@ -1,4 +1,5 @@
 import type { PlayableCard } from '../../shared/catalog.js'
+import type { CardFeatures } from '../../shared/card-features.js'
 import type { DeckLine, DeckSolution } from '../solver/types.js'
 import { CardColorRail } from './CardColorRail.js'
 import { CardRevealButton } from './CardRevealButton.js'
@@ -10,6 +11,7 @@ import { DeckRoleCoverage } from './DeckRoleCoverage.js'
 
 interface DeckResultProps {
   solution: DeckSolution
+  featuresByCardNumber: ReadonlyMap<string, CardFeatures>
   onReveal: (card: PlayableCard) => void
 }
 
@@ -21,38 +23,69 @@ function cardCountLabel(count: number): string {
   return `${count} ${count === 1 ? 'card' : 'cards'}`
 }
 
+function featuresFor(
+  cardNumber: string,
+  featuresByCardNumber: ReadonlyMap<string, CardFeatures>,
+): CardFeatures {
+  const features = featuresByCardNumber.get(cardNumber)
+  if (features === undefined) {
+    throw new Error(`Missing card features for ${cardNumber}.`)
+  }
+  return features
+}
+
 function DeckList({
   lines,
+  featuresByCardNumber,
   showColors = false,
   onReveal,
 }: {
   lines: readonly DeckLine[]
+  featuresByCardNumber: ReadonlyMap<string, CardFeatures>
   showColors?: boolean
   onReveal: (card: PlayableCard) => void
 }) {
   if (lines.length === 0) return <p className="empty-result">None</p>
   return (
     <ul className="deck-list">
-      {lines.map((line) => (
-        <li
-          className={showColors ? 'deck-line deck-line--colored' : 'deck-line'}
-          key={line.card.cardNumber}
-        >
-          <strong>{line.quantity}×</strong>
-          <span className="deck-line__identity">
-            {line.card.name}
-            <small>{line.card.cardNumber}</small>
-            {showColors ? <CardColorRail colors={line.card.colors} /> : null}
-            <CardStats
-              cost={line.card.cost}
-              power={line.card.power}
-              counter={line.card.counter}
-            />
-          </span>
-          <span className="score">Score {line.score}</span>
-          <CardRevealButton card={line.card} onReveal={onReveal} />
-        </li>
-      ))}
+      {lines.map((line) => {
+        let isPrintedBlocker = false
+        if (showColors) {
+          const features = featuresFor(
+            line.card.cardNumber,
+            featuresByCardNumber,
+          )
+          isPrintedBlocker = features.flags.blocker
+        }
+
+        return (
+          <li
+            className={showColors ? 'deck-line deck-line--colored' : 'deck-line'}
+            key={line.card.cardNumber}
+          >
+            <strong>{line.quantity}×</strong>
+            <span className="deck-line__identity">
+              {line.card.name}
+              <small>{line.card.cardNumber}</small>
+              {showColors ? (
+                <span className="deck-line__metadata">
+                  <CardColorRail colors={line.card.colors} />
+                  {isPrintedBlocker ? (
+                    <span className="deck-line__blocker-label">Blocker</span>
+                  ) : null}
+                </span>
+              ) : null}
+              <CardStats
+                cost={line.card.cost}
+                power={line.card.power}
+                counter={line.card.counter}
+              />
+            </span>
+            <span className="score">Score {line.score}</span>
+            <CardRevealButton card={line.card} onReveal={onReveal} />
+          </li>
+        )
+      })}
     </ul>
   )
 }
@@ -89,7 +122,11 @@ function SideboardSuggestions({
   )
 }
 
-export function DeckResult({ solution, onReveal }: DeckResultProps) {
+export function DeckResult({
+  solution,
+  featuresByCardNumber,
+  onReveal,
+}: DeckResultProps) {
   const mainSize = quantity(solution.mainDeck)
   const sideboardSize = quantity(solution.sideboard)
 
@@ -135,6 +172,7 @@ export function DeckResult({ solution, onReveal }: DeckResultProps) {
           <h3 id="main-deck-heading">Main deck</h3>
           <DeckList
             lines={solution.mainDeck}
+            featuresByCardNumber={featuresByCardNumber}
             showColors
             onReveal={onReveal}
           />
@@ -147,7 +185,11 @@ export function DeckResult({ solution, onReveal }: DeckResultProps) {
                 suggestions={solution.playGuide.sideboardSuggestions}
               />
             )}
-            <DeckList lines={solution.sideboard} onReveal={onReveal} />
+            <DeckList
+              lines={solution.sideboard}
+              featuresByCardNumber={featuresByCardNumber}
+              onReveal={onReveal}
+            />
           </section>
         </details>
       </div>

@@ -1250,6 +1250,27 @@
   overflow-wrap: anywhere;
 }
 
+.deck-line__metadata {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+}
+
+.deck-line__blocker-label {
+  width: fit-content;
+  padding: 2px 7px;
+  border: 1px solid rgb(179 40 40 / 24%);
+  border-radius: 999px;
+  color: var(--red-dark);
+  background: #fff0f0;
+  font-size: 0.62rem;
+  font-weight: 800;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
 .deck-list small {
   color: var(--muted);
   font-size: 0.68rem;
