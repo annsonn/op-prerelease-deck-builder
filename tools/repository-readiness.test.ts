@@ -126,13 +126,43 @@ describe('public repository readiness', () => {
       readRepositoryFile('NOTICE'),
       readdir(join(repositoryRoot, 'public')),
     ])
+    const normalizedReadme = readme.replace(/\s+/g, ' ')
+    const normalizedNotice = notice.replace(/\s+/g, ' ')
 
     expect(readme).toContain('## Card images')
-    expect(readme).toContain('Images served by Limitless TCG')
-    expect(readme).toMatch(/card reveal requires an internet connection/i)
-    expect(readme).toMatch(/not covered by this repository's MIT License/i)
-    expect(notice).toContain('Limitless TCG')
-    expect(notice).toMatch(/served remotely/i)
+    expect(readme).toContain(
+      '[Images served by Limitless TCG](https://onepiece.limitlesstcg.com/cards)',
+    )
+    expect(normalizedReadme).toContain(
+      'Card reveal requires an internet connection.',
+    )
+    expect(normalizedReadme).toContain(
+      "The app derives the active card's English image URL and loads that image directly from Limitless TCG only after the user activates a View button.",
+    )
+    expect(normalizedReadme).toContain(
+      'No card image archive is downloaded during build, committed to this repository, or included in the GitHub Pages artifact.',
+    )
+    expect(normalizedReadme).toContain(
+      'The remote URL format is not a documented API guarantee',
+    )
+    expect(normalizedReadme).toContain(
+      'unavailable images fall back to an error state with Retry.',
+    )
+    expect(normalizedReadme).toContain(
+      "Card artwork and other third-party material remain the property of their respective owners and are not covered by this repository's MIT License.",
+    )
+    expect(normalizedNotice).toContain(
+      'This repository contains an unofficial personal fan tool. It is not affiliated with, authorized by, sponsored by, or endorsed by Bandai, Shueisha, Toei Animation, Eiichiro Oda, Card Kaizoku, or Limitless TCG.',
+    )
+    expect(normalizedNotice).toContain(
+      'Card images displayed by the application are served remotely by Limitless TCG after a user requests a card preview.',
+    )
+    expect(normalizedNotice).toContain(
+      'No card image files are distributed in this repository or licensed under its MIT License.',
+    )
+    expect(normalizedNotice).toContain(
+      'Limitless TCG is an independent third-party provider and does not sponsor or endorse this project.',
+    )
     expect(publicEntries).not.toContain('card-images')
   })
 
