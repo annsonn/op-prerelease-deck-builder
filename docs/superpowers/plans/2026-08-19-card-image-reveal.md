@@ -799,7 +799,7 @@ git commit -m "feat: reveal card images from pool and deck"
 - Modify: `README.md`
 - Modify: `NOTICE`
 
-- [ ] **Step 1: Write the failing repository-documentation test**
+- [x] **Step 1: Write the failing repository-documentation test**
 
 Extend the Node import in `tools/repository-readiness.test.ts`:
 
@@ -827,7 +827,7 @@ test('documents remote card images without bundling an image archive', async () 
 })
 ```
 
-- [ ] **Step 2: Run the focused test and confirm the missing documentation fails**
+- [x] **Step 2: Run the focused test and confirm the missing documentation fails**
 
 Run:
 
@@ -837,7 +837,7 @@ npm test -- tools/repository-readiness.test.ts
 
 Expected: FAIL because `README.md` has no Card images section, `NOTICE` does not identify Limitless, and the exact licensing boundary is absent.
 
-- [ ] **Step 3: Add the README image-source section**
+- [x] **Step 3: Add the README image-source section**
 
 Insert after `## Catalogs and offline use` and its existing content:
 
@@ -858,7 +858,7 @@ repository's MIT License.
 
 Keep the existing statement that runtime catalogs intentionally exclude source image URLs; remote card images remain a separate UI concern.
 
-- [ ] **Step 4: Extend NOTICE without implying affiliation or permission**
+- [x] **Step 4: Extend NOTICE without implying affiliation or permission**
 
 Append to `NOTICE`:
 
@@ -872,7 +872,7 @@ independent third-party provider and does not sponsor or endorse this project.
 
 Also add `or Limitless TCG` to the existing non-affiliation sentence.
 
-- [ ] **Step 5: Run the documentation test and repository checks**
+- [x] **Step 5: Run the documentation test and repository checks**
 
 Run:
 
@@ -884,7 +884,7 @@ git diff --check
 
 Expected: all commands PASS.
 
-- [ ] **Step 6: Commit the documentation boundary**
+- [x] **Step 6: Commit the documentation boundary**
 
 ```bash
 git add tools/repository-readiness.test.ts README.md NOTICE

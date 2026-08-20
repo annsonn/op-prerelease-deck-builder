@@ -3,9 +3,14 @@ Copyright (c) 2026 Anson Chung
 
 This repository contains an unofficial personal fan tool. It is not affiliated
 with, authorized by, sponsored by, or endorsed by Bandai, Shueisha, Toei
-Animation, Eiichiro Oda, or Card Kaizoku.
+Animation, Eiichiro Oda, Card Kaizoku, or Limitless TCG.
 
 The MIT License applies only to the original software source code in this
 repository. It does not grant rights to third-party names, trademarks, artwork,
 card text, or derived card data. Those materials remain the property of their
 respective owners and may be subject to separate terms and restrictions.
+
+Card images displayed by the application are served remotely by Limitless TCG
+after a user requests a card preview. No card image files are distributed in
+this repository or licensed under its MIT License. Limitless TCG is an
+independent third-party provider and does not sponsor or endorse this project.

@@ -94,6 +94,19 @@ Raw downloads and intermediate build data remain ignored under
 `tmp/catalog/source`, `tmp/catalog/bundles`, `tmp/catalog/reports`, and
 `tmp/catalog/staging`.
 
+## Card images
+
+Card reveal requires an internet connection. The app derives the active card's
+English image URL and loads that image directly from Limitless TCG only after
+the user activates a View button. No card image archive is downloaded during
+build, committed to this repository, or included in the GitHub Pages artifact.
+
+[Images served by Limitless TCG](https://onepiece.limitlesstcg.com/cards). The
+remote URL format is not a documented API guarantee, so unavailable images fall
+back to an error state with Retry. Card artwork and other third-party material
+remain the property of their respective owners and are
+not covered by this repository's MIT License.
+
 ## Updating the catalogs
 
 The default sync is the publication path. It reads the pinned URL and SHA-256

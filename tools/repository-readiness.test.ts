@@ -1,4 +1,4 @@
-import { readFile } from 'node:fs/promises'
+import { readFile, readdir } from 'node:fs/promises'
 import { join } from 'node:path'
 
 import { describe, expect, test } from 'vitest'
@@ -118,6 +118,22 @@ describe('public repository readiness', () => {
     expect(fixtures.join('\n')).not.toMatch(
       /Monkey\.D\.Dragon|Thatch|Cavendish|Bartholomew Kuma|Dragon's Command|New Headquarters|Straw Hat Crew|Whitebeard Pirates/i,
     )
+  })
+
+  test('documents remote card images without bundling an image archive', async () => {
+    const [readme, notice, publicEntries] = await Promise.all([
+      readRepositoryFile('README.md'),
+      readRepositoryFile('NOTICE'),
+      readdir(join(repositoryRoot, 'public')),
+    ])
+
+    expect(readme).toContain('## Card images')
+    expect(readme).toContain('Images served by Limitless TCG')
+    expect(readme).toMatch(/card reveal requires an internet connection/i)
+    expect(readme).toMatch(/not covered by this repository's MIT License/i)
+    expect(notice).toContain('Limitless TCG')
+    expect(notice).toMatch(/served remotely/i)
+    expect(publicEntries).not.toContain('card-images')
   })
 
   test('publishes license, notice, architecture, and roadmap documents', async () => {
