@@ -1035,13 +1035,11 @@ describe('sealed pool builder', () => {
     ).not.toBeInTheDocument()
 
     await user.selectOptions(mainDeckSort, 'cost')
-    await user.click(
-      within(mainDeck).getByRole('button', {
-        name: 'Change sort direction to descending',
-      }),
-    )
     expect(mainDeckSort).toHaveValue('cost')
-    expect(mainDeckDirection).toHaveTextContent('Descending')
+    expect(mainDeckDirection).toHaveAccessibleName(
+      'Change sort direction to descending',
+    )
+    expect(mainDeckDirection).toHaveTextContent('Ascending')
 
     await user.click(buildButton)
 

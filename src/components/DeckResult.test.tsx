@@ -458,12 +458,18 @@ describe('DeckResult', () => {
 
     const mainDeck = screen.getByRole('region', { name: 'Main deck' })
     const sort = within(mainDeck).getByRole('combobox', { name: 'Sort by' })
-    await user.selectOptions(sort, 'cost')
+    await user.selectOptions(sort, 'power')
     await user.click(
+      within(mainDeck).getByRole('button', {
+        name: 'Change sort direction to ascending',
+      }),
+    )
+    expect(sort).toHaveValue('power')
+    expect(
       within(mainDeck).getByRole('button', {
         name: 'Change sort direction to descending',
       }),
-    )
+    ).toHaveTextContent('Ascending')
     expect(mainDeckCardNumbers()).toEqual(['OP16-007', 'OP16-005'])
 
     view.rerender(
