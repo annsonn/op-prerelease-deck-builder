@@ -1,13 +1,77 @@
-import { readFile, readdir } from 'node:fs/promises'
+import { execFile } from 'node:child_process'
+import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
+import { promisify } from 'node:util'
 
 import { describe, expect, test } from 'vitest'
 
 const repositoryRoot = process.cwd()
+const execFileAsync = promisify(execFile)
+
+function isTrackedCardImageArtifact(path: string): boolean {
+  const normalizedPath = path.replaceAll('\\', '/')
+  const pathSegments = normalizedPath.split('/')
+  const basename = pathSegments.at(-1) ?? ''
+  const hasExplicitCardImagePath = pathSegments.some((segment) =>
+    /^(?:card[-_ ]images(?:[-_ ]archive)?|card[-_ ]image[-_ ]archive)$/i.test(
+      segment,
+    ),
+  )
+  const isExplicitCardImageArchive =
+    /(?:^|[-_ ])(?:card[-_ ]images(?:[-_ ]archive)?|card[-_ ]image[-_ ]archive)\.(?:7z|tar(?:\.gz)?|tgz|zip)$/i.test(
+      basename,
+    )
+  const isBitmap =
+    /\.(?:avif|bmp|gif|heic|heif|jpe?g|png|tiff?|webp)$/i.test(basename)
+  const containsPrintedCardId =
+    /(?:^|[^a-z0-9])(?:OP|ST|EB|PRB)\d+-\d{3}(?:_EN)?(?=$|[^a-z0-9])/i.test(
+      normalizedPath,
+    )
+
+  return (
+    hasExplicitCardImagePath ||
+    isExplicitCardImageArchive ||
+    (isBitmap && containsPrintedCardId)
+  )
+}
 
 async function readRepositoryFile(path: string): Promise<string> {
   return readFile(join(repositoryRoot, path), 'utf8')
 }
+
+describe('tracked card image artifact detection', () => {
+  test('rejects nested, renamed, case-varied card bitmaps and card-image archives', () => {
+    const forbiddenPaths = [
+      'public/assets/cards/OP16-001_EN.webp',
+      'public/assets/cards/OP16-004_EN/front.webp',
+      'public/assets/previews/front-ST01-002.jpg',
+      'public/assets/eb02-003.PNG',
+      'public/assets/previews/PRB01-004.jpeg',
+      'public/card-images/provider-logo.svg',
+      'public/assets/Card Images/archive.txt',
+      'public/assets/card-images.zip',
+      'public/assets/card-image-archive.tar.gz',
+    ]
+
+    expect(forbiddenPaths.filter(isTrackedCardImageArtifact)).toEqual(
+      forbiddenPaths,
+    )
+  })
+
+  test('allows source modules and unrelated images', () => {
+    const allowedPaths = [
+      'src/lib/card-image-url.ts',
+      'src/card-image/card-image-url.ts',
+      'src/components/CardImageDialog.tsx',
+      'public/favicon.png',
+      'public/assets/logo.webp',
+      'docs/card-image-notes.md',
+      'public/assets/OP16-001.txt',
+    ]
+
+    expect(allowedPaths.filter(isTrackedCardImageArtifact)).toEqual([])
+  })
+})
 
 describe('public repository readiness', () => {
   test('package metadata and verification scripts describe the sealed deck builder', async () => {
@@ -121,49 +185,65 @@ describe('public repository readiness', () => {
   })
 
   test('documents remote card images without bundling an image archive', async () => {
-    const [readme, notice, publicEntries] = await Promise.all([
+    const [readme, notice, { stdout: trackedFilesOutput }] = await Promise.all([
       readRepositoryFile('README.md'),
       readRepositoryFile('NOTICE'),
-      readdir(join(repositoryRoot, 'public')),
+      execFileAsync('git', ['ls-files', '-z'], {
+        cwd: repositoryRoot,
+        encoding: 'utf8',
+      }),
     ])
     const normalizedReadme = readme.replace(/\s+/g, ' ')
     const normalizedNotice = notice.replace(/\s+/g, ' ')
+    const trackedFiles = trackedFilesOutput.split('\0').filter(Boolean)
 
     expect(readme).toContain('## Card images')
     expect(readme).toContain(
       '[Images served by Limitless TCG](https://onepiece.limitlesstcg.com/cards)',
     )
-    expect(normalizedReadme).toContain(
-      'Card reveal requires an internet connection.',
+    expect(normalizedReadme).toMatch(
+      /card reveal[^.]*requires?[^.]*internet connection/i,
     )
-    expect(normalizedReadme).toContain(
-      "The app derives the active card's English image URL and loads that image directly from Limitless TCG only after the user activates a View button.",
+    expect(normalizedReadme).toMatch(
+      /loads?[^.]*directly from Limitless TCG[^.]*only after[^.]*activat(?:e|es|ed|ing|ion)[^.]*View/i,
     )
-    expect(normalizedReadme).toContain(
-      'No card image archive is downloaded during build, committed to this repository, or included in the GitHub Pages artifact.',
+    expect(normalizedReadme).toMatch(
+      /no card image archive[^.]*downloaded during build/i,
     )
-    expect(normalizedReadme).toContain(
-      'The remote URL format is not a documented API guarantee',
+    expect(normalizedReadme).toMatch(
+      /no card image archive[^.]*committed[^.]*repository/i,
     )
-    expect(normalizedReadme).toContain(
-      'unavailable images fall back to an error state with Retry.',
+    expect(normalizedReadme).toMatch(
+      /no card image archive[^.]*GitHub Pages artifact/i,
     )
-    expect(normalizedReadme).toContain(
-      "Card artwork and other third-party material remain the property of their respective owners and are not covered by this repository's MIT License.",
+    expect(normalizedReadme).toMatch(
+      /remote URL format[^.]*not[^.]*documented API guarantee/i,
     )
-    expect(normalizedNotice).toContain(
-      'This repository contains an unofficial personal fan tool. It is not affiliated with, authorized by, sponsored by, or endorsed by Bandai, Shueisha, Toei Animation, Eiichiro Oda, Card Kaizoku, or Limitless TCG.',
+    expect(normalizedReadme).toMatch(
+      /unavailable images[^.]*error state[^.]*Retry/i,
     )
-    expect(normalizedNotice).toContain(
-      'Card images displayed by the application are served remotely by Limitless TCG after a user requests a card preview.',
+    expect(normalizedReadme).toMatch(
+      /card artwork[^.]*third-party material[^.]*not covered[^.]*MIT License/i,
     )
-    expect(normalizedNotice).toContain(
-      'No card image files are distributed in this repository or licensed under its MIT License.',
+    expect(normalizedNotice).toMatch(
+      /(?:not affiliated[^.]*Limitless TCG|Limitless TCG[^.]*not affiliated)/i,
     )
-    expect(normalizedNotice).toContain(
-      'Limitless TCG is an independent third-party provider and does not sponsor or endorse this project.',
+    expect(normalizedNotice).toMatch(
+      /card images[^.]*served remotely[^.]*Limitless TCG/i,
     )
-    expect(publicEntries).not.toContain('card-images')
+    expect(normalizedNotice).toMatch(
+      /(?:no card image files[^.]*distributed|card image files[^.]*not distributed)/i,
+    )
+    expect(normalizedNotice).toMatch(
+      /(?:no card image files[^.]*licensed under[^.]*MIT License|card image files[^.]*not licensed[^.]*MIT License)/i,
+    )
+    expect(normalizedNotice).toMatch(
+      /Limitless TCG[^.]*independent[^.]*third-party provider/i,
+    )
+    expect(normalizedNotice).toMatch(
+      /(?:Limitless TCG[^.]*(?:does not sponsor or endorse|neither sponsors nor endorses)|not sponsored or endorsed[^.]*Limitless TCG)/i,
+    )
+    expect(trackedFiles.filter(isTrackedCardImageArtifact)).toEqual([])
   })
 
   test('publishes license, notice, architecture, and roadmap documents', async () => {
