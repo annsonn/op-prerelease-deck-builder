@@ -896,7 +896,7 @@ git commit -m "docs: attribute remote card images"
 **Files:**
 - Modify: `docs/superpowers/plans/2026-08-19-card-image-reveal.md`
 
-- [ ] **Step 1: Run the full automated verification**
+- [x] **Step 1: Run the full automated verification**
 
 Run:
 
@@ -938,17 +938,94 @@ Start the app with `npm run dev -- --host 127.0.0.1`, then verify at `412×915`:
 
 Repeat the same interaction checks at `1440×900`. Confirm the dialog is centered, internally bounded, and does not alter the surrounding pool/deck layout.
 
-- [ ] **Step 4: Record evidence and check every completed step**
+- [x] **Step 4: Record evidence and check every completed step**
 
 Append the exact test count, catalog count, build result, viewport dimensions, overflow measurements, focus behavior, image behavior, and console result to this plan. Mark completed checkboxes only after the associated evidence exists.
 
-- [ ] **Step 5: Commit the completed plan**
+- [x] **Step 5: Commit the completed plan**
 
 ```bash
 git add docs/superpowers/plans/2026-08-19-card-image-reveal.md
 git commit -m "docs: complete card image reveal plan"
 ```
 
-- [ ] **Step 6: Perform final review without pushing**
+- [x] **Step 6: Perform final review without pushing**
 
 Review the complete feature against `docs/superpowers/specs/2026-08-19-card-image-reveal-design.md`, confirm `git status --short --branch` is clean, and report the local commits. Do not push unless the user explicitly asks.
+
+#### Task 5 fresh verification evidence — 2026-08-20
+
+- **Automated gates:** The approved rerun of `npm run verify` exited 0 after
+  lint, app and tools TypeScript, 51 Vitest files / 774 tests, and
+  `Runtime catalogs ready: 17 sets, 85 files`. The initial sandboxed attempts
+  at the catalog step and build precheck hit the expected `tsx` local-IPC
+  `listen EPERM`; the complete verification and build were rerun outside that
+  restriction rather than treating partial output as a pass.
+- **Production build:**
+  `VITE_BASE_PATH=/op-prerelease-deck-builder/ npm run build` exited 0, checked
+  the same 17 sets / 85 files, transformed 126 modules, and emitted the
+  base-path production bundle. The clean pre-evidence checks were
+  `git diff --check` exit 0 and `git status --short --branch` showing only
+  `## codex/card-image-reveal`.
+- **Pixel 9 viewport (`412×915`):** document and body client/scroll widths were
+  `412/412`, so there was no horizontal overflow. With the Sideboard expanded,
+  all 106 reveal buttons measured exactly `48×48`: latest 1, pool 53, Main 30,
+  Sideboard 22. Recent entries, Sideboard suggestions, and Rainbow Luffy each
+  contained 0 reveal buttons. The dialog measured `380×668.594`, bounded at
+  `x=16..396`, `y=123.203..791.797`; its reserved media area measured
+  `348×487.195` (`0.714293`, effectively 5:7).
+- **Desktop viewport (`1440×900`):** document and body client/scroll widths
+  were `1440/1440`. With the Sideboard expanded, all 103 reveal buttons
+  measured exactly `48×48`: latest 1, pool 51, Main 30, Sideboard 21. Recent
+  entries, Sideboard suggestions, and Rainbow Luffy again contained 0 reveal
+  buttons. The centered dialog measured `420×671.398`, bounded at
+  `x=510..930`, `y=114.297..785.695`, centered at `(720,449.996)`; its media
+  area was `350×490` (exactly 5:7). Pool, Main, and Sideboard widths remained
+  `638`, `650`, and `650` before and while the modal was open.
+- **Real image checks:** each requested image completed with natural size
+  `600×838`, one dialog, one active `<img>`, and
+  `referrerpolicy="no-referrer"`:
+  - OP16 base:
+    `https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/one-piece/OP16/OP16-005_EN.webp`
+  - OP16 special reprint:
+    `https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/one-piece/ST15/ST15-005_EN.webp`
+  - OP17:
+    `https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/one-piece/OP17/OP17-005_EN.webp`
+- **Interactions:** latest, pool, Main, and expanded-Sideboard buttons each
+  opened the expected named dialog while maintaining one dialog / one image.
+  Initial focus moved to Close; Shift+Tab wrapped to attribution and Tab wrapped
+  back to Close. Close, Escape, and backdrop dismissal all worked, focus
+  returned to the originating eye button, and body overflow changed from the
+  exact prior empty value to `hidden` and back. Native quantity editing changed
+  a generated pool from `72 copies / 70 eligible` to `73 / 71`; removing that
+  two-copy row produced `71 / 69` and removed its quantity input.
+- **Failure fallback:** the in-app browser advertised viewport and page-asset
+  capabilities but no request interception, so browser error injection was not
+  fabricated. A fresh focused run of
+  `src/components/CardImageDialog.test.tsx` passed 1 file / 14 tests, including
+  `removes a failed image and Retry mounts a fresh loading request`, error-state
+  focus containment, and Retry-to-load recovery.
+- **Attribution limitation:** the visible link was verified as
+  `https://onepiece.limitlesstcg.com/cards`, `target="_blank"`, and
+  `rel="noreferrer"`. Both semantic and coordinate activation preserved the
+  deck-builder URL at `http://127.0.0.1:5178/`, but the in-app browser exposed
+  neither a controlled nor user tab for the spawned context, so the destination
+  URL could not receive independent live readback. Steps 2 and 3 remain
+  unchecked for this evidence gap.
+- **Console and artifacts:** the complete session recorded 0 warnings and 0
+  errors. Useful ignored screenshots are
+  `tmp/qa/card-image-reveal/mobile-st15-005-dialog.jpg` (`412×915`) and
+  `tmp/qa/card-image-reveal/desktop-op17-005-dialog.jpg` (`1440×900`). Both
+  were visually read back. The QA server was stopped and port 5178 had no
+  listener afterward.
+- **Design review:** the implementation was reread against
+  `docs/superpowers/specs/2026-08-19-card-image-reveal-design.md`. Resolver,
+  placement/exclusion, single-host dialog, accessibility, responsive layout,
+  on-demand remote-image boundary, attribution/disclosures, and repository
+  readiness coverage align with the design; no production or test code was
+  changed during Task 5. The only remaining uncertainty is the browser-context
+  readback described above.
+- **Final repository review:** the documentation commit contained only this
+  plan, its commit diff passed `git diff --check`, the complete local commit
+  stack from `main` was reviewed, and `git status --short --branch` returned
+  only the branch header. Nothing was pushed or merged.
