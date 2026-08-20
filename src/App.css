@@ -425,17 +425,13 @@
   display: none;
 }
 
-.pool-review__summary::after {
+.pool-review__indicator {
   color: var(--red-dark);
-  content: '+';
   font-size: 1.35rem;
   font-weight: 800;
+  justify-self: center;
   line-height: 1;
   text-align: center;
-}
-
-.pool-review[open] > .pool-review__summary::after {
-  content: '−';
 }
 
 .pool-review__summary:focus-visible {

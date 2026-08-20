@@ -68,9 +68,11 @@ const emptyPool: PoolState = {
 function ControlledPoolReview({
   pool,
   initialOpen = true,
+  onOpenChange,
 }: {
   pool: PoolState
   initialOpen?: boolean
+  onOpenChange?: (open: boolean) => void
 }) {
   const [isOpen, setIsOpen] = useState(initialOpen)
 
@@ -83,7 +85,10 @@ function ControlledPoolReview({
         0,
       )}
       isOpen={isOpen}
-      onOpenChange={setIsOpen}
+      onOpenChange={(open) => {
+        onOpenChange?.(open)
+        setIsOpen(open)
+      }}
       onQuantity={vi.fn()}
       onUndo={vi.fn()}
       onReveal={vi.fn()}
@@ -99,6 +104,12 @@ function poolDisclosure(): HTMLDetailsElement {
   return disclosure
 }
 
+function nextNativeToggle(disclosure: HTMLDetailsElement): Promise<void> {
+  return new Promise((resolve) => {
+    disclosure.addEventListener('toggle', () => resolve(), { once: true })
+  })
+}
+
 describe('PoolReview', () => {
   it('keeps the heading and totals visible while the pool controls are collapsed', () => {
     const pool = appendCards(emptyPool, [playableCard.cardNumber])
@@ -106,7 +117,11 @@ describe('PoolReview', () => {
 
     expect(poolDisclosure()).not.toHaveAttribute('open')
     expect(screen.getByRole('heading', { name: 'Review your pool' })).toBeVisible()
-    const totals = screen.getByLabelText('Pool totals')
+    const summary = screen.getByText('Review your pool').closest('summary')
+    expect(summary).toHaveAccessibleName(
+      'Review your pool Pool totals: 1 copies, 1 eligible',
+    )
+    const totals = screen.getByLabelText(/^Pool totals:/)
     expect(totals).toBeVisible()
     expect(totals).toHaveTextContent('1 copies')
     expect(totals).toHaveTextContent('1 eligible')
@@ -133,12 +148,20 @@ describe('PoolReview', () => {
 
   it('lets the native summary manually open and close the controlled pool', async () => {
     const user = userEvent.setup()
+    const onOpenChange = vi.fn()
     const pool = appendCards(emptyPool, [playableCard.cardNumber])
-    render(<ControlledPoolReview pool={pool} initialOpen={false} />)
+    render(
+      <ControlledPoolReview
+        pool={pool}
+        initialOpen={false}
+        onOpenChange={onOpenChange}
+      />,
+    )
     const summary = screen.getByText('Review your pool').closest('summary')
     if (summary === null) throw new Error('Expected a pool disclosure summary.')
 
     await user.click(summary)
+    await waitFor(() => expect(onOpenChange).toHaveBeenLastCalledWith(true))
     await waitFor(() => expect(poolDisclosure()).toHaveAttribute('open'))
     expect(screen.getByLabelText('Latest accepted card')).toBeVisible()
     expect(screen.getByRole('spinbutton')).toBeVisible()
@@ -147,7 +170,9 @@ describe('PoolReview', () => {
     ).toBeVisible()
 
     await user.click(summary)
+    await waitFor(() => expect(onOpenChange).toHaveBeenLastCalledWith(false))
     await waitFor(() => expect(poolDisclosure()).not.toHaveAttribute('open'))
+    expect(onOpenChange.mock.calls.map(([open]) => open)).toEqual([true, false])
   })
 
   it('does not echo programmatic open state back through onOpenChange', async () => {
@@ -165,9 +190,11 @@ describe('PoolReview', () => {
         onReveal={vi.fn()}
       />,
     )
-    await waitFor(() => expect(poolDisclosure()).not.toHaveAttribute('open'))
+    const disclosure = poolDisclosure()
+    await waitFor(() => expect(disclosure).not.toHaveAttribute('open'))
     expect(onOpenChange).not.toHaveBeenCalled()
 
+    const openingToggle = nextNativeToggle(disclosure)
     view.rerender(
       <PoolReview
         catalog={catalog}
@@ -180,9 +207,11 @@ describe('PoolReview', () => {
         onReveal={vi.fn()}
       />,
     )
-    await waitFor(() => expect(poolDisclosure()).toHaveAttribute('open'))
+    await openingToggle
+    expect(disclosure).toHaveAttribute('open')
     expect(onOpenChange).not.toHaveBeenCalled()
 
+    const closingToggle = nextNativeToggle(disclosure)
     view.rerender(
       <PoolReview
         catalog={catalog}
@@ -195,7 +224,8 @@ describe('PoolReview', () => {
         onReveal={vi.fn()}
       />,
     )
-    await waitFor(() => expect(poolDisclosure()).not.toHaveAttribute('open'))
+    await closingToggle
+    expect(disclosure).not.toHaveAttribute('open')
     expect(onOpenChange).not.toHaveBeenCalled()
   })
 
@@ -231,6 +261,13 @@ describe('PoolReview', () => {
     await user.type(quantity, '2')
     await user.tab()
     expect(onQuantity).toHaveBeenCalledWith(playableCard.cardNumber, 2)
+
+    await user.click(
+      screen.getByRole('button', {
+        name: 'Remove Test Character (OP16-005)',
+      }),
+    )
+    expect(onQuantity).toHaveBeenLastCalledWith(playableCard.cardNumber, 0)
 
     const metadata = screen.getByText('OP16-005 · CHARACTER')
     const row = metadata.closest('li')
@@ -330,6 +367,9 @@ describe('PoolReview', () => {
       throw new Error('Expected recent accepted entries disclosure')
     }
     await user.click(within(recentEntries).getByText('Recent accepted entries'))
+    expect(recentEntries).toHaveAttribute('open')
+    expect(within(recentEntries).getByText('Test Character')).toBeVisible()
+    expect(poolDisclosure()).toHaveAttribute('open')
     expect(within(recentEntries).queryAllByRole('button')).toHaveLength(0)
   })
 })

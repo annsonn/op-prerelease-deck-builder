@@ -210,6 +210,10 @@ function poolCardRow(cardName: string, cardNumber: string): HTMLElement {
   return row
 }
 
+function poolTotals(): HTMLElement {
+  return screen.getByLabelText(/^Pool totals:/)
+}
+
 function cardImage(): HTMLImageElement {
   const image = document.body.querySelector<HTMLImageElement>(
     '.card-image-dialog__image',
@@ -315,8 +319,8 @@ describe('sealed pool builder', () => {
 
     expect(generate).toHaveBeenCalledOnce()
     expect(generate).toHaveBeenCalledWith(loadedCatalog, 'development')
-    expect(screen.getByLabelText('Pool totals')).toHaveTextContent('60 copies')
-    expect(screen.getByLabelText('Pool totals')).toHaveTextContent('59 eligible')
+    expect(poolTotals()).toHaveTextContent('60 copies')
+    expect(poolTotals()).toHaveTextContent('59 eligible')
     expect(
       screen.getByRole('status', { name: 'Entry confirmation' }),
     ).toHaveTextContent(
@@ -337,8 +341,8 @@ describe('sealed pool builder', () => {
     ).toBeVisible()
 
     await user.click(screen.getByRole('button', { name: 'Undo last change' }))
-    expect(screen.getByLabelText('Pool totals')).toHaveTextContent('0 copies')
-    expect(screen.getByLabelText('Pool totals')).toHaveTextContent('0 eligible')
+    expect(poolTotals()).toHaveTextContent('0 copies')
+    expect(poolTotals()).toHaveTextContent('0 eligible')
     expect(
       screen.queryByLabelText('Latest accepted card'),
     ).not.toBeInTheDocument()
@@ -376,7 +380,7 @@ describe('sealed pool builder', () => {
     )
 
     expect(generate).toHaveBeenCalledWith(loadedCatalog, 'tournament')
-    expect(screen.getByLabelText('Pool totals')).toHaveTextContent('72 copies')
+    expect(poolTotals()).toHaveTextContent('72 copies')
     expect(
       screen.getByRole('status', { name: 'Entry confirmation' }),
     ).toHaveTextContent(
@@ -409,12 +413,12 @@ describe('sealed pool builder', () => {
         name: 'Generate 60-card development pool',
       }),
     )
-    expect(screen.getByLabelText('Pool totals')).toHaveTextContent('60 copies')
-    expect(screen.getByLabelText('Pool totals')).toHaveTextContent('59 eligible')
+    expect(poolTotals()).toHaveTextContent('60 copies')
+    expect(poolTotals()).toHaveTextContent('59 eligible')
 
     await user.click(screen.getByRole('button', { name: 'Undo last change' }))
-    expect(screen.getByLabelText('Pool totals')).toHaveTextContent('1 copies')
-    expect(screen.getByLabelText('Pool totals')).toHaveTextContent('1 eligible')
+    expect(poolTotals()).toHaveTextContent('1 copies')
+    expect(poolTotals()).toHaveTextContent('1 eligible')
     expect(
       screen.getByRole('spinbutton', {
         name: 'Quantity for OP16-005 Test Card (OP16-005)',
@@ -454,7 +458,7 @@ describe('sealed pool builder', () => {
     expect(
       screen.queryByRole('heading', { name: 'Strategy sealed build' }),
     ).not.toBeInTheDocument()
-    expect(screen.getByLabelText('Pool totals')).toHaveTextContent('60 copies')
+    expect(poolTotals()).toHaveTextContent('60 copies')
   })
 
   it('preserves the pool and solution when test-pool generation throws', async () => {
@@ -487,8 +491,8 @@ describe('sealed pool builder', () => {
     expect(screen.getByRole('alert')).toHaveTextContent(
       'No eligible booster rarities',
     )
-    expect(screen.getByLabelText('Pool totals')).toHaveTextContent('60 copies')
-    expect(screen.getByLabelText('Pool totals')).toHaveTextContent('59 eligible')
+    expect(poolTotals()).toHaveTextContent('60 copies')
+    expect(poolTotals()).toHaveTextContent('59 eligible')
     expect(
       screen.getByRole('heading', { name: 'Strategy sealed build' }),
     ).toBeVisible()
@@ -525,8 +529,8 @@ describe('sealed pool builder', () => {
     expect(screen.getByRole('alert')).toHaveTextContent(
       'Pool replacement must include at least one card.',
     )
-    expect(screen.getByLabelText('Pool totals')).toHaveTextContent('60 copies')
-    expect(screen.getByLabelText('Pool totals')).toHaveTextContent('59 eligible')
+    expect(poolTotals()).toHaveTextContent('60 copies')
+    expect(poolTotals()).toHaveTextContent('59 eligible')
     expect(
       screen.getByRole('heading', { name: 'Strategy sealed build' }),
     ).toBeVisible()
@@ -554,7 +558,7 @@ describe('sealed pool builder', () => {
         name: 'Generate 60-card development pool',
       }),
     )
-    expect(screen.getByLabelText('Pool totals')).toHaveTextContent('60 copies')
+    expect(poolTotals()).toHaveTextContent('60 copies')
 
     await user.selectOptions(picker, 'OP17')
 
@@ -564,7 +568,7 @@ describe('sealed pool builder', () => {
         name: 'Generate 72-card tournament pool',
       }),
     ).not.toBeInTheDocument()
-    expect(screen.queryByLabelText('Pool totals')).not.toBeInTheDocument()
+    expect(screen.queryByLabelText(/^Pool totals:/)).not.toBeInTheDocument()
 
     resolveOp17(runtimeCatalog(17, []))
 
@@ -573,7 +577,7 @@ describe('sealed pool builder', () => {
         name: 'Generate 72-card tournament pool',
       }),
     ).toBeVisible()
-    expect(screen.getByLabelText('Pool totals')).toHaveTextContent('0 copies')
+    expect(poolTotals()).toHaveTextContent('0 copies')
   })
 
   it('enters and corrects an OP-16 pool, then builds an exact legal deck', async () => {
@@ -1002,7 +1006,7 @@ describe('sealed pool builder', () => {
     fireEvent.click(generateButton)
 
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
-    expect(screen.getByLabelText('Pool totals')).toHaveTextContent('72 copies')
+    expect(poolTotals()).toHaveTextContent('72 copies')
 
     fireEvent.click(
       within(poolCardRow('OP16-005 Test Card', 'OP16-005')).getByRole(

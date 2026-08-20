@@ -119,10 +119,17 @@ export function PoolReview({
           >
             Review your pool
           </span>
-          <span className="pool-totals" aria-label="Pool totals">
+          {' '}
+          <span
+            className="pool-totals"
+            aria-label={`Pool totals: ${totalCopies} copies, ${eligibleCount} eligible`}
+          >
             <span>{totalCopies} copies</span>
             <span>{eligibleCount} eligible</span>
           </span>
+        </span>
+        <span className="pool-review__indicator" aria-hidden="true">
+          {isOpen ? '−' : '+'}
         </span>
       </summary>
 
