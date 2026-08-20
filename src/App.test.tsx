@@ -1016,40 +1016,48 @@ describe('sealed pool builder', () => {
   it('clears catalog-derived state while a replacement API reloads', async () => {
     const user = userEvent.setup()
     const firstApi = catalogApi()
+    const testPoolApi = { generate: () => testPoolGeneration() }
     let resolveReplacement!: (catalog: RuntimeCatalog) => void
     const replacementCatalog = new Promise<RuntimeCatalog>((resolve) => {
       resolveReplacement = resolve
     })
     const replacementApi = catalogApi(async () => replacementCatalog)
-    const view = render(<App catalogApi={firstApi} />)
+    const view = render(
+      <App catalogApi={firstApi} testPoolApi={testPoolApi} />,
+    )
 
     await user.selectOptions(
       await screen.findByRole('combobox', { name: 'Card set' }),
       'OP16',
     )
-    await user.type(
-      await screen.findByRole('textbox', {
-        name: 'Card number (1–3 digits)',
-      }),
-      '5',
-    )
-    await user.click(screen.getByRole('button', { name: 'Add number' }))
-    expect(screen.getByText('1 eligible')).toBeVisible()
+    await generateDevelopmentPool(user)
+    await user.click(screen.getByRole('button', { name: 'Build deck' }))
+    expect(
+      screen.getByRole('heading', { name: 'Strategy sealed build' }),
+    ).toBeVisible()
+    expect(poolDisclosure()).not.toHaveAttribute('open')
 
-    view.rerender(<App catalogApi={replacementApi} />)
+    view.rerender(
+      <App catalogApi={replacementApi} testPoolApi={testPoolApi} />,
+    )
 
     expect(screen.getByText('Loading card sets…')).toBeVisible()
-    expect(
-      screen.queryByRole('textbox', { name: 'Card number (1–3 digits)' }),
-    ).not.toBeInTheDocument()
-    await screen.findByRole('combobox', { name: 'Card set' })
-    resolveReplacement(op16Catalog())
-    await Promise.resolve()
+    expect(screen.queryByText('Review your pool')).not.toBeInTheDocument()
+    expect(document.querySelector('.result-panel')).toBeNull()
 
+    const replacementPicker = await screen.findByRole('combobox', {
+      name: 'Card set',
+    })
+    await user.selectOptions(replacementPicker, 'OP16')
+    resolveReplacement(op16Catalog())
+
+    expect(await screen.findByText('OP16 is ready for pool entry.')).toBeVisible()
+    expect(poolDisclosure()).toHaveAttribute('open')
+    expect(poolTotals()).toHaveTextContent('0 copies')
+    expect(poolTotals()).toHaveTextContent('0 eligible')
     expect(
-      screen.queryByRole('textbox', { name: 'Card number (1–3 digits)' }),
+      screen.queryByRole('heading', { name: 'Strategy sealed build' }),
     ).not.toBeInTheDocument()
-    expect(screen.queryByText('0 eligible')).not.toBeInTheDocument()
   })
 
   it('gives duplicate-name pool controls unique card-number labels', async () => {
