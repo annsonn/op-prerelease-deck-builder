@@ -481,7 +481,7 @@ describe('DeckResult', () => {
     expect(mainDeckCardNumbers()).toEqual(['OP16-005', 'OP16-007'])
   })
 
-  it('resets Main deck sorting synchronously when the solution identity changes', async () => {
+  it('resets Main deck sorting on every solution identity transition', async () => {
     const user = userEvent.setup()
     const view = render(
       <DeckResult
@@ -510,6 +510,22 @@ describe('DeckResult', () => {
     view.rerender(
       <DeckResult
         solution={{ ...solution, mainDeck: [...solution.mainDeck].reverse() }}
+        featuresByCardNumber={featuresByCardNumber}
+        onReveal={vi.fn()}
+      />,
+    )
+
+    expect(sort).toHaveValue('score')
+    expect(
+      within(mainDeck).getByRole('button', {
+        name: 'Change sort direction to ascending',
+      }),
+    ).toHaveTextContent('Descending')
+    expect(mainDeckCardNumbers()).toEqual(['OP16-005', 'OP16-007'])
+
+    view.rerender(
+      <DeckResult
+        solution={solution}
         featuresByCardNumber={featuresByCardNumber}
         onReveal={vi.fn()}
       />,
@@ -661,10 +677,42 @@ describe('DeckResult', () => {
     )
     expect(mainDeckCardNumbers()).toEqual(['OP16-007', 'OP16-005'])
 
-    const mainRow = within(mainDeck).getByText(secondMainCard.name).closest('li')
-    if (mainRow === null) throw new Error('Expected Main deck card row.')
+    const [secondMainRow, firstMainRow] = within(mainDeck).getAllByRole(
+      'listitem',
+    )
+    expect(secondMainRow).toHaveTextContent('38×')
+    expect(secondMainRow).toHaveTextContent('Score 16')
+    expect(
+      within(
+        within(secondMainRow).getByRole('group', { name: 'Card stats' }),
+      )
+        .getAllByTestId('card-stat-value')
+        .map((value) => value.textContent),
+    ).toEqual(['Cost 6', 'Power 6,000', 'Counter 1,000'])
+    expect(
+      within(secondMainRow).getByRole('group', { name: 'Card colors' }),
+    ).toHaveTextContent('Green')
+    expect(
+      secondMainRow.querySelector('.deck-line__blocker-label'),
+    ).not.toBeInTheDocument()
+    expect(firstMainRow).toHaveTextContent('2×')
+    expect(firstMainRow).toHaveTextContent('Score 17')
+    expect(
+      within(
+        within(firstMainRow).getByRole('group', { name: 'Card stats' }),
+      )
+        .getAllByTestId('card-stat-value')
+        .map((value) => value.textContent),
+    ).toEqual(['Cost 5', 'Power 7,000', 'Counter 1,000'])
+    expect(
+      within(firstMainRow).getByRole('group', { name: 'Card colors' }),
+    ).toHaveTextContent('Red / Blue')
+    expect(
+      firstMainRow.querySelector('.deck-line__blocker-label'),
+    ).toHaveTextContent('Blocker')
+
     await user.click(
-      within(mainRow).getByRole('button', {
+      within(secondMainRow).getByRole('button', {
         name: `View ${secondMainCard.name}, ${secondMainCard.cardNumber}`,
       }),
     )

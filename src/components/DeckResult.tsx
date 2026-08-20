@@ -168,6 +168,9 @@ export function DeckResult({
     storedMainDeckSort.solution === solution
       ? storedMainDeckSort
       : defaultMainDeckSort(solution)
+  if (storedMainDeckSort.solution !== solution) {
+    setStoredMainDeckSort(mainDeckSort)
+  }
   const nextDirection = oppositeDirection(mainDeckSort.direction)
   const orderedMainDeck = useMemo(
     () =>

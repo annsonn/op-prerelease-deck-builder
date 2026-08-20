@@ -1041,6 +1041,29 @@ describe('sealed pool builder', () => {
     )
     expect(mainDeckDirection).toHaveTextContent('Ascending')
 
+    const sortedMainRow = within(mainDeck)
+      .getByText('OP16-005 Test Card')
+      .closest('li')
+    if (sortedMainRow === null) {
+      throw new Error('Expected sorted Main deck row for OP16-005.')
+    }
+    await user.click(
+      within(sortedMainRow).getByRole('button', {
+        name: 'View OP16-005 Test Card, OP16-005',
+      }),
+    )
+    expect(
+      screen.getByRole('dialog', {
+        name: 'OP16-005 Test Card, OP16-005',
+      }),
+    ).toBeVisible()
+    await user.click(screen.getByRole('button', { name: 'Close card image' }))
+    expect(
+      screen.queryByRole('dialog', {
+        name: 'OP16-005 Test Card, OP16-005',
+      }),
+    ).not.toBeInTheDocument()
+
     await user.click(buildButton)
 
     expect(mainDeckSort).toHaveValue('score')
