@@ -872,6 +872,15 @@ describe('sealed pool builder', () => {
     const user = userEvent.setup()
     render(<App catalogApi={catalogApi()} />)
 
+    expect(
+      screen.queryByRole('combobox', { name: 'Sort by' }),
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', {
+        name: 'Change sort direction to ascending',
+      }),
+    ).not.toBeInTheDocument()
+
     const picker = await screen.findByRole('combobox', { name: 'Card set' })
     expect(within(picker).getByRole('option', { name: 'OP-16' })).toBeVisible()
     expect(within(picker).getByRole('option', { name: 'OP-17' })).toBeVisible()
@@ -958,6 +967,15 @@ describe('sealed pool builder', () => {
     expect(
       screen.getByRole('heading', { name: 'Strategy sealed build' }),
     ).toBeVisible()
+    const mainDeck = screen.getByRole('region', { name: 'Main deck' })
+    const mainDeckSort = within(mainDeck).getByRole('combobox', {
+      name: 'Sort by',
+    })
+    const mainDeckDirection = within(mainDeck).getByRole('button', {
+      name: 'Change sort direction to ascending',
+    })
+    expect(mainDeckSort).toHaveValue('score')
+    expect(mainDeckDirection).toHaveTextContent('Descending')
     const coverage = screen.getByRole('group', { name: 'Role coverage' })
     const blockers = within(coverage)
       .getByText('Blockers')
@@ -977,7 +995,6 @@ describe('sealed pool builder', () => {
       within(guide).getByText(/consider using removal before attacks/i),
     ).toBeVisible()
     expect(screen.getByText('Main deck 40')).toBeVisible()
-    const mainDeck = screen.getByRole('region', { name: 'Main deck' })
     const blockerRow = within(mainDeck)
       .getByText('OP16-006 Test Card')
       .closest('li')
@@ -1016,6 +1033,23 @@ describe('sealed pool builder', () => {
     expect(
       screen.queryByRole('heading', { name: 'Warnings' }),
     ).not.toBeInTheDocument()
+
+    await user.selectOptions(mainDeckSort, 'cost')
+    await user.click(
+      within(mainDeck).getByRole('button', {
+        name: 'Change sort direction to descending',
+      }),
+    )
+    expect(mainDeckSort).toHaveValue('cost')
+    expect(mainDeckDirection).toHaveTextContent('Descending')
+
+    await user.click(buildButton)
+
+    expect(mainDeckSort).toHaveValue('score')
+    expect(mainDeckDirection).toHaveAccessibleName(
+      'Change sort direction to ascending',
+    )
+    expect(mainDeckDirection).toHaveTextContent('Descending')
   })
 
   it('keeps build disabled until 40 eligible cards are entered', async () => {

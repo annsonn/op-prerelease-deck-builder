@@ -1,3 +1,5 @@
+import { useMemo, useState } from 'react'
+
 import type { PlayableCard } from '../../shared/catalog.js'
 import type { CardFeatures } from '../../shared/card-features.js'
 import type { DeckLine, DeckSolution } from '../solver/types.js'
@@ -8,11 +10,44 @@ import { CostColorChart } from './CostColorChart.js'
 import { DeckInsights } from './DeckInsights.js'
 import { DeckPlayGuide } from './DeckPlayGuide.js'
 import { DeckRoleCoverage } from './DeckRoleCoverage.js'
+import {
+  defaultDirectionFor,
+  type MainDeckSortDirection,
+  type MainDeckSortField,
+  parseMainDeckSortField,
+  sortMainDeck,
+} from './main-deck-sort.js'
 
 interface DeckResultProps {
   solution: DeckSolution
   featuresByCardNumber: ReadonlyMap<string, CardFeatures>
   onReveal: (card: PlayableCard) => void
+}
+
+interface StoredMainDeckSort {
+  solution: DeckSolution
+  field: MainDeckSortField
+  direction: MainDeckSortDirection
+}
+
+function defaultMainDeckSort(solution: DeckSolution): StoredMainDeckSort {
+  const field = 'score'
+
+  return {
+    solution,
+    field,
+    direction: defaultDirectionFor(field),
+  }
+}
+
+function oppositeDirection(
+  direction: MainDeckSortDirection,
+): MainDeckSortDirection {
+  return direction === 'ascending' ? 'descending' : 'ascending'
+}
+
+function visibleDirection(direction: MainDeckSortDirection): string {
+  return direction === 'ascending' ? 'Ascending ↑' : 'Descending ↓'
 }
 
 function quantity(lines: readonly DeckLine[]): number {
@@ -127,6 +162,22 @@ export function DeckResult({
   featuresByCardNumber,
   onReveal,
 }: DeckResultProps) {
+  const [storedMainDeckSort, setStoredMainDeckSort] =
+    useState<StoredMainDeckSort>(() => defaultMainDeckSort(solution))
+  const mainDeckSort =
+    storedMainDeckSort.solution === solution
+      ? storedMainDeckSort
+      : defaultMainDeckSort(solution)
+  const nextDirection = oppositeDirection(mainDeckSort.direction)
+  const orderedMainDeck = useMemo(
+    () =>
+      sortMainDeck(
+        solution.mainDeck,
+        mainDeckSort.field,
+        mainDeckSort.direction,
+      ),
+    [solution.mainDeck, mainDeckSort.direction, mainDeckSort.field],
+  )
   const mainSize = quantity(solution.mainDeck)
   const sideboardSize = quantity(solution.sideboard)
 
@@ -169,9 +220,51 @@ export function DeckResult({
           className="main-deck"
           aria-labelledby="main-deck-heading"
         >
-          <h3 id="main-deck-heading">Main deck</h3>
+          <div className="main-deck__header">
+            <h3 id="main-deck-heading">Main deck</h3>
+            <div
+              className="main-deck-sort"
+              role="group"
+              aria-label="Main deck sorting"
+            >
+              <div className="main-deck-sort__field">
+                <label htmlFor="main-deck-sort-field">Sort by</label>
+                <select
+                  id="main-deck-sort-field"
+                  value={mainDeckSort.field}
+                  onChange={(event) => {
+                    const field = parseMainDeckSortField(event.target.value)
+                    setStoredMainDeckSort({
+                      solution,
+                      field,
+                      direction: defaultDirectionFor(field),
+                    })
+                  }}
+                >
+                  <option value="score">Score</option>
+                  <option value="name">Name</option>
+                  <option value="cost">Cost</option>
+                  <option value="power">Power</option>
+                </select>
+              </div>
+              <button
+                type="button"
+                className="main-deck-sort__direction"
+                aria-label={`Change sort direction to ${nextDirection}`}
+                onClick={() => {
+                  setStoredMainDeckSort({
+                    solution,
+                    field: mainDeckSort.field,
+                    direction: nextDirection,
+                  })
+                }}
+              >
+                {visibleDirection(mainDeckSort.direction)}
+              </button>
+            </div>
+          </div>
           <DeckList
-            lines={solution.mainDeck}
+            lines={orderedMainDeck}
             featuresByCardNumber={featuresByCardNumber}
             showMainDeckMetadata
             onReveal={onReveal}

@@ -56,6 +56,7 @@ const secondMainCard: PlayableCard = {
   name: 'Second Main Card',
   colors: ['Green'],
   cost: 6,
+  power: 6000,
   effect: '',
   entryShortcut: '007',
 }
@@ -250,6 +251,15 @@ const solution: StrategyDeckSolution = {
   profileVersion: 1,
 }
 
+function mainDeckCardNumbers(): string[] {
+  const mainDeck = screen.getByRole('region', { name: 'Main deck' })
+
+  return Array.from(
+    mainDeck.querySelectorAll<HTMLElement>('.deck-line__identity > small'),
+    (cardNumber) => cardNumber.textContent ?? '',
+  )
+}
+
 describe('DeckResult', () => {
   it('wires analysis into the chart and insights while replacing old summaries', () => {
     render(
@@ -365,6 +375,112 @@ describe('DeckResult', () => {
       mainRows[1].querySelector('.deck-line__blocker-label'),
     ).not.toBeInTheDocument()
     expect(mainDeck.querySelector('.deck-line--colored')).toBeInTheDocument()
+  })
+
+  it('starts a reversed Main deck in score-descending order with labelled controls', () => {
+    render(
+      <DeckResult
+        solution={{ ...solution, mainDeck: [...solution.mainDeck].reverse() }}
+        featuresByCardNumber={featuresByCardNumber}
+        onReveal={vi.fn()}
+      />,
+    )
+
+    const mainDeck = screen.getByRole('region', { name: 'Main deck' })
+    const sort = within(mainDeck).getByRole('combobox', { name: 'Sort by' })
+    const direction = within(mainDeck).getByRole('button', {
+      name: 'Change sort direction to ascending',
+    })
+
+    expect(mainDeckCardNumbers()).toEqual(['OP16-005', 'OP16-007'])
+    expect(sort).toHaveValue('score')
+    expect(direction).toHaveTextContent('Descending')
+  })
+
+  it('sorts Main deck by each field, resets natural direction, and preserves focus', async () => {
+    const user = userEvent.setup()
+    render(
+      <DeckResult
+        solution={solution}
+        featuresByCardNumber={featuresByCardNumber}
+        onReveal={vi.fn()}
+      />,
+    )
+
+    const mainDeck = screen.getByRole('region', { name: 'Main deck' })
+    const sort = within(mainDeck).getByRole('combobox', { name: 'Sort by' })
+
+    await user.selectOptions(sort, 'cost')
+    expect(sort).toHaveFocus()
+    expect(mainDeckCardNumbers()).toEqual(['OP16-005', 'OP16-007'])
+
+    const descending = within(mainDeck).getByRole('button', {
+      name: 'Change sort direction to descending',
+    })
+    expect(descending).toHaveTextContent('Ascending')
+
+    await user.click(descending)
+    expect(descending).toHaveFocus()
+    expect(descending).toHaveAccessibleName(
+      'Change sort direction to ascending',
+    )
+    expect(descending).toHaveTextContent('Descending')
+    expect(mainDeckCardNumbers()).toEqual(['OP16-007', 'OP16-005'])
+
+    await user.selectOptions(sort, 'power')
+    expect(sort).toHaveFocus()
+    expect(sort).toHaveValue('power')
+    expect(descending).toHaveAccessibleName(
+      'Change sort direction to ascending',
+    )
+    expect(descending).toHaveTextContent('Descending')
+    expect(mainDeckCardNumbers()).toEqual(['OP16-005', 'OP16-007'])
+
+    await user.selectOptions(sort, 'name')
+    expect(sort).toHaveFocus()
+    expect(sort).toHaveValue('name')
+    expect(descending).toHaveAccessibleName(
+      'Change sort direction to descending',
+    )
+    expect(descending).toHaveTextContent('Ascending')
+    expect(mainDeckCardNumbers()).toEqual(['OP16-005', 'OP16-007'])
+  })
+
+  it('resets Main deck sorting synchronously when the solution identity changes', async () => {
+    const user = userEvent.setup()
+    const view = render(
+      <DeckResult
+        solution={solution}
+        featuresByCardNumber={featuresByCardNumber}
+        onReveal={vi.fn()}
+      />,
+    )
+
+    const mainDeck = screen.getByRole('region', { name: 'Main deck' })
+    const sort = within(mainDeck).getByRole('combobox', { name: 'Sort by' })
+    await user.selectOptions(sort, 'cost')
+    await user.click(
+      within(mainDeck).getByRole('button', {
+        name: 'Change sort direction to descending',
+      }),
+    )
+    expect(mainDeckCardNumbers()).toEqual(['OP16-007', 'OP16-005'])
+
+    view.rerender(
+      <DeckResult
+        solution={{ ...solution, mainDeck: [...solution.mainDeck].reverse() }}
+        featuresByCardNumber={featuresByCardNumber}
+        onReveal={vi.fn()}
+      />,
+    )
+
+    expect(sort).toHaveValue('score')
+    expect(
+      within(mainDeck).getByRole('button', {
+        name: 'Change sort direction to ascending',
+      }),
+    ).toHaveTextContent('Descending')
+    expect(mainDeckCardNumbers()).toEqual(['OP16-005', 'OP16-007'])
   })
 
   it('keeps Sideboard hidden until its native disclosure is opened', async () => {
@@ -493,15 +609,25 @@ describe('DeckResult', () => {
     )
 
     const mainDeck = screen.getByRole('region', { name: 'Main deck' })
-    for (const card of [mainCard, secondMainCard]) {
-      const mainRow = within(mainDeck).getByText(card.name).closest('li')
-      if (mainRow === null) throw new Error('Expected Main deck card row.')
-      const reveal = within(mainRow).getByRole('button', {
-        name: `View ${card.name}, ${card.cardNumber}`,
-      })
-      await user.click(reveal)
-      expect(onReveal).toHaveBeenLastCalledWith(card)
-    }
+    await user.selectOptions(
+      within(mainDeck).getByRole('combobox', { name: 'Sort by' }),
+      'cost',
+    )
+    await user.click(
+      within(mainDeck).getByRole('button', {
+        name: 'Change sort direction to descending',
+      }),
+    )
+    expect(mainDeckCardNumbers()).toEqual(['OP16-007', 'OP16-005'])
+
+    const mainRow = within(mainDeck).getByText(secondMainCard.name).closest('li')
+    if (mainRow === null) throw new Error('Expected Main deck card row.')
+    await user.click(
+      within(mainRow).getByRole('button', {
+        name: `View ${secondMainCard.name}, ${secondMainCard.cardNumber}`,
+      }),
+    )
+    expect(onReveal).toHaveBeenLastCalledWith(secondMainCard)
 
     expect(
       screen.getByRole('button', {
@@ -514,6 +640,14 @@ describe('DeckResult', () => {
     const sideboard = screen.getByRole('region', { name: 'Sideboard' })
     const sideboardList = sideboard.querySelector<HTMLElement>('.deck-list')
     if (sideboardList === null) throw new Error('Expected Sideboard card list.')
+    expect(
+      Array.from(
+        sideboardList.querySelectorAll<HTMLElement>(
+          '.deck-line__identity > small',
+        ),
+        (cardNumber) => cardNumber.textContent,
+      ),
+    ).toEqual(['OP16-006', 'OP16-008'])
     for (const card of [sideboardCard, secondSideboardCard]) {
       const sideboardRow = within(sideboardList)
         .getByText(card.name)
