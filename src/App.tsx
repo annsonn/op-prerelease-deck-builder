@@ -18,6 +18,7 @@ import { CatalogPicker } from './components/CatalogPicker.js'
 import { DeckResult } from './components/DeckResult.js'
 import { PoolReview } from './components/PoolReview.js'
 import { TestPoolButton } from './components/TestPoolButton.js'
+import { WorkflowStep } from './components/WorkflowStep.js'
 import {
   appendCard,
   eligiblePoolCount,
@@ -97,6 +98,8 @@ function App({
   const [selectedSetId, setSelectedSetId] = useState('')
   const [catalog, setCatalog] = useState<RuntimeCatalog | null>(null)
   const [pool, setPool] = useState<PoolState>(emptyPool)
+  const [isSetStepOpen, setIsSetStepOpen] = useState(true)
+  const [isEntryStepOpen, setIsEntryStepOpen] = useState(true)
   const [isPoolReviewOpen, setIsPoolReviewOpen] = useState(true)
   const [solution, setSolution] = useState<DeckSolution | null>(null)
   const [loadingIndex, setLoadingIndex] = useState(true)
@@ -115,6 +118,8 @@ function App({
     setSelectedSetId('')
     setCatalog(null)
     setPool(emptyPool())
+    setIsSetStepOpen(true)
+    setIsEntryStepOpen(true)
     setIsPoolReviewOpen(true)
     setSolution(null)
     setLoadingSetId(null)
@@ -184,6 +189,7 @@ function App({
     setSelectedSetId(setId)
     setCatalog(null)
     setPool(emptyPool())
+    setIsEntryStepOpen(true)
     setIsPoolReviewOpen(true)
     setSolution(null)
     setError(null)
@@ -263,6 +269,8 @@ function App({
       const nextSolution = deckSolver.solve(catalog, pool.counts)
       setRevealedCard(null)
       setSolution(nextSolution)
+      setIsSetStepOpen(false)
+      setIsEntryStepOpen(false)
       setIsPoolReviewOpen(false)
       setError(null)
       setConfirmation('Built a 40-card main deck.')
@@ -291,15 +299,15 @@ function App({
         </p>
       </header>
 
-      <section className="panel setup-panel" aria-labelledby="set-heading">
-        <div className="section-heading">
-          <span className="step-number">1</span>
-          <div>
-            <h2 id="set-heading">Choose your set</h2>
-            <p>Your pool resets when you change sets.</p>
-          </div>
-        </div>
-
+      <WorkflowStep
+        stepNumber={1}
+        headingId="set-heading"
+        title="Choose your set"
+        description="Your pool resets when you change sets."
+        isOpen={isSetStepOpen}
+        onOpenChange={setIsSetStepOpen}
+        className="setup-panel"
+      >
         {loadingIndex ? (
           <p className="loading-status" role="status">
             Loading card sets…
@@ -343,9 +351,9 @@ function App({
             </div>
           </div>
         ) : null}
-      </section>
+      </WorkflowStep>
 
-      {catalog === null && error !== null ? (
+      {error !== null ? (
         <p className="message message--error" role="alert">
           {error}
         </p>
@@ -353,19 +361,15 @@ function App({
 
       {catalog !== null ? (
         <>
-          <section className="panel entry-panel" aria-labelledby="entry-heading">
-            <div className="section-heading">
-              <span className="step-number">2</span>
-              <div>
-                <h2 id="entry-heading">Enter your cards</h2>
-                <p>Use the short number for normal cards or a full reprint ID.</p>
-              </div>
-            </div>
-            {error !== null ? (
-              <p className="message message--error entry-message" role="alert">
-                {error}
-              </p>
-            ) : null}
+          <WorkflowStep
+            stepNumber={2}
+            headingId="entry-heading"
+            title="Enter your cards"
+            description="Use the short number for normal cards or a full reprint ID."
+            isOpen={isEntryStepOpen}
+            onOpenChange={setIsEntryStepOpen}
+            className="entry-panel"
+          >
             <p
               className={`entry-message confirmation-status${
                 confirmation === '' ? ' confirmation-status--empty' : ''
@@ -382,7 +386,7 @@ function App({
               onError={handleEntryError}
             />
             <TestPoolButton onGenerate={handleGenerateTestPool} />
-          </section>
+          </WorkflowStep>
 
           <PoolReview
             key={`pool-${catalog.manifest.setId}`}

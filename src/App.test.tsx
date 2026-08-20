@@ -215,23 +215,40 @@ function poolTotals(): HTMLElement {
   return screen.getByLabelText(/^Pool totals:/)
 }
 
-function poolDisclosure(): HTMLDetailsElement {
-  const disclosure = screen.getByText('Review your pool').closest('details')
+function workflowDisclosure(name: string): HTMLDetailsElement {
+  const disclosure = screen.getByRole('heading', { name }).closest('details')
   if (!(disclosure instanceof HTMLDetailsElement)) {
-    throw new Error('Expected Review your pool inside a details disclosure.')
+    throw new Error(`Expected ${name} inside a details disclosure.`)
   }
   return disclosure
 }
 
-function poolSummary(): HTMLElement {
-  const summary = screen.getByText('Review your pool').closest('summary')
-  if (summary === null) throw new Error('Expected a pool disclosure summary.')
+function workflowSummary(name: string): HTMLElement {
+  const summary = screen.getByRole('heading', { name }).closest('summary')
+  if (summary === null) throw new Error(`Expected summary for ${name}.`)
   return summary
+}
+
+const setDisclosure = () => workflowDisclosure('Choose your set')
+const entryDisclosure = () => workflowDisclosure('Enter your cards')
+const poolDisclosure = () => workflowDisclosure('Review your pool')
+const poolSummary = () => workflowSummary('Review your pool')
+
+async function openWorkflowStep(
+  user: ReturnType<typeof userEvent.setup>,
+  name: string,
+): Promise<void> {
+  const disclosure = workflowDisclosure(name)
+  if (!disclosure.open) {
+    await user.click(workflowSummary(name))
+    await waitFor(() => expect(disclosure).toHaveAttribute('open'))
+  }
 }
 
 async function generateDevelopmentPool(
   user: ReturnType<typeof userEvent.setup>,
 ): Promise<void> {
+  await openWorkflowStep(user, 'Enter your cards')
   await user.click(
     await screen.findByRole('button', {
       name: 'Generate 60-card development pool',
@@ -377,7 +394,7 @@ describe('sealed pool builder', () => {
     ).not.toBeInTheDocument()
   })
 
-  it('collapses the pool after a successful build and lets the user reopen it', async () => {
+  it('collapses all workflow steps after successful builds and reopens each independently', async () => {
     const user = userEvent.setup()
     render(
       <App
@@ -391,6 +408,9 @@ describe('sealed pool builder', () => {
       'OP16',
     )
     await generateDevelopmentPool(user)
+
+    expect(setDisclosure()).toHaveAttribute('open')
+    expect(entryDisclosure()).toHaveAttribute('open')
     expect(poolDisclosure()).toHaveAttribute('open')
 
     await user.click(screen.getByRole('button', { name: 'Build deck' }))
@@ -398,16 +418,41 @@ describe('sealed pool builder', () => {
     expect(
       screen.getByRole('heading', { name: 'Strategy sealed build' }),
     ).toBeVisible()
+    expect(setDisclosure()).not.toHaveAttribute('open')
+    expect(entryDisclosure()).not.toHaveAttribute('open')
     expect(poolDisclosure()).not.toHaveAttribute('open')
-    expect(
-      screen.getByRole('heading', { name: 'Review your pool' }),
-    ).toBeVisible()
-    expect(poolTotals()).toBeVisible()
+    for (const name of [
+      'Choose your set',
+      'Enter your cards',
+      'Review your pool',
+    ]) {
+      expect(screen.getByRole('heading', { name })).toBeVisible()
+    }
     expect(poolTotals()).toHaveTextContent('60 copies')
     expect(poolTotals()).toHaveTextContent('59 eligible')
 
-    await user.click(poolSummary())
+    await user.click(workflowSummary('Choose your set'))
+    await waitFor(() => expect(setDisclosure()).toHaveAttribute('open'))
+    expect(entryDisclosure()).not.toHaveAttribute('open')
+    expect(poolDisclosure()).not.toHaveAttribute('open')
+    expect(
+      screen.getByRole('heading', { name: 'Strategy sealed build' }),
+    ).toBeVisible()
+
+    await user.click(workflowSummary('Enter your cards'))
+    await waitFor(() => expect(entryDisclosure()).toHaveAttribute('open'))
+    expect(setDisclosure()).toHaveAttribute('open')
+    expect(poolDisclosure()).not.toHaveAttribute('open')
+    expect(
+      screen.getByRole('button', {
+        name: 'Generate 60-card development pool',
+      }),
+    ).toBeVisible()
+
+    await user.click(workflowSummary('Review your pool'))
     await waitFor(() => expect(poolDisclosure()).toHaveAttribute('open'))
+    expect(setDisclosure()).toHaveAttribute('open')
+    expect(entryDisclosure()).toHaveAttribute('open')
     expect(
       screen.getByRole('button', { name: 'Undo last change' }),
     ).toBeVisible()
@@ -421,13 +466,27 @@ describe('sealed pool builder', () => {
         name: 'View OP16-005 Test Card, OP16-005',
       }),
     ).toBeVisible()
+
+    await user.click(screen.getByRole('button', { name: 'Build deck' }))
+    expect(setDisclosure()).not.toHaveAttribute('open')
+    expect(entryDisclosure()).not.toHaveAttribute('open')
+    expect(poolDisclosure()).not.toHaveAttribute('open')
+    expect(
+      screen.getByRole('heading', { name: 'Strategy sealed build' }),
+    ).toBeVisible()
   })
 
   it('reopens the pool after accepted cards, test replacement, quantity, Remove, Undo, and set changes', async () => {
     const user = userEvent.setup()
+    let resolveOp17!: (catalog: RuntimeCatalog) => void
+    const op17Promise = new Promise<RuntimeCatalog>((resolve) => {
+      resolveOp17 = resolve
+    })
     render(
       <App
-        catalogApi={catalogApi()}
+        catalogApi={catalogApi(async (entry) =>
+          entry.setId === 'OP16' ? op16Catalog() : op17Promise,
+        )}
         testPoolApi={{ generate: () => testPoolGeneration() }}
       />,
     )
@@ -437,6 +496,7 @@ describe('sealed pool builder', () => {
 
     await user.click(screen.getByRole('button', { name: 'Build deck' }))
     expect(poolDisclosure()).not.toHaveAttribute('open')
+    await openWorkflowStep(user, 'Enter your cards')
     const suffixInput = screen.getByRole('textbox', {
       name: 'Card number (1–3 digits)',
     })
@@ -495,16 +555,26 @@ describe('sealed pool builder', () => {
 
     await user.click(screen.getByRole('button', { name: 'Build deck' }))
     expect(poolDisclosure()).not.toHaveAttribute('open')
+    await openWorkflowStep(user, 'Choose your set')
     await user.selectOptions(picker, 'OP17')
+    expect(screen.getByText('Loading OP-17…')).toBeVisible()
+    expect(setDisclosure()).toHaveAttribute('open')
+    resolveOp17(runtimeCatalog(17, []))
     expect(await screen.findByText('OP17 is ready for pool entry.')).toBeVisible()
+    expect(setDisclosure()).toHaveAttribute('open')
+    expect(entryDisclosure()).toHaveAttribute('open')
     expect(poolDisclosure()).toHaveAttribute('open')
     expect(poolTotals()).toHaveTextContent('0 copies')
     expect(document.querySelector('.result-panel')).toBeNull()
   })
 
-  it.each([true, false])(
-    'preserves pool disclosure state when deck building fails (open=%s)',
-    async (startsOpen) => {
+  it.each([
+    { setOpen: true, entryOpen: true, poolOpen: true },
+    { setOpen: false, entryOpen: false, poolOpen: false },
+    { setOpen: false, entryOpen: true, poolOpen: false },
+  ])(
+    'preserves workflow disclosure state when deck building fails: %o',
+    async (state) => {
       const user = userEvent.setup()
       const deckSolver: DeckSolver = {
         solve: () => {
@@ -525,7 +595,7 @@ describe('sealed pool builder', () => {
       await generateDevelopmentPool(user)
       const buildButton = screen.getByRole('button', { name: 'Build deck' })
 
-      if (startsOpen) {
+      if (state.setOpen && state.entryOpen && state.poolOpen) {
         await user.click(
           within(poolCardRow('OP16-005 Test Card', 'OP16-005')).getByRole(
             'button',
@@ -533,21 +603,35 @@ describe('sealed pool builder', () => {
           ),
         )
         expect(screen.getByRole('dialog')).toBeVisible()
-        fireEvent.click(buildButton)
-      } else {
-        await user.click(poolSummary())
-        await waitFor(() =>
-          expect(poolDisclosure()).not.toHaveAttribute('open'),
-        )
-        await user.click(buildButton)
       }
 
+      for (const [name, shouldOpen] of [
+        ['Choose your set', state.setOpen],
+        ['Enter your cards', state.entryOpen],
+        ['Review your pool', state.poolOpen],
+      ] as const) {
+        if (workflowDisclosure(name).open !== shouldOpen) {
+          await user.click(workflowSummary(name))
+          await waitFor(() =>
+            expect(workflowDisclosure(name).open).toBe(shouldOpen),
+          )
+        }
+      }
+
+      fireEvent.click(buildButton)
+
       expect(screen.getByRole('alert')).toHaveTextContent('solver failed')
+      expect(screen.getByRole('alert')).toBeVisible()
+      expect(screen.getByRole('alert').closest('details')).toBeNull()
+      expect(setDisclosure().open).toBe(state.setOpen)
+      expect(entryDisclosure().open).toBe(state.entryOpen)
+      expect(poolDisclosure().open).toBe(state.poolOpen)
       expect(document.querySelector('.result-panel')).toBeNull()
-      expect(poolDisclosure().open).toBe(startsOpen)
       expect(poolTotals()).toHaveTextContent('60 copies')
       expect(poolTotals()).toHaveTextContent('59 eligible')
-      if (startsOpen) expect(screen.getByRole('dialog')).toBeVisible()
+      if (state.setOpen && state.entryOpen && state.poolOpen) {
+        expect(screen.getByRole('dialog')).toBeVisible()
+      }
     },
   )
 
@@ -611,11 +695,7 @@ describe('sealed pool builder', () => {
     await user.click(screen.getByRole('button', { name: 'Add number' }))
     expect(suffixInput).toHaveFocus()
 
-    await user.click(
-      screen.getByRole('button', {
-        name: 'Generate 60-card development pool',
-      }),
-    )
+    await generateDevelopmentPool(user)
     expect(poolTotals()).toHaveTextContent('60 copies')
     expect(poolTotals()).toHaveTextContent('59 eligible')
 
@@ -652,11 +732,7 @@ describe('sealed pool builder', () => {
       screen.getByRole('heading', { name: 'Strategy sealed build' }),
     ).toBeVisible()
 
-    await user.click(
-      screen.getByRole('button', {
-        name: 'Generate 60-card development pool',
-      }),
-    )
+    await generateDevelopmentPool(user)
 
     expect(
       screen.queryByRole('heading', { name: 'Strategy sealed build' }),
@@ -686,6 +762,7 @@ describe('sealed pool builder', () => {
     await user.click(screen.getByRole('button', { name: 'Build deck' }))
     expect(poolDisclosure()).not.toHaveAttribute('open')
 
+    await openWorkflowStep(user, 'Enter your cards')
     await user.click(
       screen.getByRole('button', {
         name: 'Generate 60-card development pool',
@@ -728,6 +805,7 @@ describe('sealed pool builder', () => {
 
     await user.click(poolSummary())
     await waitFor(() => expect(poolDisclosure()).toHaveAttribute('open'))
+    await openWorkflowStep(user, 'Enter your cards')
 
     await user.click(
       screen.getByRole('button', {
@@ -930,6 +1008,7 @@ describe('sealed pool builder', () => {
   })
 
   it('shows loading and actionable catalog errors', async () => {
+    const user = userEvent.setup()
     const loadIndex = vi.fn<CatalogApi['loadIndex']>()
     const api: CatalogApi = {
       loadIndex,
@@ -943,6 +1022,17 @@ describe('sealed pool builder', () => {
     expect(await screen.findByRole('alert')).toHaveTextContent(
       'Could not load card sets: offline',
     )
+    expect(setDisclosure()).toHaveAttribute('open')
+    expect(screen.getByRole('alert')).toBeVisible()
+    expect(screen.getByRole('alert').closest('details')).toBeNull()
+
+    await user.click(workflowSummary('Choose your set'))
+    await waitFor(() => expect(setDisclosure()).not.toHaveAttribute('open'))
+    expect(screen.getByRole('alert')).toBeVisible()
+
+    await user.click(workflowSummary('Choose your set'))
+    await waitFor(() => expect(setDisclosure()).toHaveAttribute('open'))
+    expect(screen.getByRole('alert')).toBeVisible()
   })
 
   it('ignores a stale catalog result after the selected set changes', async () => {
@@ -1008,6 +1098,9 @@ describe('sealed pool builder', () => {
     expect(await screen.findByRole('alert')).toHaveTextContent(
       'Could not load OP-16: checksum mismatch Run npm run catalog:sync',
     )
+    expect(screen.getByRole('alert')).toBeVisible()
+    expect(screen.getByRole('alert').closest('details')).toBeNull()
+    expect(setDisclosure()).toHaveAttribute('open')
     expect(
       screen.queryByRole('textbox', { name: 'Card number (1–3 digits)' }),
     ).not.toBeInTheDocument()
@@ -1042,6 +1135,7 @@ describe('sealed pool builder', () => {
     )
 
     expect(screen.getByText('Loading card sets…')).toBeVisible()
+    expect(setDisclosure()).toHaveAttribute('open')
     expect(screen.queryByText('Review your pool')).not.toBeInTheDocument()
     expect(document.querySelector('.result-panel')).toBeNull()
 
@@ -1049,9 +1143,13 @@ describe('sealed pool builder', () => {
       name: 'Card set',
     })
     await user.selectOptions(replacementPicker, 'OP16')
+    expect(setDisclosure()).toHaveAttribute('open')
+    expect(screen.getByText('Loading OP-16…')).toBeVisible()
     resolveReplacement(op16Catalog())
 
     expect(await screen.findByText('OP16 is ready for pool entry.')).toBeVisible()
+    expect(setDisclosure()).toHaveAttribute('open')
+    expect(entryDisclosure()).toHaveAttribute('open')
     expect(poolDisclosure()).toHaveAttribute('open')
     expect(poolTotals()).toHaveTextContent('0 copies')
     expect(poolTotals()).toHaveTextContent('0 eligible')
