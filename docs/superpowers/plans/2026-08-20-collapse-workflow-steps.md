@@ -28,7 +28,7 @@
 - Create: `src/components/WorkflowStep.test.tsx`
 - Modify: `src/App.css`
 
-- [ ] **Step 1: Write failing component tests**
+- [x] **Step 1: Write failing component tests**
 
 Create `src/components/WorkflowStep.test.tsx` with a controlled harness and these assertions:
 
@@ -113,7 +113,7 @@ describe('WorkflowStep', () => {
 })
 ```
 
-- [ ] **Step 2: Run the focused test and verify RED**
+- [x] **Step 2: Run the focused test and verify RED**
 
 Run:
 
@@ -123,7 +123,7 @@ npx vitest run src/components/WorkflowStep.test.tsx
 
 Expected: FAIL because `./WorkflowStep.js` does not exist.
 
-- [ ] **Step 3: Implement the minimal controlled component**
+- [x] **Step 3: Implement the minimal controlled component**
 
 Create `src/components/WorkflowStep.tsx`:
 
@@ -186,7 +186,7 @@ export function WorkflowStep({
 }
 ```
 
-- [ ] **Step 4: Add generic disclosure styling**
+- [x] **Step 4: Add generic disclosure styling**
 
 In `src/App.css`, add the generic workflow styles beside the existing PoolReview disclosure styles:
 
@@ -257,7 +257,7 @@ Remove the obsolete direct-child rule:
 }
 ```
 
-- [ ] **Step 5: Run the component test, lint, and typecheck**
+- [x] **Step 5: Run the component test, lint, and typecheck**
 
 Run:
 
@@ -269,7 +269,7 @@ npm run typecheck
 
 Expected: the WorkflowStep test file passes; lint and typecheck exit 0.
 
-- [ ] **Step 6: Commit Task 1**
+- [x] **Step 6: Commit Task 1**
 
 ```bash
 git add src/components/WorkflowStep.tsx src/components/WorkflowStep.test.tsx src/App.css
@@ -282,7 +282,7 @@ git commit -m "feat: add workflow step disclosure"
 - Create: `src/components/CatalogPicker.test.tsx`
 - Modify: `src/components/CatalogPicker.tsx`
 
-- [ ] **Step 1: Write failing ordering and immutability tests**
+- [x] **Step 1: Write failing ordering and immutability tests**
 
 Create `src/components/CatalogPicker.test.tsx`:
 
@@ -338,7 +338,7 @@ describe('CatalogPicker', () => {
 })
 ```
 
-- [ ] **Step 2: Run the focused test and verify RED**
+- [x] **Step 2: Run the focused test and verify RED**
 
 Run:
 
@@ -348,7 +348,7 @@ npx vitest run src/components/CatalogPicker.test.tsx
 
 Expected: the order test FAILS with the original input order.
 
-- [ ] **Step 3: Sort a copied list in `CatalogPicker`**
+- [x] **Step 3: Sort a copied list in `CatalogPicker`**
 
 Add above `CatalogPicker` in `src/components/CatalogPicker.tsx`:
 
@@ -371,7 +371,7 @@ const orderedEntries = [...entries].sort(
 
 Replace `entries.map(...)` with `orderedEntries.map(...)` in the `<select>`.
 
-- [ ] **Step 4: Run focused and App catalog-picker tests**
+- [x] **Step 4: Run focused and App catalog-picker tests**
 
 Run:
 
@@ -381,7 +381,7 @@ npx vitest run src/components/CatalogPicker.test.tsx src/App.test.tsx
 
 Expected: both test files pass, and existing option lookup remains valid.
 
-- [ ] **Step 5: Commit Task 2**
+- [x] **Step 5: Commit Task 2**
 
 ```bash
 git add src/components/CatalogPicker.tsx src/components/CatalogPicker.test.tsx
@@ -394,7 +394,7 @@ git commit -m "feat: order OP sets newest first"
 - Modify: `src/App.test.tsx`
 - Modify: `src/App.tsx`
 
-- [ ] **Step 1: Add reusable disclosure test helpers**
+- [x] **Step 1: Add reusable disclosure test helpers**
 
 In `src/App.test.tsx`, replace the pool-only DOM helpers with generic workflow helpers:
 
@@ -446,7 +446,7 @@ async function generateDevelopmentPool(
 }
 ```
 
-- [ ] **Step 2: Write failing successful-build disclosure tests**
+- [x] **Step 2: Write failing successful-build disclosure tests**
 
 Extend the successful build test to assert all three disclosures start open, close only after the build succeeds, retain visible headings, reopen independently, and close again on a later successful build:
 
@@ -489,7 +489,7 @@ await openWorkflowStep(user, 'Enter your cards')
 
 before querying those now-hidden controls.
 
-- [ ] **Step 3: Write failing build-error state tests**
+- [x] **Step 3: Write failing build-error state tests**
 
 Replace the pool-only failure matrix with a matrix that controls all three disclosures. For each row, manually put the disclosures into the requested state, trigger the throwing solver, then assert the states are unchanged and the external alert is visible:
 
@@ -545,7 +545,7 @@ Keep the existing dialog-preservation assertion in the all-open case: reveal a
 pool card before triggering the throwing solver, then assert the same dialog is
 still visible after the alert appears.
 
-- [ ] **Step 4: Write the failing set-change transition test**
+- [x] **Step 4: Write the failing set-change transition test**
 
 After a successful OP16 build, reopen only setup, select OP17, and assert the setup state is preserved while Entry and Pool reopen after the OP17 catalog resolves:
 
@@ -577,7 +577,7 @@ expect(entryDisclosure()).toHaveAttribute('open')
 expect(poolDisclosure()).toHaveAttribute('open')
 ```
 
-- [ ] **Step 5: Run App tests and verify RED**
+- [x] **Step 5: Run App tests and verify RED**
 
 Run:
 
@@ -587,7 +587,7 @@ npx vitest run src/App.test.tsx
 
 Expected: new tests FAIL because steps 1 and 2 are not disclosures, successful builds do not close them, and the catalog-loaded error alert is nested inside Entry.
 
-- [ ] **Step 6: Add App-owned setup and entry state**
+- [x] **Step 6: Add App-owned setup and entry state**
 
 Import the component:
 
@@ -632,7 +632,7 @@ setConfirmation('Built a 40-card main deck.')
 
 Do not add disclosure setters to the `catch` block.
 
-- [ ] **Step 7: Replace setup and entry sections with controlled disclosures**
+- [x] **Step 7: Replace setup and entry sections with controlled disclosures**
 
 Replace the setup `<section>` wrapper with:
 
@@ -724,7 +724,7 @@ Replace the entry `<section>` wrapper with:
 The snippets above are the complete replacement bodies for setup and entry;
 remove the old duplicated `.section-heading` markup.
 
-- [ ] **Step 8: Move the shared error alert outside every disclosure**
+- [x] **Step 8: Move the shared error alert outside every disclosure**
 
 Delete both conditional error renderings and add one unconditional shared location immediately after the setup `WorkflowStep`:
 
@@ -738,7 +738,7 @@ Delete both conditional error renderings and add one unconditional shared locati
 
 This single alert covers index, catalog, card-entry, Testing Utility, and solver failures and remains visible even when setup or entry is closed.
 
-- [ ] **Step 9: Run focused disclosure regressions**
+- [x] **Step 9: Run focused disclosure regressions**
 
 Run:
 
@@ -748,7 +748,7 @@ npx vitest run src/components/WorkflowStep.test.tsx src/components/CatalogPicker
 
 Expected: all focused files pass. Confirm failures are not bypassed with hidden DOM clicks except tests explicitly checking state-owner transitions.
 
-- [ ] **Step 10: Commit Task 3**
+- [x] **Step 10: Commit Task 3**
 
 ```bash
 git add src/App.tsx src/App.test.tsx
@@ -760,7 +760,7 @@ git commit -m "feat: collapse workflow after successful builds"
 **Files:**
 - Modify: `docs/superpowers/plans/2026-08-20-collapse-workflow-steps.md`
 
-- [ ] **Step 1: Run repository gates**
+- [x] **Step 1: Run repository gates**
 
 Run:
 
@@ -775,7 +775,7 @@ git diff --check
 
 Expected: lint and TypeScript exit 0; all Vitest files pass; catalog check reports all 17 OP sets and 85 catalog files; the Vite production build completes; `git diff --check` prints no output.
 
-- [ ] **Step 2: Run mobile browser QA at 412×915**
+- [x] **Step 2: Run mobile browser QA at 412×915**
 
 Start the app with `npm run dev -- --host 127.0.0.1`, open the reported local URL, set the viewport to 412×915, and verify:
 
@@ -788,15 +788,15 @@ Start the app with `npm run dev -- --host 127.0.0.1`, open the reported local UR
 7. Reopen setup, select another set, and confirm Entry and Pool reopen after loading while setup remains open.
 8. No horizontal overflow, unexpected console errors, or focus loss on summary activation.
 
-- [ ] **Step 3: Run desktop browser QA at 1440×900**
+- [x] **Step 3: Run desktop browser QA at 1440×900**
 
 Repeat the successful build, independent reopening, set ordering, set-change, keyboard Enter/Space summary activation, visible `:focus-visible` ring, and no-overflow checks at 1440×900.
 
-- [ ] **Step 4: Record evidence and check off the plan**
+- [x] **Step 4: Record evidence and check off the plan**
 
 Update this plan’s checkboxes and append a short `## Verification Evidence` section containing the exact passing test count, catalog count, build result, QA viewports, and any environment-qualified interaction result. Do not mark an unsupported browser interaction as passed.
 
-- [ ] **Step 5: Commit verification evidence**
+- [x] **Step 5: Commit verification evidence**
 
 ```bash
 git add docs/superpowers/plans/2026-08-20-collapse-workflow-steps.md
@@ -818,3 +818,30 @@ git status --short --branch
 ```
 
 Expected: verification and build pass; local `main` is clean and ahead of `origin/main` by the new commits.
+
+## Verification Evidence
+
+Verified in the `codex/collapse-workflow-steps` worktree on 2026-08-20.
+
+- Repository gates, run in the documented order:
+  - `npm run lint`: exit 0; `oxlint` reported no diagnostics.
+  - `npm run typecheck`: exit 0; both `tsc -b` and `tsc -p tsconfig.tools.json` completed.
+  - `npm test`: exit 0; 53/53 test files and 791/791 tests passed in 9.62 seconds.
+  - `npm run catalog:check`: exit 0; `Runtime catalogs ready: 17 sets, 85 files`.
+  - `npm run build`: exit 0; the prebuild catalog check again reported 17 sets / 85 files, TypeScript completed, and Vite 8.2.1 transformed 127 modules and produced `dist/index.html` (0.59 kB), CSS (23.31 kB), and JavaScript (337.39 kB) in 241 ms.
+  - `git diff --check`: exit 0 with no output.
+  - Environment qualification: the first sandboxed catalog and build attempts could not create the temporary `tsx` IPC socket (`listen EPERM`). Re-running those same commands with the required temporary IPC permission produced the passing results above.
+- In-app-browser QA at 412×915:
+  - The set options were exactly OP17, OP16, OP15, OP14, OP13, OP12, OP11, OP10, OP09, OP08, OP07, OP06, OP05, OP04, OP03, OP02, OP01 after the disabled prompt: numeric descending, OP17 first and OP01 last.
+  - After OP16 loaded, Setup, Entry, and Pool were all open. Their summary heights were 48 px, 67.21 px, and 48 px respectively.
+  - A generated 60-card development pool enabled Build deck. A successful build closed all three disclosures, left all three summary headings rendered and visible, retained focus on Build deck, and moved the visible Strategy sealed build result into the viewport (`scrollY` 783).
+  - Tapping Setup, Entry, and Pool reopened each independently without changing the other two states. A second successful build closed all three again.
+  - Entering short card number `999` showed the visible shared alert `No normally numbered card 999 exists in OP16.`; the alert had no enclosing `details` element. The error did not change the other disclosure states.
+  - After another successful build, reopening Setup and selecting OP17 kept Setup open, reopened Entry and Pool after load, reset Pool to 0 copies / 0 eligible, cleared the alert, and removed the stale deck result.
+  - At every measured state, `documentElement.scrollWidth === clientWidth === 412`. Pointer activation retained focus on the activated summary, and captured console warning/error logs were empty.
+- In-app-browser QA at 1440×900:
+  - The same exact OP17-through-OP01 ordering was present. After OP16 loaded, all three disclosures were open and every summary measured 48 px high.
+  - A generated 60-card development pool built successfully; all three disclosures closed, all summary headings remained rendered and visible, Build deck retained focus, and the visible Strategy sealed build result moved into the viewport (`scrollY` 745.5).
+  - Pointer activation reopened Setup, Entry, and Pool independently, preserving every other state; a second successful build closed all three again. Reopening Setup and selecting OP17 then kept Setup open, reopened Entry and Pool, reset Pool to 0 copies / 0 eligible, and removed the stale result.
+  - Keyboard qualification: the in-app browser's Playwright `press`, coordinate-keypress, and DOM-keypress surfaces focused the native summaries but did not trigger their default Enter/Space toggle behavior, so keyboard activation is not claimed from rendered QA. The focused summaries did match `:focus-visible` and rendered the expected solid 3 px `rgba(37, 99, 184, 0.42)` outline; the visible ring was also confirmed in the rendered capture. Native summary pointer behavior and automated disclosure integration tests passed, but physical Enter/Space activation remains unverified in this environment.
+  - At every measured state, `documentElement.scrollWidth === clientWidth === 1440`. Supported activations retained focus on the invoked summary or button, and captured console warning/error logs were empty.
