@@ -13,6 +13,7 @@ import {
   type RuntimeCatalog,
 } from './catalog/load-catalog.js'
 import { CardEntry } from './components/CardEntry.js'
+import { CardImageDialog } from './components/CardImageDialog.js'
 import { CatalogPicker } from './components/CatalogPicker.js'
 import { DeckResult } from './components/DeckResult.js'
 import { PoolReview } from './components/PoolReview.js'
@@ -99,6 +100,7 @@ function App({
   const [loadingSetId, setLoadingSetId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [confirmation, setConfirmation] = useState('')
+  const [revealedCard, setRevealedCard] = useState<PlayableCard | null>(null)
   const catalogRequest = useRef(0)
   const indexCatalogApi = useRef<CatalogApi | null>(null)
 
@@ -114,6 +116,7 @@ function App({
     setLoadingSetId(null)
     setError(null)
     setConfirmation('')
+    setRevealedCard(null)
 
     void catalogApi.loadIndex().then(
       (loadedIndex) => {
@@ -180,9 +183,11 @@ function App({
     setSolution(null)
     setError(null)
     setConfirmation('')
+    setRevealedCard(null)
   }, [])
 
   const handleCard = useCallback((card: PlayableCard) => {
+    setRevealedCard(null)
     setPool((current) => {
       const next = appendCard(current, card.cardNumber)
       setConfirmation(
@@ -204,6 +209,7 @@ function App({
     try {
       const generated = testPoolApi.generate(catalog, mode)
       const nextPool = replaceCards(pool, generated.cardNumbers)
+      setRevealedCard(null)
       setPool(nextPool)
       setSolution(null)
       setError(null)
@@ -220,6 +226,7 @@ function App({
   }, [catalog, pool, testPoolApi])
 
   const handleUndo = useCallback(() => {
+    setRevealedCard(null)
     setPool((current) => undoLast(current))
     setSolution(null)
     setError(null)
@@ -228,6 +235,7 @@ function App({
 
   const handleQuantity = useCallback(
     (cardNumber: string, quantity: number) => {
+      setRevealedCard(null)
       setPool((current) => setQuantity(current, cardNumber, quantity))
       setSolution(null)
       setError(null)
@@ -243,7 +251,9 @@ function App({
   const handleBuild = useCallback(() => {
     if (catalog === null) return
     try {
-      setSolution(solver.solve(catalog, pool.counts))
+      const nextSolution = solver.solve(catalog, pool.counts)
+      setRevealedCard(null)
+      setSolution(nextSolution)
       setError(null)
       setConfirmation('Built a 40-card main deck.')
     } catch (cause) {
@@ -251,6 +261,14 @@ function App({
       setConfirmation('')
     }
   }, [catalog, pool.counts])
+
+  const handleReveal = useCallback((card: PlayableCard) => {
+    setRevealedCard(card)
+  }, [])
+
+  const handleCloseReveal = useCallback(() => {
+    setRevealedCard(null)
+  }, [])
 
   return (
     <main className="app-shell">
@@ -363,6 +381,7 @@ function App({
             eligibleCount={eligibleCount}
             onQuantity={handleQuantity}
             onUndo={handleUndo}
+            onReveal={handleReveal}
           />
 
           <section className="build-panel" aria-label="Build deck">
@@ -384,9 +403,14 @@ function App({
             </button>
           </section>
 
-          {solution !== null ? <DeckResult solution={solution} /> : null}
+          {solution !== null ? (
+            <DeckResult solution={solution} onReveal={handleReveal} />
+          ) : null}
         </>
       ) : null}
+      {revealedCard === null ? null : (
+        <CardImageDialog card={revealedCard} onClose={handleCloseReveal} />
+      )}
     </main>
   )
 }

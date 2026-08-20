@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 
+import type { PlayableCard } from '../../shared/catalog.js'
 import type { RuntimeCatalog } from '../catalog/load-catalog.js'
 import type { PoolState } from '../pool/pool.js'
+import { CardRevealButton } from './CardRevealButton.js'
 import { CardStats } from './CardStats.js'
 
 interface PoolReviewProps {
@@ -10,6 +12,7 @@ interface PoolReviewProps {
   eligibleCount: number
   onQuantity: (cardNumber: string, quantity: number) => void
   onUndo: () => void
+  onReveal: (card: PlayableCard) => void
 }
 
 interface QuantityEditorProps {
@@ -66,6 +69,7 @@ export function PoolReview({
   eligibleCount,
   onQuantity,
   onUndo,
+  onReveal,
 }: PoolReviewProps) {
   const lines = Object.entries(pool.counts)
     .map(([cardNumber, quantity]) => ({
@@ -113,10 +117,13 @@ export function PoolReview({
 
       {latestCard !== undefined ? (
         <div className="latest-card" aria-label="Latest accepted card">
-          <span>Latest accepted card</span>
-          <strong>
-            {latestCard.name} · {latestCard.cardNumber}
-          </strong>
+          <span className="latest-card__identity">
+            <span>Latest accepted card</span>
+            <strong>
+              {latestCard.name} · {latestCard.cardNumber}
+            </strong>
+          </span>
+          <CardRevealButton card={latestCard} onReveal={onReveal} />
         </div>
       ) : null}
 
@@ -156,6 +163,7 @@ export function PoolReview({
                   Remove
                 </button>
               </div>
+              <CardRevealButton card={card} onReveal={onReveal} />
             </li>
           ))}
         </ul>

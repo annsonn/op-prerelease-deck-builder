@@ -446,7 +446,10 @@
 
 .latest-card {
   display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
   gap: 3px;
+  column-gap: 12px;
   margin-top: 18px;
   padding: 12px 14px;
   border-left: 3px solid var(--red);
@@ -454,7 +457,13 @@
   background: #fff6f4;
 }
 
-.latest-card span {
+.latest-card__identity {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
+.latest-card__identity > span {
   color: var(--red-dark);
   font-size: 0.7rem;
   font-weight: 800;
@@ -465,6 +474,7 @@
 .latest-card strong {
   color: var(--ink);
   font-size: 0.84rem;
+  overflow-wrap: anywhere;
 }
 
 .empty-state strong {
@@ -484,7 +494,8 @@
 
 .pool-line {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) auto 48px;
+  min-width: 0;
   align-items: center;
   gap: 12px;
   padding: 12px 0;
@@ -532,6 +543,7 @@
 
 .quantity-actions {
   display: flex;
+  min-width: 0;
   align-items: center;
   gap: 10px;
 }
@@ -1106,7 +1118,8 @@
 
 .deck-list li {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-columns: auto minmax(0, 1fr) auto 48px;
+  min-width: 0;
   align-items: center;
   gap: 10px;
   padding: 10px 0;

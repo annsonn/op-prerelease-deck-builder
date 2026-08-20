@@ -1,4 +1,10 @@
-import { render, screen, waitFor, within } from '@testing-library/react'
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
@@ -193,6 +199,23 @@ async function commitQuantity(
   await user.clear(input)
   await user.type(input, String(quantity))
   await user.tab()
+}
+
+function poolCardRow(cardName: string, cardNumber: string): HTMLElement {
+  const quantity = screen.getByRole('spinbutton', {
+    name: `Quantity for ${cardName} (${cardNumber})`,
+  })
+  const row = quantity.closest('li')
+  if (row === null) throw new Error(`Expected pool row for ${cardNumber}.`)
+  return row
+}
+
+function cardImage(): HTMLImageElement {
+  const image = document.body.querySelector<HTMLImageElement>(
+    '.card-image-dialog__image',
+  )
+  if (image === null) throw new Error('Expected one card image request.')
+  return image
 }
 
 describe('default catalog API', () => {
@@ -849,6 +872,281 @@ describe('sealed pool builder', () => {
         name: 'Remove Monkey.D.Luffy (OP16-006)',
       }),
     ).toBeVisible()
+
+    const firstReveal = within(
+      poolCardRow('Monkey.D.Luffy', 'OP16-005'),
+    ).getByRole('button', {
+      name: 'View Monkey.D.Luffy, OP16-005',
+    })
+    const secondReveal = within(
+      poolCardRow('Monkey.D.Luffy', 'OP16-006'),
+    ).getByRole('button', {
+      name: 'View Monkey.D.Luffy, OP16-006',
+    })
+
+    await user.click(firstReveal)
+    expect(
+      screen.getByRole('dialog', { name: 'Monkey.D.Luffy, OP16-005' }),
+    ).toBeVisible()
+    await user.click(screen.getByRole('button', { name: 'Close card image' }))
+
+    await user.click(secondReveal)
+    expect(
+      screen.getByRole('dialog', { name: 'Monkey.D.Luffy, OP16-006' }),
+    ).toBeVisible()
+  })
+
+  it('owns one card dialog without letting image failure mutate the pool or solution', async () => {
+    const user = userEvent.setup()
+    render(
+      <App
+        catalogApi={catalogApi()}
+        testPoolApi={{ generate: () => testPoolGeneration() }}
+      />,
+    )
+
+    await user.selectOptions(
+      await screen.findByRole('combobox', { name: 'Card set' }),
+      'OP16',
+    )
+    await user.click(
+      await screen.findByRole('button', {
+        name: 'Generate 60-card development pool',
+      }),
+    )
+    await user.click(screen.getByRole('button', { name: 'Build deck' }))
+
+    await user.click(
+      within(poolCardRow('OP16-005 Test Card', 'OP16-005')).getByRole(
+        'button',
+        { name: 'View OP16-005 Test Card, OP16-005' },
+      ),
+    )
+
+    expect(
+      screen.getByRole('dialog', {
+        name: 'OP16-005 Test Card, OP16-005',
+      }),
+    ).toBeVisible()
+    expect(screen.getAllByRole('dialog')).toHaveLength(1)
+    expect(
+      document.body.querySelectorAll('.card-image-dialog__image'),
+    ).toHaveLength(1)
+
+    fireEvent.error(cardImage())
+
+    expect(screen.getByRole('alert')).toHaveTextContent(
+      'Card image unavailable',
+    )
+    expect(
+      screen.getByRole('spinbutton', {
+        name: 'Quantity for OP16-005 Test Card (OP16-005)',
+      }),
+    ).toHaveValue(35)
+    expect(
+      screen.getByRole('heading', { name: 'Strategy sealed build' }),
+    ).toBeVisible()
+    expect(
+      screen.queryByRole('button', { name: /View Rainbow Luffy/ }),
+    ).not.toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Close card image' }))
+    await user.click(
+      within(poolCardRow('OP16-006 Test Card', 'OP16-006')).getByRole(
+        'button',
+        { name: 'View OP16-006 Test Card, OP16-006' },
+      ),
+    )
+
+    expect(screen.getAllByRole('dialog')).toHaveLength(1)
+    expect(
+      screen.getByRole('dialog', {
+        name: 'OP16-006 Test Card, OP16-006',
+      }),
+    ).toBeVisible()
+    expect(cardImage()).toHaveAttribute(
+      'alt',
+      'OP16-006 Test Card (OP16-006) card',
+    )
+  })
+
+  it('closes a reveal for successful test-pool replacement and set selection only', async () => {
+    const user = userEvent.setup()
+    const generate = vi
+      .fn()
+      .mockReturnValueOnce(testPoolGeneration())
+      .mockImplementationOnce(() => {
+        throw new Error('replacement failed')
+      })
+      .mockReturnValueOnce(testPoolGeneration('tournament'))
+    render(<App catalogApi={catalogApi()} testPoolApi={{ generate }} />)
+
+    const picker = await screen.findByRole('combobox', { name: 'Card set' })
+    await user.selectOptions(picker, 'OP16')
+    const generateButton = await screen.findByRole('button', {
+      name: 'Generate 60-card development pool',
+    })
+    await user.click(generateButton)
+    await user.click(
+      within(poolCardRow('OP16-005 Test Card', 'OP16-005')).getByRole(
+        'button',
+        { name: 'View OP16-005 Test Card, OP16-005' },
+      ),
+    )
+
+    fireEvent.click(generateButton)
+
+    expect(screen.getByRole('dialog')).toBeVisible()
+    expect(screen.getByRole('alert')).toHaveTextContent('replacement failed')
+
+    fireEvent.click(generateButton)
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    expect(screen.getByLabelText('Pool totals')).toHaveTextContent('72 copies')
+
+    fireEvent.click(
+      within(poolCardRow('OP16-005 Test Card', 'OP16-005')).getByRole(
+        'button',
+        { name: 'View OP16-005 Test Card, OP16-005' },
+      ),
+    )
+    fireEvent.change(picker, { target: { value: 'OP17' } })
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    expect(screen.getByText('Loading OP-17…')).toBeVisible()
+  })
+
+  it('closes a reveal after accepted cards, Undo, quantity edits, removal, and deck replacement', async () => {
+    const user = userEvent.setup()
+    render(
+      <App
+        catalogApi={catalogApi()}
+        testPoolApi={{ generate: () => testPoolGeneration() }}
+      />,
+    )
+
+    await user.selectOptions(
+      await screen.findByRole('combobox', { name: 'Card set' }),
+      'OP16',
+    )
+    const suffixInput = await screen.findByRole('textbox', {
+      name: 'Card number (1–3 digits)',
+    })
+    await user.type(suffixInput, '5')
+    await user.click(screen.getByRole('button', { name: 'Add number' }))
+    await user.click(
+      within(poolCardRow('OP16-005 Test Card', 'OP16-005')).getByRole(
+        'button',
+        { name: 'View OP16-005 Test Card, OP16-005' },
+      ),
+    )
+
+    fireEvent.change(suffixInput, { target: { value: '6' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Add number' }))
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+
+    fireEvent.click(
+      within(screen.getByLabelText('Latest accepted card')).getByRole(
+        'button',
+        { name: 'View OP16-006 Test Card, OP16-006' },
+      ),
+    )
+    fireEvent.click(screen.getByRole('button', { name: 'Undo last change' }))
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+
+    const firstRow = poolCardRow('OP16-005 Test Card', 'OP16-005')
+    fireEvent.click(
+      within(firstRow).getByRole('button', {
+        name: 'View OP16-005 Test Card, OP16-005',
+      }),
+    )
+    const quantity = within(firstRow).getByRole('spinbutton', {
+      name: 'Quantity for OP16-005 Test Card (OP16-005)',
+    })
+    fireEvent.change(quantity, { target: { value: '2' } })
+    fireEvent.blur(quantity)
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    expect(quantity).toHaveValue(2)
+
+    fireEvent.click(
+      within(firstRow).getByRole('button', {
+        name: 'View OP16-005 Test Card, OP16-005',
+      }),
+    )
+    fireEvent.click(
+      within(firstRow).getByRole('button', {
+        name: 'Remove OP16-005 Test Card (OP16-005)',
+      }),
+    )
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('spinbutton', {
+        name: 'Quantity for OP16-005 Test Card (OP16-005)',
+      }),
+    ).not.toBeInTheDocument()
+
+    fireEvent.click(
+      screen.getByRole('button', {
+        name: 'Generate 60-card development pool',
+      }),
+    )
+    fireEvent.click(
+      within(poolCardRow('OP16-005 Test Card', 'OP16-005')).getByRole(
+        'button',
+        { name: 'View OP16-005 Test Card, OP16-005' },
+      ),
+    )
+    fireEvent.click(screen.getByRole('button', { name: 'Build deck' }))
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { name: 'Strategy sealed build' }),
+    ).toBeVisible()
+  })
+
+  it('cleans up the dialog and restores body scroll when the catalog API resets', async () => {
+    const user = userEvent.setup()
+    const firstApi = catalogApi()
+    let resolveIndex!: (index: RuntimeCatalogIndex) => void
+    const replacementApi: CatalogApi = {
+      loadIndex: () =>
+        new Promise<RuntimeCatalogIndex>((resolve) => {
+          resolveIndex = resolve
+        }),
+      loadCatalog: async () => op16Catalog(),
+    }
+    const view = render(<App catalogApi={firstApi} />)
+    const previousOverflow = document.body.style.overflow
+
+    try {
+      await user.selectOptions(
+        await screen.findByRole('combobox', { name: 'Card set' }),
+        'OP16',
+      )
+      const suffixInput = await screen.findByRole('textbox', {
+        name: 'Card number (1–3 digits)',
+      })
+      await user.type(suffixInput, '5')
+      await user.click(screen.getByRole('button', { name: 'Add number' }))
+      document.body.style.overflow = 'clip'
+      await user.click(
+        within(poolCardRow('OP16-005 Test Card', 'OP16-005')).getByRole(
+          'button',
+          { name: 'View OP16-005 Test Card, OP16-005' },
+        ),
+      )
+      expect(document.body.style.overflow).toBe('hidden')
+
+      view.rerender(<App catalogApi={replacementApi} />)
+
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+      expect(document.body.style.overflow).toBe('clip')
+      expect(screen.getByText('Loading card sets…')).toBeVisible()
+      resolveIndex(runtimeIndex())
+    } finally {
+      view.unmount()
+      document.body.style.overflow = previousOverflow
+    }
   })
 
   it('updates the persistent live confirmation for repeated copies', async () => {

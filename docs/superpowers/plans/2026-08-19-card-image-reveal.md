@@ -545,7 +545,7 @@ git commit -m "feat: add accessible card image dialog"
 - Modify: `src/App.tsx`
 - Modify: `src/App.css`
 
-- [ ] **Step 1: Write failing pool integration tests**
+- [x] **Step 1: Write failing pool integration tests**
 
 Expand the pool fixture with a second card, render a pool containing both cards, and pass `onReveal={vi.fn()}`. Verify:
 
@@ -566,7 +566,7 @@ await user.click(
 expect(onReveal).toHaveBeenLastCalledWith(playableCard)
 ```
 
-- [ ] **Step 2: Run the pool test and confirm the missing prop/control fails**
+- [x] **Step 2: Run the pool test and confirm the missing prop/control fails**
 
 Run:
 
@@ -576,7 +576,7 @@ npm test -- src/components/PoolReview.test.tsx
 
 Expected: FAIL because `PoolReview` does not accept `onReveal` and renders no reveal buttons.
 
-- [ ] **Step 3: Integrate pool reveal controls**
+- [x] **Step 3: Integrate pool reveal controls**
 
 Add the explicit prop:
 
@@ -600,7 +600,7 @@ Import `PlayableCard` and `CardRevealButton`. Change the latest card to:
 
 Add one `<CardRevealButton card={card} onReveal={onReveal} />` after each pool row's `.quantity-actions`, at the row's far edge. Do not add a button inside `.recent-entries`.
 
-- [ ] **Step 4: Run the pool tests**
+- [x] **Step 4: Run the pool tests**
 
 Run:
 
@@ -610,7 +610,7 @@ npm test -- src/components/PoolReview.test.tsx
 
 Expected: PASS.
 
-- [ ] **Step 5: Write failing deck integration tests**
+- [x] **Step 5: Write failing deck integration tests**
 
 Pass `onReveal={vi.fn()}` in every `DeckResult` render helper/call. Add assertions that:
 
@@ -635,7 +635,7 @@ await user.click(
 expect(onReveal).toHaveBeenLastCalledWith(mainCard)
 ```
 
-- [ ] **Step 6: Run the deck test and confirm the missing prop/control fails**
+- [x] **Step 6: Run the deck test and confirm the missing prop/control fails**
 
 Run:
 
@@ -645,7 +645,7 @@ npm test -- src/components/DeckResult.test.tsx
 
 Expected: FAIL because `DeckResult` and `DeckList` do not accept `onReveal` and render no reveal actions.
 
-- [ ] **Step 7: Integrate deck reveal controls**
+- [x] **Step 7: Integrate deck reveal controls**
 
 Add this required prop to `DeckResultProps` and the internal `DeckList` props:
 
@@ -669,7 +669,7 @@ Import `PlayableCard` and `CardRevealButton`, render one button after `.score` a
 
 Do not change `SideboardSuggestions`.
 
-- [ ] **Step 8: Run the deck tests**
+- [x] **Step 8: Run the deck tests**
 
 Run:
 
@@ -679,7 +679,7 @@ npm test -- src/components/DeckResult.test.tsx
 
 Expected: PASS.
 
-- [ ] **Step 9: Write failing App integration tests**
+- [x] **Step 9: Write failing App integration tests**
 
 Add tests using the existing catalog API fixtures and real entry/build flows to verify:
 
@@ -691,7 +691,7 @@ Add tests using the existing catalog API fixtures and real entry/build flows to 
 
 Use `screen.getAllByRole('dialog')` only after a reveal action; assert length `1`. Use full labels such as `View Shared Name, OP16-005` and `View Shared Name, OP16-006` for duplicate-name coverage.
 
-- [ ] **Step 10: Run the App test and confirm the missing state/host fails**
+- [x] **Step 10: Run the App test and confirm the missing state/host fails**
 
 Run:
 
@@ -701,7 +701,7 @@ npm test -- src/App.test.tsx
 
 Expected: FAIL because App does not provide `onReveal` or render `CardImageDialog`.
 
-- [ ] **Step 11: Add one active-card state and one dialog host to App**
+- [x] **Step 11: Add one active-card state and one dialog host to App**
 
 Import `CardImageDialog` and add:
 
@@ -737,7 +737,7 @@ Call `setRevealedCard(null)` in:
 
 Do not close the dialog for a failed remote image request; the dialog owns that state. Do not mutate pool or solution from image callbacks.
 
-- [ ] **Step 12: Adapt row layouts for the 48px edge action**
+- [x] **Step 12: Adapt row layouts for the 48px edge action**
 
 Update `src/App.css`:
 
@@ -773,7 +773,7 @@ Update `src/App.css`:
 
 At `max-width: 520px`, keep the reveal button at 48px and allow pool actions to use their current compact vertical layout. Add `min-width: 0` and `overflow-wrap: anywhere` where needed; do not shrink the button below 48px and do not hide the score, quantity editor, or Remove action.
 
-- [ ] **Step 13: Run all integration tests, lint, and type-check**
+- [x] **Step 13: Run all integration tests, lint, and type-check**
 
 Run:
 
@@ -785,7 +785,7 @@ npx tsc -b
 
 Expected: all commands PASS with no accessibility or act warnings.
 
-- [ ] **Step 14: Commit the application integration**
+- [x] **Step 14: Commit the application integration**
 
 ```bash
 git add src/components/PoolReview.tsx src/components/PoolReview.test.tsx src/components/DeckResult.tsx src/components/DeckResult.test.tsx src/App.tsx src/App.test.tsx src/App.css

@@ -1,6 +1,6 @@
 import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
 import type { PlayableCard } from '../../shared/catalog.js'
 import type { StrategyDeckSolution } from '../solver/types.js'
@@ -239,7 +239,7 @@ const solution: StrategyDeckSolution = {
 
 describe('DeckResult', () => {
   it('wires analysis into the chart and insights while replacing old summaries', () => {
-    render(<DeckResult solution={solution} />)
+    render(<DeckResult solution={solution} onReveal={vi.fn()} />)
 
     expect(
       screen.getByRole('heading', { name: 'Cost and color curve' }),
@@ -273,7 +273,7 @@ describe('DeckResult', () => {
   })
 
   it('places the play guide after insights and before the Main deck', () => {
-    render(<DeckResult solution={solution} />)
+    render(<DeckResult solution={solution} onReveal={vi.fn()} />)
 
     const insights = screen.getByRole('region', { name: 'Weaknesses' }).closest(
       '.deck-insights',
@@ -291,7 +291,7 @@ describe('DeckResult', () => {
   })
 
   it('keeps Main deck full width with colors, printed stats, quantity, and score', () => {
-    render(<DeckResult solution={solution} />)
+    render(<DeckResult solution={solution} onReveal={vi.fn()} />)
 
     const mainDeck = screen.getByRole('region', { name: 'Main deck' })
     expect(mainDeck).toHaveClass('main-deck')
@@ -322,7 +322,7 @@ describe('DeckResult', () => {
 
   it('keeps Sideboard hidden until its native disclosure is opened', async () => {
     const user = userEvent.setup()
-    render(<DeckResult solution={solution} />)
+    render(<DeckResult solution={solution} onReveal={vi.fn()} />)
 
     const summary = screen.getByText('Sideboard · 2 cards')
     const details = summary.closest('details')
@@ -379,7 +379,12 @@ describe('DeckResult', () => {
 
   it('keeps an empty Sideboard closed and reveals None when opened', async () => {
     const user = userEvent.setup()
-    render(<DeckResult solution={{ ...solution, sideboard: [] }} />)
+    render(
+      <DeckResult
+        solution={{ ...solution, sideboard: [] }}
+        onReveal={vi.fn()}
+      />,
+    )
 
     const summary = screen.getByText('Sideboard · 0 cards')
     const details = summary.closest('details')
@@ -402,6 +407,7 @@ describe('DeckResult', () => {
           ...solution,
           playGuide: { ...solution.playGuide, sideboardSuggestions: [] },
         }}
+        onReveal={vi.fn()}
       />,
     )
 
@@ -412,5 +418,50 @@ describe('DeckResult', () => {
     await user.click(summary)
 
     expect(neutral).toBeVisible()
+  })
+
+  it('reveals Main and actual Sideboard cards but not suggestions', async () => {
+    const user = userEvent.setup()
+    const onReveal = vi.fn()
+    render(<DeckResult solution={solution} onReveal={onReveal} />)
+
+    const mainDeck = screen.getByRole('region', { name: 'Main deck' })
+    for (const card of [mainCard, secondMainCard]) {
+      const mainRow = within(mainDeck).getByText(card.name).closest('li')
+      if (mainRow === null) throw new Error('Expected Main deck card row.')
+      const reveal = within(mainRow).getByRole('button', {
+        name: `View ${card.name}, ${card.cardNumber}`,
+      })
+      await user.click(reveal)
+      expect(onReveal).toHaveBeenLastCalledWith(card)
+    }
+
+    expect(
+      screen.getByRole('button', {
+        name: 'View Sideboard Card, OP16-006',
+      }),
+    ).not.toBeVisible()
+
+    await user.click(screen.getByText('Sideboard · 2 cards'))
+
+    const sideboard = screen.getByRole('region', { name: 'Sideboard' })
+    const sideboardList = sideboard.querySelector<HTMLElement>('.deck-list')
+    if (sideboardList === null) throw new Error('Expected Sideboard card list.')
+    for (const card of [sideboardCard, secondSideboardCard]) {
+      const sideboardRow = within(sideboardList)
+        .getByText(card.name)
+        .closest('li')
+      if (sideboardRow === null) throw new Error('Expected Sideboard card row.')
+      const reveal = within(sideboardRow).getByRole('button', {
+        name: `View ${card.name}, ${card.cardNumber}`,
+      })
+      await user.click(reveal)
+      expect(onReveal).toHaveBeenLastCalledWith(card)
+    }
+
+    const suggestions = screen.getByRole('region', {
+      name: 'Sideboard suggestions',
+    })
+    expect(within(suggestions).queryAllByRole('button')).toHaveLength(0)
   })
 })

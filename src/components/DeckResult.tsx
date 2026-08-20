@@ -1,5 +1,7 @@
+import type { PlayableCard } from '../../shared/catalog.js'
 import type { DeckLine, DeckSolution } from '../solver/types.js'
 import { CardColorRail } from './CardColorRail.js'
+import { CardRevealButton } from './CardRevealButton.js'
 import { CardStats } from './CardStats.js'
 import { CostColorChart } from './CostColorChart.js'
 import { DeckInsights } from './DeckInsights.js'
@@ -8,6 +10,7 @@ import { DeckRoleCoverage } from './DeckRoleCoverage.js'
 
 interface DeckResultProps {
   solution: DeckSolution
+  onReveal: (card: PlayableCard) => void
 }
 
 function quantity(lines: readonly DeckLine[]): number {
@@ -21,9 +24,11 @@ function cardCountLabel(count: number): string {
 function DeckList({
   lines,
   showColors = false,
+  onReveal,
 }: {
   lines: readonly DeckLine[]
   showColors?: boolean
+  onReveal: (card: PlayableCard) => void
 }) {
   if (lines.length === 0) return <p className="empty-result">None</p>
   return (
@@ -45,6 +50,7 @@ function DeckList({
             />
           </span>
           <span className="score">Score {line.score}</span>
+          <CardRevealButton card={line.card} onReveal={onReveal} />
         </li>
       ))}
     </ul>
@@ -83,7 +89,7 @@ function SideboardSuggestions({
   )
 }
 
-export function DeckResult({ solution }: DeckResultProps) {
+export function DeckResult({ solution, onReveal }: DeckResultProps) {
   const mainSize = quantity(solution.mainDeck)
   const sideboardSize = quantity(solution.sideboard)
 
@@ -127,7 +133,11 @@ export function DeckResult({ solution }: DeckResultProps) {
           aria-labelledby="main-deck-heading"
         >
           <h3 id="main-deck-heading">Main deck</h3>
-          <DeckList lines={solution.mainDeck} showColors />
+          <DeckList
+            lines={solution.mainDeck}
+            showColors
+            onReveal={onReveal}
+          />
         </section>
         <details className="sideboard-disclosure">
           <summary>Sideboard · {cardCountLabel(sideboardSize)}</summary>
@@ -137,7 +147,7 @@ export function DeckResult({ solution }: DeckResultProps) {
                 suggestions={solution.playGuide.sideboardSuggestions}
               />
             )}
-            <DeckList lines={solution.sideboard} />
+            <DeckList lines={solution.sideboard} onReveal={onReveal} />
           </section>
         </details>
       </div>

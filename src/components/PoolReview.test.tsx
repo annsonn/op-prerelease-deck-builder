@@ -1,4 +1,5 @@
 import { render, screen, within } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
 import type { PlayableCard } from '../../shared/catalog.js'
@@ -26,6 +27,13 @@ const playableCard: PlayableCard = {
   isSpecialReprint: false,
 }
 
+const secondPlayableCard: PlayableCard = {
+  ...playableCard,
+  cardNumber: 'OP16-006',
+  name: 'Second Character',
+  entryShortcut: '006',
+}
+
 const catalog: RuntimeCatalog = {
   manifest: {
     schemaVersion: 1,
@@ -35,9 +43,15 @@ const catalog: RuntimeCatalog = {
     sourceType: 'local-json',
     readiness: 'needs-review',
   },
-  cards: [playableCard],
-  cardsByNumber: new Map([[playableCard.cardNumber, playableCard]]),
-  normalCardsByShortcut: new Map([['005', playableCard]]),
+  cards: [playableCard, secondPlayableCard],
+  cardsByNumber: new Map([
+    [playableCard.cardNumber, playableCard],
+    [secondPlayableCard.cardNumber, secondPlayableCard],
+  ]),
+  normalCardsByShortcut: new Map([
+    ['005', playableCard],
+    ['006', secondPlayableCard],
+  ]),
   specialCards: [],
   strategySuggestions: [],
   suggestionsByCardNumber: new Map(),
@@ -64,6 +78,7 @@ describe('PoolReview', () => {
         eligibleCount={2}
         onQuantity={vi.fn()}
         onUndo={vi.fn()}
+        onReveal={vi.fn()}
       />,
     )
 
@@ -84,5 +99,55 @@ describe('PoolReview', () => {
         name: 'Quantity for Test Character (OP16-005)',
       }),
     ).toHaveValue(2)
+  })
+
+  it('reveals cards from the latest card and pool rows but not recent entries', async () => {
+    const user = userEvent.setup()
+    const onReveal = vi.fn()
+    const pool = appendCards(emptyPool, [
+      playableCard.cardNumber,
+      secondPlayableCard.cardNumber,
+    ])
+
+    render(
+      <PoolReview
+        catalog={catalog}
+        pool={pool}
+        eligibleCount={2}
+        onQuantity={vi.fn()}
+        onUndo={vi.fn()}
+        onReveal={onReveal}
+      />,
+    )
+
+    const latest = screen.getByLabelText('Latest accepted card')
+    await user.click(
+      within(latest).getByRole('button', {
+        name: 'View Second Character, OP16-006',
+      }),
+    )
+    expect(onReveal).toHaveBeenLastCalledWith(secondPlayableCard)
+
+    for (const card of [playableCard, secondPlayableCard]) {
+      const metadata = screen.getByText(
+        `${card.cardNumber} · ${card.cardType}`,
+      )
+      const row = metadata.closest('li')
+      if (row === null) throw new Error('Expected card metadata inside a pool row')
+      const reveal = within(row).getByRole('button', {
+        name: `View ${card.name}, ${card.cardNumber}`,
+      })
+      await user.click(reveal)
+      expect(onReveal).toHaveBeenLastCalledWith(card)
+    }
+
+    const recentEntries = screen
+      .getByText('Recent accepted entries')
+      .closest('details')
+    if (recentEntries === null) {
+      throw new Error('Expected recent accepted entries disclosure')
+    }
+    await user.click(within(recentEntries).getByText('Recent accepted entries'))
+    expect(within(recentEntries).queryAllByRole('button')).toHaveLength(0)
   })
 })
