@@ -26,7 +26,7 @@
 - Modify: `src/components/DeckResult.tsx`
 - Modify: `src/App.css`
 
-- [ ] **Step 1: Add authoritative feature fixtures to DeckResult tests**
+- [x] **Step 1: Add authoritative feature fixtures to DeckResult tests**
 
 Import the shared classifier and feature type in `src/components/DeckResult.test.tsx`:
 
@@ -90,7 +90,7 @@ Add `featuresByCardNumber={featuresByCardNumber}` to every existing
 `<DeckResult>` render in this test file, including renders with overridden
 solutions.
 
-- [ ] **Step 2: Write failing Main deck label tests**
+- [x] **Step 2: Write failing Main deck label tests**
 
 Extend the existing `keeps Main deck full width with colors...` test after it
 resolves `mainRows`:
@@ -132,7 +132,7 @@ expect(
 This proves the visible label uses the raw printed flag rather than Rainbow
 Luffy usability and remains limited to the color-bearing Main deck rows.
 
-- [ ] **Step 3: Write the failing missing-feature invariant test**
+- [x] **Step 3: Write the failing missing-feature invariant test**
 
 Add this focused test:
 
@@ -153,7 +153,7 @@ it('rejects a Main deck card without an authoritative feature record', () => {
 })
 ```
 
-- [ ] **Step 4: Run the DeckResult test and verify RED**
+- [x] **Step 4: Run the DeckResult test and verify RED**
 
 Run:
 
@@ -164,7 +164,7 @@ npx vitest run src/components/DeckResult.test.tsx
 Expected: FAIL because `DeckResult` does not accept `featuresByCardNumber`, no
 Blocker label is rendered, and the missing-feature invariant does not exist.
 
-- [ ] **Step 5: Add the required feature-map prop and invariant helper**
+- [x] **Step 5: Add the required feature-map prop and invariant helper**
 
 In `src/components/DeckResult.tsx`, import `CardFeatures`:
 
@@ -197,7 +197,7 @@ function printedBlocker(
 }
 ```
 
-- [ ] **Step 6: Forward features into the Main deck list only**
+- [x] **Step 6: Forward features into the Main deck list only**
 
 Extend `DeckList`'s arguments and local props:
 
@@ -273,7 +273,7 @@ The implementer must use a block-bodied `lines.map` callback so `isBlocker` is
 computed before returning each `<li>`; no placeholder comments belong in the
 production code.
 
-- [ ] **Step 7: Add wrapping, non-interactive label styles**
+- [x] **Step 7: Add wrapping, non-interactive label styles**
 
 Add beside the existing `.card-colors` styles in `src/App.css`:
 
@@ -305,7 +305,7 @@ Add beside the existing `.card-colors` styles in `src/App.css`:
 Do not add a tooltip, button, icon, `Not a blocker` placeholder, or styles to
 `CardColorRail`.
 
-- [ ] **Step 8: Run focused tests, lint, and typecheck**
+- [x] **Step 8: Run focused tests, lint, and typecheck**
 
 Run:
 
@@ -317,7 +317,7 @@ npm run typecheck
 
 Expected: DeckResult tests pass; lint and both TypeScript projects exit 0.
 
-- [ ] **Step 9: Commit Task 1**
+- [x] **Step 9: Commit Task 1**
 
 ```bash
 git add src/components/DeckResult.tsx src/components/DeckResult.test.tsx src/App.css
@@ -330,7 +330,7 @@ git commit -m "feat: label printed blockers in deck review"
 - Modify: `src/App.test.tsx`
 - Modify: `src/App.tsx`
 
-- [ ] **Step 1: Write the failing App integration assertion**
+- [x] **Step 1: Write the failing App integration assertion**
 
 In the existing `enters and corrects an OP-16 pool, then builds an exact legal
 deck` test, after the generated Main deck is visible, resolve one printed
@@ -362,7 +362,7 @@ expect(
 The existing App fixture defines OP16-006 with `effect: '[Blocker]'`, so this
 assertion exercises the runtime catalog classifier and public component wiring.
 
-- [ ] **Step 2: Run the App test and verify RED**
+- [x] **Step 2: Run the App test and verify RED**
 
 Run:
 
@@ -373,7 +373,7 @@ npx vitest run src/App.test.tsx
 Expected: FAIL at TypeScript/transform or render time because App has not supplied
 the required `featuresByCardNumber` prop, and the generated row has no label.
 
-- [ ] **Step 3: Pass the runtime feature map to DeckResult**
+- [x] **Step 3: Pass the runtime feature map to DeckResult**
 
 Replace the existing result render in `src/App.tsx` with:
 
@@ -389,7 +389,7 @@ Replace the existing result render in `src/App.tsx` with:
 
 Do not derive features from the solution or call `classifyCardFeatures` in App.
 
-- [ ] **Step 4: Run focused integration and component tests**
+- [x] **Step 4: Run focused integration and component tests**
 
 Run:
 
@@ -400,7 +400,7 @@ npx vitest run src/components/DeckResult.test.tsx src/App.test.tsx
 Expected: both test files pass, including raw printed Blocker, non-blocker,
 sideboard exclusion, missing-feature invariant, and App wiring coverage.
 
-- [ ] **Step 5: Commit Task 2**
+- [x] **Step 5: Commit Task 2**
 
 ```bash
 git add src/App.tsx src/App.test.tsx
@@ -412,7 +412,7 @@ git commit -m "feat: wire blocker features into deck review"
 **Files:**
 - Modify: `docs/superpowers/plans/2026-08-20-main-deck-blocker-label.md`
 
-- [ ] **Step 1: Run repository gates**
+- [x] **Step 1: Run repository gates**
 
 Run:
 
@@ -429,26 +429,27 @@ Expected: lint and TypeScript exit 0; every Vitest file passes; catalog check
 reports 17 sets and 85 files; Vite completes the production build; diff check
 prints no output.
 
-- [ ] **Step 2: Run mobile browser QA at 412×915**
+- [x] **Step 2: Run mobile browser QA at 412×915**
 
 Start the app with `npm run dev -- --host 127.0.0.1`, open the reported local
 URL, select OP16, generate a valid development test pool, and build a deck.
 Verify:
 
-1. OP16-006 shows a visible `Blocker` pill beside its color metadata.
-2. OP16-005 shows color metadata and no Blocker pill.
-3. The Role coverage `Blockers` metric remains unchanged.
+1. OP16-005 shows a visible `Blocker` pill beside its Red color metadata.
+2. OP16-006 shows Red color metadata and no Blocker pill.
+3. The Role coverage `Blockers` metric remains separately visible; prove its
+   value is unchanged with the deterministic App integration fixture.
 4. Sideboard rows show neither color metadata nor Blocker pills after expansion.
 5. The label is static text with no tooltip or interactive role.
 6. Main deck rows wrap without overlap or horizontal overflow.
 7. Captured console warning/error logs are empty.
 
-- [ ] **Step 3: Run desktop browser QA at 1440×900**
+- [x] **Step 3: Run desktop browser QA at 1440×900**
 
-Repeat the printed blocker, non-blocker, Sideboard exclusion, layout, overflow,
-and console checks at 1440×900.
+Repeat the OP16-005 printed blocker, OP16-006 non-blocker, Sideboard exclusion,
+layout, overflow, and console checks at 1440×900.
 
-- [ ] **Step 4: Record exact evidence**
+- [x] **Step 4: Record exact evidence**
 
 Check completed plan steps and append `## Verification Evidence` with exact test
 counts, catalog/build results, both viewports, observed card IDs, blocker label
@@ -456,7 +457,7 @@ placement, Sideboard result, overflow measurements, console result, and any
 environment qualification. Do not claim an interaction the browser surface did
 not prove.
 
-- [ ] **Step 5: Commit verification evidence**
+- [x] **Step 5: Commit verification evidence**
 
 ```bash
 git add docs/superpowers/plans/2026-08-20-main-deck-blocker-label.md
@@ -482,3 +483,68 @@ git status --short --branch
 
 Expected: verification and build pass; local `main` is clean and ahead of
 `origin/main` by the new commits.
+
+## Verification Evidence
+
+Verified on 2026-08-20 from feature tip `1465a29` before this documentation
+commit.
+
+### Repository gates
+
+- `npm run lint`: exit 0 (`oxlint`, no findings).
+- `npm run typecheck`: exit 0 (`tsc -b && tsc -p tsconfig.tools.json`).
+- `npm test`: exit 0; 53/53 test files and 792/792 tests passed.
+- `npm run catalog:check`: exit 0; `Runtime catalogs ready: 17 sets, 85 files`.
+- `npm run build`: exit 0; catalog prebuild passed and Vite transformed 127
+  modules, then completed the production build in 259 ms.
+- `git diff --check`: exit 0 with no output.
+
+The first sandboxed `catalog:check` and `build` attempts hit the known `tsx`
+local IPC `listen EPERM` restriction. Both commands passed immediately when
+rerun with approved access outside that sandbox restriction; this is an
+environment qualification, not an application failure.
+
+The pre-existing deterministic App integration assertion expects
+`Blockers5 / 10` from its fixed catalog and pool fixture. That same assertion
+passed in the 791/791-test baseline run and the 792/792-test post-change run.
+The identical assertion result for identical fixture inputs is the
+reproducible proof that this feature did not change the Role coverage metric;
+the randomized browser-pool values below are observations only.
+
+### In-app browser QA
+
+The app ran at `http://127.0.0.1:5173/`. Each viewport used a fresh OP16 load,
+a newly generated 60-card development pool, and `Build deck`; the Sideboard was
+expanded before measurements.
+
+- At 412×915, OP16-005 Thatch showed Red plus one visible `Blocker` label;
+  OP16-006 Shanks showed Red and no label. The separate Role coverage
+  `Blockers` metric remained visible and showed `8 / 10` in this post-change
+  randomized pool; this value is not used as a cross-run equality check. The
+  40-card Main deck had 30 distinct rows and eight printed-Blocker labels. The
+  19-card Sideboard had 15 distinct rows, zero Card color groups, and zero
+  Blocker labels.
+- At 1440×900, a fresh randomized pool again showed Red plus one visible
+  `Blocker` label for OP16-005 and Red with no label for OP16-006. The separate
+  Role coverage `Blockers` metric remained visible and showed `10 / 10` in this
+  post-change randomized pool; this value is also observational only. The
+  40-card Main deck had 31 distinct rows and eight printed-Blocker labels. The
+  19-card Sideboard had 14 distinct rows, zero Card color groups, and zero
+  Blocker labels.
+- At both viewports, every Main metadata container computed to
+  `flex-wrap: wrap`; measured overflowing Main rows and color/label rectangle
+  intersections were both zero. Document `scrollWidth === clientWidth` was
+  `412 === 412` and `1440 === 1440`, respectively.
+- The rendered label was a plain `SPAN` with `cursor: auto`, no `role`, no
+  `title`, no `aria-describedby`, `tabIndex === -1`, and no interactive
+  descendants. It was therefore proven as visible static text, with no button,
+  tooltip hook, or interactive role.
+- Captured console warning/error logs were empty in both viewport passes.
+
+The original QA examples named OP16-006 as the blocker and OP16-005 as the
+non-blocker because the App integration test intentionally uses synthetic
+catalog fixtures for wiring coverage. The authoritative runtime OP16 catalog
+has `[Blocker]` on OP16-005 Thatch and removal text on OP16-006 Shanks, with the
+reviewed feature flags set to `true` and `false`, respectively. The rendered QA
+expectations above follow those authoritative production records; the
+synthetic integration fixture remains unchanged.
