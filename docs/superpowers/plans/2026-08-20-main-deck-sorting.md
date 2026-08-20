@@ -28,7 +28,7 @@
 - Create: `src/components/main-deck-sort.test.ts`
 - Create: `src/components/main-deck-sort.ts`
 
-- [ ] **Step 1: Write the failing pure-function tests**
+- [x] **Step 1: Write the failing pure-function tests**
 
 Create `src/components/main-deck-sort.test.ts` with complete fixtures that make every ordering decision observable:
 
@@ -154,7 +154,7 @@ describe('Main deck sorting', () => {
 })
 ```
 
-- [ ] **Step 2: Run the focused test and verify RED**
+- [x] **Step 2: Run the focused test and verify RED**
 
 Run:
 
@@ -164,7 +164,7 @@ npm test -- src/components/main-deck-sort.test.ts
 
 Expected: FAIL because `./main-deck-sort.js` does not exist.
 
-- [ ] **Step 3: Implement the minimal typed sorting module**
+- [x] **Step 3: Implement the minimal typed sorting module**
 
 Create `src/components/main-deck-sort.ts`:
 
@@ -269,7 +269,7 @@ export function sortMainDeck(
 }
 ```
 
-- [ ] **Step 4: Run the focused test and verify GREEN**
+- [x] **Step 4: Run the focused test and verify GREEN**
 
 Run:
 
@@ -279,7 +279,7 @@ npm test -- src/components/main-deck-sort.test.ts
 
 Expected: PASS with all ordering, null, parsing, and immutability cases green.
 
-- [ ] **Step 5: Run static checks for the new module**
+- [x] **Step 5: Run static checks for the new module**
 
 Run:
 
@@ -291,7 +291,7 @@ git diff --check
 
 Expected: all commands exit 0 with no diagnostics for the new files.
 
-- [ ] **Step 6: Commit the ordering contract**
+- [x] **Step 6: Commit the ordering contract**
 
 ```bash
 git add src/components/main-deck-sort.ts src/components/main-deck-sort.test.ts
@@ -306,7 +306,7 @@ git commit -m "feat: define main deck sorting"
 - Modify: `src/components/DeckResult.tsx`
 - Modify: `src/App.css`
 
-- [ ] **Step 1: Make the component fixtures distinguish Power ordering**
+- [x] **Step 1: Make the component fixtures distinguish Power ordering**
 
 In `src/components/DeckResult.test.tsx`, add an explicit power to
 `secondMainCard`:
@@ -324,7 +324,7 @@ const secondMainCard: PlayableCard = {
 }
 ```
 
-- [ ] **Step 2: Add failing toolbar, ordering, reset, isolation, and focus tests**
+- [x] **Step 2: Add failing toolbar, ordering, reset, isolation, and focus tests**
 
 Add this helper above `describe('DeckResult', ...)` in
 `src/components/DeckResult.test.tsx`:
@@ -478,7 +478,7 @@ it('keeps Sideboard order and Main deck reveal controls intact after sorting', a
 })
 ```
 
-- [ ] **Step 3: Add a failing successful-build smoke assertion**
+- [x] **Step 3: Add a failing successful-build smoke assertion**
 
 In the existing `src/App.test.tsx` full build-flow test, before activating
 `Build deck`, prove the controls do not exist without a generated result:
@@ -531,7 +531,7 @@ expect(
 ).toHaveTextContent('Descending')
 ```
 
-- [ ] **Step 4: Run the component tests and verify RED**
+- [x] **Step 4: Run the component tests and verify RED**
 
 Run:
 
@@ -542,7 +542,7 @@ npm test -- src/components/DeckResult.test.tsx src/App.test.tsx
 Expected: FAIL because the Main deck toolbar and local ordering state do not yet
 exist. Existing unrelated tests remain green.
 
-- [ ] **Step 5: Implement solution-scoped sort state and the toolbar**
+- [x] **Step 5: Implement solution-scoped sort state and the toolbar**
 
 Update the React import at the top of `src/components/DeckResult.tsx`:
 
@@ -672,7 +672,7 @@ Change only the Main deck list input:
 
 Leave the Sideboard `DeckList` input as `solution.sideboard`.
 
-- [ ] **Step 6: Add responsive, touch-friendly CSS**
+- [x] **Step 6: Add responsive, touch-friendly CSS**
 
 Add this block after `.main-deck` in `src/App.css`:
 
@@ -758,7 +758,7 @@ explicit wrapping contract at mobile widths:
 }
 ```
 
-- [ ] **Step 7: Run the focused tests and verify GREEN**
+- [x] **Step 7: Run the focused tests and verify GREEN**
 
 Run:
 
@@ -769,7 +769,7 @@ npm test -- src/components/main-deck-sort.test.ts src/components/DeckResult.test
 Expected: PASS. Confirm the new tests prove field defaults, direction reversal,
 replacement reset, focus retention, reveal controls, and Sideboard isolation.
 
-- [ ] **Step 8: Run static checks**
+- [x] **Step 8: Run static checks**
 
 Run:
 
@@ -781,7 +781,7 @@ git diff --check
 
 Expected: all commands exit 0.
 
-- [ ] **Step 9: Commit the toolbar integration**
+- [x] **Step 9: Commit the toolbar integration**
 
 ```bash
 git add src/components/DeckResult.tsx src/components/DeckResult.test.tsx src/App.test.tsx src/App.css
@@ -794,7 +794,7 @@ git commit -m "feat: sort main deck cards"
 - Modify: `docs/superpowers/plans/2026-08-20-main-deck-sorting.md`
 - Modify only if a defect is found: the smallest source/test file that owns it
 
-- [ ] **Step 1: Run the complete repository verification gate**
+- [x] **Step 1: Run the complete repository verification gate**
 
 Run:
 
@@ -819,7 +819,7 @@ If the sandbox blocks the known `tsx` IPC socket used by catalog validation,
 rerun only that command with the required approval rather than weakening or
 skipping the gate.
 
-- [ ] **Step 2: Start a clean local app for browser QA**
+- [x] **Step 2: Start a clean local app for browser QA**
 
 Run:
 
@@ -830,7 +830,7 @@ npm run dev -- --host 127.0.0.1
 Expected: Vite prints a local `http://127.0.0.1:<port>/` URL after the predev
 catalog check succeeds. Keep the process running in its terminal session.
 
-- [ ] **Step 3: Verify the mobile workflow at exactly 412x915**
+- [x] **Step 3: Verify the mobile workflow at exactly 412x915**
 
 Use the in-app browser against the fresh local URL:
 
@@ -857,7 +857,7 @@ Use the in-app browser against the fresh local URL:
     the result panel's overflow styling can otherwise conceal internal clipping.
 14. Confirm the warning/error console is empty.
 
-- [ ] **Step 4: Verify the desktop workflow at exactly 1440x900**
+- [x] **Step 4: Verify the desktop workflow at exactly 1440x900**
 
 Repeat the build and sorting checks at 1440x900. Confirm the toolbar remains
 aligned with the Main deck heading, the controls do not crowd card metadata,
@@ -866,14 +866,16 @@ unchanged, reveal still works, there is no horizontal overflow, and the
 warning/error console is empty. Measure document, Main deck, and toolbar widths
 separately so clipped internal overflow cannot pass unnoticed.
 
-- [ ] **Step 5: Verify replacement-solution reset in the browser**
+- [x] **Step 5: Verify replacement-solution reset in the browser**
 
 With a built deck sorted by Cost descending, activate `Build deck` again without
 changing the pool. This replaces the solution while `DeckResult` stays mounted.
 Confirm the replacement deck returns to Score descending rather than retaining
 Cost descending.
 
-- [ ] **Step 6: Fix any QA defect with a new failing regression test**
+- [x] **Step 6: Fix any QA defect with a new failing regression test** — Not
+  applicable: QA found no product defect, so no source or regression-test change
+  was required.
 
 If QA finds a defect, stop and use systematic debugging. Add a focused failing
 test that reproduces the observed behavior, run it to prove RED, make the
@@ -881,7 +883,7 @@ smallest owning change, rerun it to prove GREEN, then repeat the full automated
 and browser gates. Do not broaden sorting into the solver or Sideboard as a
 shortcut.
 
-- [ ] **Step 7: Record evidence and commit verification documentation**
+- [x] **Step 7: Record evidence and commit verification documentation**
 
 Check completed boxes in this plan and add a `## Verification Evidence` section
 with the actual test totals, catalog totals, build module count, measured mobile
@@ -899,3 +901,124 @@ git status --short --branch
 
 Expected: the documentation commit succeeds and the final worktree is clean on
 `main`. Do not push unless the user explicitly asks.
+
+## Verification Evidence
+
+### Branch and automated gate
+
+- Verified from `codex/main-deck-sorting` at `7b5e193` before this evidence
+  commit. Task 1 and Task 2 artifacts are present in `fd0fdcb`, `045b806`,
+  `2153b42`, and `7b5e193`; this fresh Task 3 run verified their resulting
+  behavior but did not recreate the historical RED states.
+- `npm run verify` initially reached catalog validation after lint, typecheck,
+  and tests, then hit the known sandbox-only `tsx` IPC `EPERM`. The exact
+  command was rerun with approval and exited 0: lint 0 diagnostics; app and
+  tools TypeScript 0 diagnostics; Vitest **54/54 files and 814/814 tests** in
+  **9.53s**; runtime catalogs **17 sets / 85 files**.
+- `npm run build` initially hit the same sandbox-only `tsx` IPC `EPERM` in its
+  catalog prehook. The exact command was rerun with approval and exited 0:
+  catalogs **17 sets / 85 files**, Vite 8.2.1, **128 modules transformed**, and
+  production build in **246ms**. Output was `index.html` 0.59 kB (0.35 kB
+  gzip), CSS 24.59 kB (5.70 kB gzip), and JS 339.90 kB (102.00 kB gzip).
+- Pre-QA `git diff --check` exited 0 and `git status --short` was empty. The
+  fresh development server passed its catalog prehook and started at
+  `http://127.0.0.1:5173/` in **82ms**.
+
+### Browser QA — 412x915
+
+- A fresh local tab had no `.main-deck` or `.main-deck-sort` before build.
+  OP16 was selected; **Generate 60-card development pool** replaced the pool
+  (60 copies, 58 eligible); the build produced **Strategy sealed build**, Main
+  **40**, Sideboard **18**, and collapsed all three workflow disclosures.
+- Default Score/Descending order passed across all visible Main rows. The first
+  scores were `OP16-017:27`, `OP16-010:26`, `OP16-006:24.9`, then the 23.5 tie
+  `OP16-004` before `OP16-102`; the 6.0 tie was `OP16-051` before `OP16-105`.
+- Name defaulted ascending and reversed descending; the equal-name
+  `Monkey.D.Luffy` tie stayed `OP16-015` before `OP16-034` in both directions.
+  Cost defaulted ascending and reversed descending; Power defaulted descending
+  and reversed ascending. Every adjacent primary comparison passed, and all
+  equal Cost/Power groups used ascending printed card number (for example,
+  Cost 8 `OP16-086` before `OP16-096`, and Power 8,000 `OP16-004`, `007`,
+  `013`, `017`, `096`, `112`). The randomized Main deck exposed **0 null Cost**
+  and **0 null Power** rows, so null-last was not claimed from browser data;
+  the passing pure-function suite covers nulls last in both numeric directions.
+- Baseline Main card-number/quantity set (40 copies) was:
+  `017:1, 010:1, 006:1, 004:2, 102:1, 062:1, 067:1, 086:3, 088:1,
+  018:1, 028:1, 025:1, 029:2, 027:1, 042:1, 023:1, 112:1, 026:1,
+  094:1, 092:1, 072:1, 064:1, 007:1, 114:2, 033:1, 034:1, 071:2,
+  051:2, 105:1, 068:1, 096:1, 015:1, 013:1` (all `OP16-`). Every sort and
+  rebuild retained this exact set and copy count.
+- Expanded Sideboard order stayed exactly
+  `OP16-089:3, 035:2, 014:2, 053:1, 069:1, 059:2, 099:1, 039:1,
+  076:1, 117:1, 019:3`. Role coverage (`17` 2K counters, `3` blockers,
+  `6` vanilla-like bodies, `10` interaction, `7` bosses, `4` draw, `6`
+  removal, `0` rush, `0` banish, `5` bricks), strengths/weaknesses, and the
+  complete play guide were unchanged after every sort.
+- From Power ascending, the reordered first card `OP16-034 Monkey.D.Luffy`
+  opened a dialog with the correct identity, alt text, and `OP16-034_EN.webp`;
+  closing removed the dialog and left both sorting controls enabled.
+- The select retained focus after the click-plus-select operation and showed a
+  **3px** visible outline. The direction button retained focus after pointer
+  activation and showed the same **3px** outline. In-app Browser injected
+  Enter/Space did not activate the focused button; the same injection also did
+  not activate an unrelated focused native Sideboard `<summary>`, while pointer
+  activation worked for both. This is recorded as a browser-automation
+  limitation, not as observed keyboard success or a product defect. The passing
+  component test covers select/button focus after Testing Library interactions;
+  it does not independently prove native keyboard event injection.
+- Measured select **48px** high and button **48px** high. Document
+  `397/397`, Main `347/347`, and toolbar `347/347` scroll/client widths were
+  equal. Both control rectangles were inside Main, and the controls ended at
+  y=391.65625 before the first row began at y=402.65625 (no overlap).
+- With Cost ascending selected, a second Build deck activation without pool
+  mutation reset to Score/Descending. Main 40, Sideboard 18, exact card sets,
+  Sideboard order, and analysis remained unchanged. Console warning/error log:
+  **0 entries**.
+
+### Browser QA — 1440x900
+
+- A separate fresh local tab confirmed exact `innerWidth=1440` and
+  `innerHeight=900`, no pre-build Main/sorting controls, OP16 development-pool
+  replacement, successful Strategy build, Main **40**, Sideboard **18**, and
+  all three workflow disclosures collapsed.
+- Default Score/Descending passed; the first rows were `OP16-006:26`,
+  `OP16-086:24.7`, `OP16-083:23.2`, and the browser exposed Score ties including
+  `OP16-091` before `OP16-103` at 8.0. Name ascending/descending, Cost
+  ascending/descending, and Power descending/ascending all passed every
+  adjacent primary comparison. Cost/Power ties stayed printed-card-number
+  ascending (for example Cost 7 `OP16-007` before `OP16-035`, Power 9,000
+  `OP16-035` before `OP16-086`). No equal-name pair and **0 null Cost/Power**
+  rows occurred in this randomized Main deck; mobile evidence and the passing
+  pure-function tests cover those unavailable observations.
+- Baseline Main set (40 copies) was:
+  `OP16-006:1, 086:1, 083:1, 062:3, 018:1, 028:1, 043:1, 027:1,
+  042:1, 029:2, 007:1, 112:1, 070:1, 092:1, 009:3, 094:2, 109:2,
+  075:1, 110:1, 106:1, 091:1, 103:1, 035:1, 034:1, 051:1, 105:1,
+  008:1, 011:1, 111:2, 013:1, 054:1, 071:1`. All sorts/rebuilds retained it.
+  Expanded Sideboard order stayed exactly
+  `OP16-068:1, 098:1, 107:1, 111:1, 036:1, 049:1, 078:1, 047:2,
+  039:2, 055:1, 057:2, 115:1, 100:1, 117:1, 101:1`.
+- Role coverage (`13` 2K counters, `6` blockers, `5` vanilla-like bodies,
+  `12` interaction, `3` bosses, `6` draw, `8` removal, `3` rush, `0` banish,
+  `8` bricks), strengths/weaknesses, and the complete play guide stayed
+  unchanged. Reordered `OP16-034 Monkey.D.Luffy` reveal/identity/image/close
+  passed and left controls usable.
+- Select and button focus each showed a **3px** outline; the same keyboard
+  injection limitation and native-summary comparison reproduced at desktop.
+  Pointer operation remained successful.
+- Select and button were each **48px** high. Document `1425/1425`, Main
+  `650/650`, and toolbar `243/243` scroll/client widths were equal. Both
+  controls were inside Main; controls ended at y=400.9375 and the first row
+  began at y=411.9375, so there was no toolbar/row overlap or metadata crowding.
+- Second builds without pool mutation reset both Cost/Ascending and, in an
+  additional check, Cost/Descending to Score/Descending while retaining Main,
+  Sideboard, and analysis. Console warning/error log: **0 entries**.
+
+### Outcome
+
+No product defect was observed, no source file was changed during Task 3, and
+all automated, pointer/touch, ordering, invariance, reveal, reset, sizing,
+overflow, and console gates passed. The sole concern is that in-app Browser
+keyboard injection could not demonstrate activation even on an unrelated
+native disclosure; focus retention and visible focus styling were observed,
+and the limitation is explicitly not counted as keyboard-activation evidence.
