@@ -672,7 +672,7 @@ Change only the Main deck list input:
 
 Leave the Sideboard `DeckList` input as `solution.sideboard`.
 
-- [x] **Step 6: Add responsive, touch-friendly CSS**
+- [x] **Step 6: Add responsive, touch-target CSS**
 
 Add this block after `.main-deck` in `src/App.css`:
 
@@ -848,13 +848,20 @@ Use the in-app browser against the fresh local URL:
 9. Activate a reordered card's reveal button and close the image dialog.
 10. Expand Sideboard and confirm its order does not change while Main deck is
     sorted.
-11. Focus both sorting controls and confirm the visible focus outline and native
-    keyboard operation.
+11. Focus both sorting controls and confirm the visible focus outline. Attempt
+    native keyboard activation in the browser. An in-app Browser limitation is
+    acceptable only when the same injected key also fails on an unrelated
+    focused native control, the limitation is documented without claiming
+    browser keyboard success, and automated coverage proves both native Enter
+    and literal Space activation.
 12. Measure both controls at a minimum 48px height and verify
-    `document.documentElement.scrollWidth === window.innerWidth`.
-13. Also verify the Main deck and sorting toolbar each have equal `scrollWidth`
-    and `clientWidth`, and both control rectangles remain inside the Main deck;
-    the result panel's overflow styling can otherwise conceal internal clipping.
+    `document.documentElement.scrollWidth === document.documentElement.clientWidth`.
+    Record `window.innerWidth` separately so the browser's vertical-scrollbar
+    width is not misclassified as horizontal overflow.
+13. Also verify the Main deck and sorting toolbar each satisfy
+    `scrollWidth === clientWidth`, and both control rectangles remain inside the
+    Main deck; the result panel's overflow styling can otherwise conceal
+    internal clipping.
 14. Confirm the warning/error console is empty.
 
 - [x] **Step 4: Verify the desktop workflow at exactly 1440x900**
@@ -900,26 +907,34 @@ git status --short --branch
 ```
 
 Expected: the documentation commit succeeds and the final worktree is clean on
-`main`. Do not push unless the user explicitly asks.
+the feature branch, ready for a local merge into `main`. Do not push unless the
+user explicitly asks.
 
 ## Verification Evidence
 
 ### Branch and automated gate
 
-- Verified from `codex/main-deck-sorting` at `7b5e193` before this evidence
-  commit. Task 1 and Task 2 artifacts are present in `fd0fdcb`, `045b806`,
-  `2153b42`, and `7b5e193`; this fresh Task 3 run verified their resulting
-  behavior but did not recreate the historical RED states.
+- Initial browser verification ran from `codex/main-deck-sorting` at `7b5e193`.
+  Task 1 and Task 2 artifacts are present in `fd0fdcb`, `045b806`, `2153b42`,
+  and `7b5e193`; the fresh Task 3 run verified their resulting behavior but did
+  not recreate the historical RED states. Follow-up commit `95a4454` adds only
+  the mutation-sensitive keyboard tests described below.
 - `npm run verify` initially reached catalog validation after lint, typecheck,
   and tests, then hit the known sandbox-only `tsx` IPC `EPERM`. The exact
   command was rerun with approval and exited 0: lint 0 diagnostics; app and
-  tools TypeScript 0 diagnostics; Vitest **54/54 files and 814/814 tests** in
-  **9.53s**; runtime catalogs **17 sets / 85 files**.
+  tools TypeScript 0 diagnostics; Vitest **54/54 files and 816/816 tests** in
+  **8.00s**; runtime catalogs **17 sets / 85 files**.
 - `npm run build` initially hit the same sandbox-only `tsx` IPC `EPERM` in its
   catalog prehook. The exact command was rerun with approval and exited 0:
   catalogs **17 sets / 85 files**, Vite 8.2.1, **128 modules transformed**, and
-  production build in **246ms**. Output was `index.html` 0.59 kB (0.35 kB
+  production build in **111ms**. Output was `index.html` 0.59 kB (0.35 kB
   gzip), CSS 24.59 kB (5.70 kB gzip), and JS 339.90 kB (102.00 kB gzip).
+- Before the full gate, the focused sorting suite passed **3/3 files and 59/59
+  tests**. For mutation sensitivity, temporarily neutralizing the direction
+  button `onClick` made both parameterized keyboard cases fail: **1 file, 2
+  failed, 11 skipped**, each because `Ascending` was expected but `Descending`
+  remained visible. After fully restoring production, the same focused cases
+  passed: **1 file, 2 passed, 11 skipped**. No production diff remained.
 - Pre-QA `git diff --check` exited 0 and `git status --short` was empty. The
   fresh development server passed its catalog prehook and started at
   `http://127.0.0.1:5173/` in **82ms**.
@@ -963,13 +978,21 @@ Expected: the documentation commit succeeds and the final worktree is clean on
   Enter/Space did not activate the focused button; the same injection also did
   not activate an unrelated focused native Sideboard `<summary>`, while pointer
   activation worked for both. This is recorded as a browser-automation
-  limitation, not as observed keyboard success or a product defect. The passing
-  component test covers select/button focus after Testing Library interactions;
-  it does not independently prove native keyboard event injection.
+  limitation, not as observed browser keyboard success or a product defect.
+  Parameterized Testing Library coverage independently proves native Enter and
+  literal Space activation exactly once: Score/Descending changes to
+  Score/Ascending, the action label changes to `Change sort direction to
+  descending`, rows change from `OP16-005, OP16-007` to
+  `OP16-007, OP16-005`, and the button retains focus. Neutralizing the production
+  `onClick` made both cases fail at the unchanged `Descending` assertion before
+  production was fully restored and both cases passed.
 - Measured select **48px** high and button **48px** high. Document
   `397/397`, Main `347/347`, and toolbar `347/347` scroll/client widths were
-  equal. Both control rectangles were inside Main, and the controls ended at
-  y=391.65625 before the first row began at y=402.65625 (no overlap).
+  equal at exact `window.innerWidth=412`. The 15px difference between viewport
+  inner width and document client width was the vertical scrollbar, not
+  horizontal overflow. Both control rectangles were inside Main, and the
+  controls ended at y=391.65625 before the first row began at y=402.65625 (no
+  overlap).
 - With Cost ascending selected, a second Build deck activation without pool
   mutation reset to Score/Descending. Main 40, Sideboard 18, exact card sets,
   Sideboard order, and analysis remained unchanged. Console warning/error log:
@@ -1007,18 +1030,22 @@ Expected: the documentation commit succeeds and the final worktree is clean on
   injection limitation and native-summary comparison reproduced at desktop.
   Pointer operation remained successful.
 - Select and button were each **48px** high. Document `1425/1425`, Main
-  `650/650`, and toolbar `243/243` scroll/client widths were equal. Both
-  controls were inside Main; controls ended at y=400.9375 and the first row
-  began at y=411.9375, so there was no toolbar/row overlap or metadata crowding.
+  `650/650`, and toolbar `243/243` scroll/client widths were equal at exact
+  `window.innerWidth=1440`. The 15px viewport/client difference was the vertical
+  scrollbar, not horizontal overflow. Both controls were inside Main; controls
+  ended at y=400.9375 and the first row began at y=411.9375, so there was no
+  toolbar/row overlap or metadata crowding.
 - Second builds without pool mutation reset both Cost/Ascending and, in an
   additional check, Cost/Descending to Score/Descending while retaining Main,
   Sideboard, and analysis. Console warning/error log: **0 entries**.
 
 ### Outcome
 
-No product defect was observed, no source file was changed during Task 3, and
-all automated, pointer/touch, ordering, invariance, reveal, reset, sizing,
+No product defect was observed and no production file was changed during
+verification. The follow-up change is test-only, and all automated, pointer
+activation and touch-target sizing, ordering, invariance, reveal, reset, sizing,
 overflow, and console gates passed. The sole concern is that in-app Browser
-keyboard injection could not demonstrate activation even on an unrelated
-native disclosure; focus retention and visible focus styling were observed,
-and the limitation is explicitly not counted as keyboard-activation evidence.
+keyboard injection could not demonstrate activation even on an unrelated native
+disclosure; focus retention and visible focus styling were observed, automated
+Enter/Space activation coverage passed, and the browser limitation is explicitly
+not counted as browser keyboard-activation evidence.
