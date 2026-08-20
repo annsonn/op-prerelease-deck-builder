@@ -470,7 +470,7 @@ Dispatch independent reviewers against the feature branch's merge-base with
 `main`. Resolve every Critical or Important finding and repeat affected tests
 and review until both axes approve.
 
-- [ ] **Step 7: Merge locally and verify final main**
+- [x] **Step 7: Merge locally and verify final main**
 
 Use the finishing-a-development-branch workflow to merge into local `main`
 without pushing. Run on the final integrated tree:
@@ -559,3 +559,13 @@ has `[Blocker]` on OP16-005 Thatch and removal text on OP16-006 Shanks, with the
 reviewed feature flags set to `true` and `false`, respectively. The rendered QA
 expectations above follow those authoritative production records; the
 synthetic integration fixture remains unchanged.
+
+### Local main integration
+
+- Fast-forwarded `codex/main-deck-blocker-label` into local `main` without
+  pushing.
+- `npm run verify`: exit 0; lint and both TypeScript projects passed, 53/53 test
+  files and 792/792 tests passed, and runtime catalogs reported 17 sets / 85
+  files.
+- `npm run build`: exit 0; catalog prebuild passed and Vite 8.2.1 transformed
+  127 modules into the production artifact.
