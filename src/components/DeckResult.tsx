@@ -37,12 +37,12 @@ function featuresFor(
 function DeckList({
   lines,
   featuresByCardNumber,
-  showColors = false,
+  showMainDeckMetadata = false,
   onReveal,
 }: {
   lines: readonly DeckLine[]
   featuresByCardNumber: ReadonlyMap<string, CardFeatures>
-  showColors?: boolean
+  showMainDeckMetadata?: boolean
   onReveal: (card: PlayableCard) => void
 }) {
   if (lines.length === 0) return <p className="empty-result">None</p>
@@ -50,7 +50,7 @@ function DeckList({
     <ul className="deck-list">
       {lines.map((line) => {
         let isPrintedBlocker = false
-        if (showColors) {
+        if (showMainDeckMetadata) {
           const features = featuresFor(
             line.card.cardNumber,
             featuresByCardNumber,
@@ -60,14 +60,14 @@ function DeckList({
 
         return (
           <li
-            className={showColors ? 'deck-line deck-line--colored' : 'deck-line'}
+            className={showMainDeckMetadata ? 'deck-line deck-line--colored' : 'deck-line'}
             key={line.card.cardNumber}
           >
             <strong>{line.quantity}×</strong>
             <span className="deck-line__identity">
               {line.card.name}
               <small>{line.card.cardNumber}</small>
-              {showColors ? (
+              {showMainDeckMetadata ? (
                 <span className="deck-line__metadata">
                   <CardColorRail colors={line.card.colors} />
                   {isPrintedBlocker ? (
@@ -173,7 +173,7 @@ export function DeckResult({
           <DeckList
             lines={solution.mainDeck}
             featuresByCardNumber={featuresByCardNumber}
-            showColors
+            showMainDeckMetadata
             onReveal={onReveal}
           />
         </section>
