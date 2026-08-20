@@ -117,10 +117,6 @@
   color: #929dad;
 }
 
-.setup-panel > .field {
-  margin-top: 18px;
-}
-
 .loading-status {
   margin: 16px 0 0;
   color: var(--navy);
@@ -408,6 +404,63 @@
 
 .pool-totals span:last-child {
   color: var(--green);
+}
+
+.workflow-step__summary {
+  display: grid;
+  min-height: 48px;
+  grid-template-columns: 32px minmax(0, 1fr) 24px;
+  align-items: center;
+  gap: 12px;
+  color: var(--navy-dark);
+  cursor: pointer;
+  list-style: none;
+}
+
+.workflow-step__summary::-webkit-details-marker {
+  display: none;
+}
+
+.workflow-step__summary:focus-visible {
+  border-radius: 8px;
+  outline: 3px solid rgb(37 99 184 / 42%);
+  outline-offset: 3px;
+}
+
+.workflow-step__summary-copy {
+  display: grid;
+  min-width: 0;
+  gap: 4px;
+}
+
+.workflow-step__heading {
+  color: var(--navy-dark);
+  font-size: 1.12rem;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.workflow-step__description {
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.workflow-step__indicator {
+  color: var(--red-dark);
+  font-size: 1.35rem;
+  font-weight: 800;
+  justify-self: center;
+  line-height: 1;
+  text-align: center;
+}
+
+.workflow-step__content {
+  padding-top: 12px;
+}
+
+.setup-panel .workflow-step__content > .field {
+  margin-top: 6px;
 }
 
 .pool-review__summary {
