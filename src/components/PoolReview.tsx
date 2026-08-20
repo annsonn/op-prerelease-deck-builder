@@ -10,6 +10,8 @@ interface PoolReviewProps {
   catalog: RuntimeCatalog
   pool: PoolState
   eligibleCount: number
+  isOpen: boolean
+  onOpenChange: (open: boolean) => void
   onQuantity: (cardNumber: string, quantity: number) => void
   onUndo: () => void
   onReveal: (card: PlayableCard) => void
@@ -67,6 +69,8 @@ export function PoolReview({
   catalog,
   pool,
   eligibleCount,
+  isOpen,
+  onOpenChange,
   onQuantity,
   onUndo,
   onReveal,
@@ -93,97 +97,117 @@ export function PoolReview({
       : catalog.cardsByNumber.get(latestCardNumber)
 
   return (
-    <section className="panel" aria-labelledby="pool-heading">
-      <div className="section-heading section-heading--spread">
-        <div className="section-heading">
-          <span className="step-number">3</span>
-          <div>
-            <h2 id="pool-heading">Review your pool</h2>
-            <div className="pool-totals" aria-label="Pool totals">
-              <span>{totalCopies} copies</span>
-              <span>{eligibleCount} eligible</span>
-            </div>
-          </div>
-        </div>
-        <button
-          type="button"
-          className="text-button"
-          disabled={pool.events.length === 0}
-          onClick={onUndo}
-        >
-          Undo last change
-        </button>
-      </div>
-
-      {latestCard !== undefined ? (
-        <div className="latest-card" aria-label="Latest accepted card">
-          <span className="latest-card__identity">
-            <span>Latest accepted card</span>
-            <strong>
-              {latestCard.name} · {latestCard.cardNumber}
-            </strong>
+    <details
+      className="panel pool-review"
+      aria-labelledby="pool-heading"
+      open={isOpen}
+      onToggle={(event) => {
+        const nextOpen = event.currentTarget.open
+        if (nextOpen !== isOpen) onOpenChange(nextOpen)
+      }}
+    >
+      <summary className="pool-review__summary">
+        <span className="step-number" aria-hidden="true">
+          3
+        </span>
+        <span className="pool-review__summary-copy">
+          <span
+            id="pool-heading"
+            className="pool-review__heading"
+            role="heading"
+            aria-level={2}
+          >
+            Review your pool
           </span>
-          <CardRevealButton card={latestCard} onReveal={onReveal} />
-        </div>
-      ) : null}
+          <span className="pool-totals" aria-label="Pool totals">
+            <span>{totalCopies} copies</span>
+            <span>{eligibleCount} eligible</span>
+          </span>
+        </span>
+      </summary>
 
-      {lines.length === 0 ? (
-        <div className="empty-state">
-          <strong>No cards entered yet</strong>
-          <span>Your accepted entries will appear here.</span>
+      <div className="pool-review__content">
+        <div className="pool-review__actions">
+          <button
+            type="button"
+            className="text-button"
+            disabled={pool.events.length === 0}
+            onClick={onUndo}
+          >
+            Undo last change
+          </button>
         </div>
-      ) : (
-        <ul className="pool-list">
-          {lines.map(({ card, cardNumber, quantity }) => (
-            <li key={cardNumber} className="pool-line">
-              <div className="card-identity">
-                <strong>{card.name}</strong>
-                <span>
-                  {card.cardNumber} · {card.cardType}
-                </span>
-                <CardStats
-                  cost={card.cost}
-                  power={card.power}
-                  counter={card.counter}
-                />
-              </div>
-              <div className="quantity-actions">
-                <QuantityEditor
-                  cardNumber={cardNumber}
-                  cardName={card.name}
-                  quantity={quantity}
-                  onQuantity={onQuantity}
-                />
-                <button
-                  type="button"
-                  className="remove-button"
-                  aria-label={`Remove ${card.name} (${cardNumber})`}
-                  onClick={() => onQuantity(cardNumber, 0)}
-                >
-                  Remove
-                </button>
-              </div>
-              <CardRevealButton card={card} onReveal={onReveal} />
-            </li>
-          ))}
-        </ul>
-      )}
 
-      {pool.recentCardNumbers.length > 0 ? (
-        <details className="recent-entries">
-          <summary>Recent accepted entries</summary>
-          <ol>
-            {pool.recentCardNumbers.map((cardNumber, index) => {
-              const card = catalog.cardsByNumber.get(cardNumber)
-              return (
-                <li key={`${cardNumber}-${index}`}>
-                  {card?.name ?? cardNumber}
-                </li>
-              )
-            })}
-          </ol>
-        </details>
-      ) : null}
-    </section>
+        {latestCard !== undefined ? (
+          <div className="latest-card" aria-label="Latest accepted card">
+            <span className="latest-card__identity">
+              <span>Latest accepted card</span>
+              <strong>
+                {latestCard.name} · {latestCard.cardNumber}
+              </strong>
+            </span>
+            <CardRevealButton card={latestCard} onReveal={onReveal} />
+          </div>
+        ) : null}
+
+        {lines.length === 0 ? (
+          <div className="empty-state">
+            <strong>No cards entered yet</strong>
+            <span>Your accepted entries will appear here.</span>
+          </div>
+        ) : (
+          <ul className="pool-list">
+            {lines.map(({ card, cardNumber, quantity }) => (
+              <li key={cardNumber} className="pool-line">
+                <div className="card-identity">
+                  <strong>{card.name}</strong>
+                  <span>
+                    {card.cardNumber} · {card.cardType}
+                  </span>
+                  <CardStats
+                    cost={card.cost}
+                    power={card.power}
+                    counter={card.counter}
+                  />
+                </div>
+                <div className="quantity-actions">
+                  <QuantityEditor
+                    cardNumber={cardNumber}
+                    cardName={card.name}
+                    quantity={quantity}
+                    onQuantity={onQuantity}
+                  />
+                  <button
+                    type="button"
+                    className="remove-button"
+                    aria-label={`Remove ${card.name} (${cardNumber})`}
+                    onClick={() => onQuantity(cardNumber, 0)}
+                  >
+                    Remove
+                  </button>
+                </div>
+                <CardRevealButton card={card} onReveal={onReveal} />
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {pool.recentCardNumbers.length > 0 ? (
+          <details className="recent-entries">
+            <summary>Recent accepted entries</summary>
+            <ol>
+              {pool.recentCardNumbers.map((cardNumber, index) => {
+                const card = catalog.cardsByNumber.get(cardNumber)
+                return (
+                  <li key={`${cardNumber}-${index}`}>
+                    {card?.name ?? cardNumber}
+                  </li>
+                )
+              })}
+            </ol>
+          </details>
+        ) : null}
+      </div>
+    </details>
   )
 }

@@ -410,6 +410,64 @@
   color: var(--green);
 }
 
+.pool-review__summary {
+  display: grid;
+  min-height: 48px;
+  grid-template-columns: 32px minmax(0, 1fr) 24px;
+  align-items: center;
+  gap: 12px;
+  color: var(--navy-dark);
+  cursor: pointer;
+  list-style: none;
+}
+
+.pool-review__summary::-webkit-details-marker {
+  display: none;
+}
+
+.pool-review__summary::after {
+  color: var(--red-dark);
+  content: '+';
+  font-size: 1.35rem;
+  font-weight: 800;
+  line-height: 1;
+  text-align: center;
+}
+
+.pool-review[open] > .pool-review__summary::after {
+  content: '−';
+}
+
+.pool-review__summary:focus-visible {
+  border-radius: 8px;
+  outline: 3px solid rgb(37 99 184 / 42%);
+  outline-offset: 3px;
+}
+
+.pool-review__summary-copy {
+  display: grid;
+  min-width: 0;
+  gap: 4px;
+}
+
+.pool-review__heading {
+  color: var(--navy-dark);
+  font-size: 1.12rem;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.pool-review__content {
+  padding-top: 12px;
+}
+
+.pool-review__actions {
+  display: flex;
+  min-height: 48px;
+  justify-content: flex-end;
+  align-items: center;
+}
+
 .text-button,
 .remove-button {
   min-height: 48px;

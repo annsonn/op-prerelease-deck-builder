@@ -95,6 +95,7 @@ function App({
   const [selectedSetId, setSelectedSetId] = useState('')
   const [catalog, setCatalog] = useState<RuntimeCatalog | null>(null)
   const [pool, setPool] = useState<PoolState>(emptyPool)
+  const [isPoolReviewOpen, setIsPoolReviewOpen] = useState(true)
   const [solution, setSolution] = useState<DeckSolution | null>(null)
   const [loadingIndex, setLoadingIndex] = useState(true)
   const [loadingSetId, setLoadingSetId] = useState<string | null>(null)
@@ -379,6 +380,8 @@ function App({
             catalog={catalog}
             pool={pool}
             eligibleCount={eligibleCount}
+            isOpen={isPoolReviewOpen}
+            onOpenChange={setIsPoolReviewOpen}
             onQuantity={handleQuantity}
             onUndo={handleUndo}
             onReveal={handleReveal}

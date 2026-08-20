@@ -27,7 +27,7 @@
 - Modify: `src/App.tsx`
 - Modify: `src/App.css`
 
-- [ ] **Step 1: Add failing component tests for the controlled disclosure**
+- [x] **Step 1: Add failing component tests for the controlled disclosure**
 
 Add `useState` and `waitFor` imports, then add this stateful test wrapper below `emptyPool` in `src/components/PoolReview.test.tsx`:
 
@@ -160,7 +160,7 @@ it('keeps Undo separate from the summary and preserves expanded controls', async
 
 Add `isOpen` and `onOpenChange={vi.fn()}` to the two existing `PoolReview` renders so their current stats/reveal assertions continue to run against expanded content.
 
-- [ ] **Step 2: Run the component test to verify RED**
+- [x] **Step 2: Run the component test to verify RED**
 
 Run:
 
@@ -170,7 +170,7 @@ npx vitest run --project browser src/components/PoolReview.test.tsx
 
 Expected: FAIL because `PoolReview` does not accept `isOpen`/`onOpenChange`, does not render `<details>`, and leaves content visible.
 
-- [ ] **Step 3: Implement the controlled native disclosure**
+- [x] **Step 3: Implement the controlled native disclosure**
 
 Extend `PoolReviewProps` in `src/components/PoolReview.tsx`:
 
@@ -377,7 +377,7 @@ Add these styles next to `.pool-totals` in `src/App.css`:
 }
 ```
 
-- [ ] **Step 4: Run focused tests and type checking to verify GREEN**
+- [x] **Step 4: Run focused tests and type checking to verify GREEN**
 
 Run:
 
@@ -388,7 +388,7 @@ npm run typecheck
 
 Expected: all focused tests pass; app and tools TypeScript checks exit 0.
 
-- [ ] **Step 5: Commit the controlled disclosure**
+- [x] **Step 5: Commit the controlled disclosure**
 
 ```bash
 git add src/components/PoolReview.tsx src/components/PoolReview.test.tsx src/App.tsx src/App.css

@@ -1,4 +1,5 @@
-import { render, screen, within } from '@testing-library/react'
+import { useState } from 'react'
+import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
@@ -64,7 +65,184 @@ const emptyPool: PoolState = {
   recentCardNumbers: Object.freeze([]),
 }
 
+function ControlledPoolReview({
+  pool,
+  initialOpen = true,
+}: {
+  pool: PoolState
+  initialOpen?: boolean
+}) {
+  const [isOpen, setIsOpen] = useState(initialOpen)
+
+  return (
+    <PoolReview
+      catalog={catalog}
+      pool={pool}
+      eligibleCount={Object.values(pool.counts).reduce(
+        (total, quantity) => total + quantity,
+        0,
+      )}
+      isOpen={isOpen}
+      onOpenChange={setIsOpen}
+      onQuantity={vi.fn()}
+      onUndo={vi.fn()}
+      onReveal={vi.fn()}
+    />
+  )
+}
+
+function poolDisclosure(): HTMLDetailsElement {
+  const disclosure = screen.getByText('Review your pool').closest('details')
+  if (!(disclosure instanceof HTMLDetailsElement)) {
+    throw new Error('Expected Review your pool inside a details disclosure.')
+  }
+  return disclosure
+}
+
 describe('PoolReview', () => {
+  it('keeps the heading and totals visible while the pool controls are collapsed', () => {
+    const pool = appendCards(emptyPool, [playableCard.cardNumber])
+    render(<ControlledPoolReview pool={pool} initialOpen={false} />)
+
+    expect(poolDisclosure()).not.toHaveAttribute('open')
+    expect(screen.getByRole('heading', { name: 'Review your pool' })).toBeVisible()
+    const totals = screen.getByLabelText('Pool totals')
+    expect(totals).toBeVisible()
+    expect(totals).toHaveTextContent('1 copies')
+    expect(totals).toHaveTextContent('1 eligible')
+
+    const hiddenControls = [
+      screen.getByRole('button', { name: 'Undo last change', hidden: true }),
+      screen.getByLabelText('Latest accepted card'),
+      screen.getByRole('spinbutton', {
+        name: 'Quantity for Test Character (OP16-005)',
+        hidden: true,
+      }),
+      screen.getByRole('button', {
+        name: 'Remove Test Character (OP16-005)',
+        hidden: true,
+      }),
+      ...screen.getAllByRole('button', {
+        name: 'View Test Character, OP16-005',
+        hidden: true,
+      }),
+    ]
+    expect(hiddenControls).toHaveLength(6)
+    hiddenControls.forEach((control) => expect(control).not.toBeVisible())
+  })
+
+  it('lets the native summary manually open and close the controlled pool', async () => {
+    const user = userEvent.setup()
+    const pool = appendCards(emptyPool, [playableCard.cardNumber])
+    render(<ControlledPoolReview pool={pool} initialOpen={false} />)
+    const summary = screen.getByText('Review your pool').closest('summary')
+    if (summary === null) throw new Error('Expected a pool disclosure summary.')
+
+    await user.click(summary)
+    await waitFor(() => expect(poolDisclosure()).toHaveAttribute('open'))
+    expect(screen.getByLabelText('Latest accepted card')).toBeVisible()
+    expect(screen.getByRole('spinbutton')).toBeVisible()
+    expect(
+      screen.getByRole('button', { name: /Remove Test Character/ }),
+    ).toBeVisible()
+
+    await user.click(summary)
+    await waitFor(() => expect(poolDisclosure()).not.toHaveAttribute('open'))
+  })
+
+  it('does not echo programmatic open state back through onOpenChange', async () => {
+    const onOpenChange = vi.fn()
+    const pool = appendCards(emptyPool, [playableCard.cardNumber])
+    const view = render(
+      <PoolReview
+        catalog={catalog}
+        pool={pool}
+        eligibleCount={1}
+        isOpen={false}
+        onOpenChange={onOpenChange}
+        onQuantity={vi.fn()}
+        onUndo={vi.fn()}
+        onReveal={vi.fn()}
+      />,
+    )
+    await waitFor(() => expect(poolDisclosure()).not.toHaveAttribute('open'))
+    expect(onOpenChange).not.toHaveBeenCalled()
+
+    view.rerender(
+      <PoolReview
+        catalog={catalog}
+        pool={pool}
+        eligibleCount={1}
+        isOpen
+        onOpenChange={onOpenChange}
+        onQuantity={vi.fn()}
+        onUndo={vi.fn()}
+        onReveal={vi.fn()}
+      />,
+    )
+    await waitFor(() => expect(poolDisclosure()).toHaveAttribute('open'))
+    expect(onOpenChange).not.toHaveBeenCalled()
+
+    view.rerender(
+      <PoolReview
+        catalog={catalog}
+        pool={pool}
+        eligibleCount={1}
+        isOpen={false}
+        onOpenChange={onOpenChange}
+        onQuantity={vi.fn()}
+        onUndo={vi.fn()}
+        onReveal={vi.fn()}
+      />,
+    )
+    await waitFor(() => expect(poolDisclosure()).not.toHaveAttribute('open'))
+    expect(onOpenChange).not.toHaveBeenCalled()
+  })
+
+  it('keeps Undo separate from the summary and preserves expanded controls', async () => {
+    const user = userEvent.setup()
+    const onQuantity = vi.fn()
+    const onReveal = vi.fn()
+    const onUndo = vi.fn()
+    const pool = appendCards(emptyPool, [playableCard.cardNumber])
+    render(
+      <PoolReview
+        catalog={catalog}
+        pool={pool}
+        eligibleCount={1}
+        isOpen
+        onOpenChange={vi.fn()}
+        onQuantity={onQuantity}
+        onUndo={onUndo}
+        onReveal={onReveal}
+      />,
+    )
+
+    const undo = screen.getByRole('button', { name: 'Undo last change' })
+    expect(undo.closest('summary')).toBeNull()
+    await user.click(undo)
+    expect(onUndo).toHaveBeenCalledOnce()
+    expect(poolDisclosure()).toHaveAttribute('open')
+
+    const quantity = screen.getByRole('spinbutton', {
+      name: 'Quantity for Test Character (OP16-005)',
+    })
+    await user.clear(quantity)
+    await user.type(quantity, '2')
+    await user.tab()
+    expect(onQuantity).toHaveBeenCalledWith(playableCard.cardNumber, 2)
+
+    const metadata = screen.getByText('OP16-005 · CHARACTER')
+    const row = metadata.closest('li')
+    if (row === null) throw new Error('Expected card metadata inside a pool row')
+    await user.click(
+      within(row).getByRole('button', {
+        name: 'View Test Character, OP16-005',
+      }),
+    )
+    expect(onReveal).toHaveBeenCalledWith(playableCard)
+  })
+
   it('shows printed card stats once for a pool row with two copies', () => {
     const pool = appendCards(emptyPool, [
       playableCard.cardNumber,
@@ -76,6 +254,8 @@ describe('PoolReview', () => {
         catalog={catalog}
         pool={pool}
         eligibleCount={2}
+        isOpen
+        onOpenChange={vi.fn()}
         onQuantity={vi.fn()}
         onUndo={vi.fn()}
         onReveal={vi.fn()}
@@ -114,6 +294,8 @@ describe('PoolReview', () => {
         catalog={catalog}
         pool={pool}
         eligibleCount={2}
+        isOpen
+        onOpenChange={vi.fn()}
         onQuantity={vi.fn()}
         onUndo={vi.fn()}
         onReveal={onReveal}
