@@ -68,6 +68,11 @@ const LINES: readonly DeckLine[] = Object.freeze([
   line(card('OP16-003', 'alpha', 2, null), 20),
 ])
 
+const REVERSE_CARD_NUMBER_LINES: readonly DeckLine[] = Object.freeze([
+  line(card('OP16-010', 'Card 10', 3, 5_000), 10),
+  line(card('OP16-002', 'Card 2', 3, 5_000), 10),
+])
+
 const cardNumbers = (lines: readonly DeckLine[]): string[] =>
   lines.map(({ card: { cardNumber } }) => cardNumber)
 
@@ -89,6 +94,26 @@ describe('main deck sorting', () => {
     expect(cardNumbers(sortMainDeck(LINES, field, direction))).toEqual(expected)
   })
 
+  it('sorts numeric names naturally in both directions', () => {
+    expect(
+      cardNumbers(sortMainDeck(REVERSE_CARD_NUMBER_LINES, 'name', 'ascending')),
+    ).toEqual(['OP16-002', 'OP16-010'])
+    expect(
+      cardNumbers(sortMainDeck(REVERSE_CARD_NUMBER_LINES, 'name', 'descending')),
+    ).toEqual(['OP16-010', 'OP16-002'])
+  })
+
+  it.each<MainDeckSortDirection>(['ascending', 'descending'])(
+    'breaks equal-primary %s ties by ascending card number',
+    (direction) => {
+      expect(
+        cardNumbers(
+          sortMainDeck(REVERSE_CARD_NUMBER_LINES, 'score', direction),
+        ),
+      ).toEqual(['OP16-002', 'OP16-010'])
+    },
+  )
+
   it('defines the natural default direction for every sort field', () => {
     expect(MAIN_DECK_SORT_FIELDS).toEqual(['score', 'name', 'cost', 'power'])
     expect(
@@ -106,14 +131,29 @@ describe('main deck sorting', () => {
     })
   })
 
-  it('strictly parses supported fields and rejects unsupported values', () => {
+  it('strictly parses supported fields', () => {
     for (const field of MAIN_DECK_SORT_FIELDS) {
       expect(parseMainDeckSortField(field)).toBe(field)
     }
+  })
 
-    expect(() => parseMainDeckSortField('rarity')).toThrowError(
-      /^Unsupported Main deck sort field: rarity\.$/,
-    )
+  it.each([
+    ['', 'Unsupported Main deck sort field: .'],
+    ['Score', 'Unsupported Main deck sort field: Score.'],
+    [' score', 'Unsupported Main deck sort field:  score.'],
+    ['score ', 'Unsupported Main deck sort field: score .'],
+    ['rarity', 'Unsupported Main deck sort field: rarity.'],
+  ])('rejects the invalid field %j without normalization', (value, message) => {
+    let thrown: unknown
+
+    try {
+      parseMainDeckSortField(value)
+    } catch (error) {
+      thrown = error
+    }
+
+    expect(thrown).toBeInstanceOf(Error)
+    expect((thrown as Error).message).toBe(message)
   })
 
   it('returns a new array without changing the frozen input order', () => {
