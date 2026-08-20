@@ -420,7 +420,11 @@ function App({
           </section>
 
           {solution !== null ? (
-            <DeckResult solution={solution} onReveal={handleReveal} />
+            <DeckResult
+              solution={solution}
+              featuresByCardNumber={catalog.featuresByCardNumber}
+              onReveal={handleReveal}
+            />
           ) : null}
         </>
       ) : null}

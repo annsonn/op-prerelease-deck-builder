@@ -977,6 +977,30 @@ describe('sealed pool builder', () => {
       within(guide).getByText(/consider using removal before attacks/i),
     ).toBeVisible()
     expect(screen.getByText('Main deck 40')).toBeVisible()
+    const mainDeck = screen.getByRole('region', { name: 'Main deck' })
+    const blockerRow = within(mainDeck)
+      .getByText('OP16-006 Test Card')
+      .closest('li')
+    if (blockerRow === null) {
+      throw new Error('Expected Main deck row for OP16-006.')
+    }
+    expect(
+      within(blockerRow).getByText('Blocker', {
+        selector: '.deck-line__blocker-label',
+      }),
+    ).toBeVisible()
+
+    const nonBlockerRow = within(mainDeck)
+      .getByText('OP16-005 Test Card')
+      .closest('li')
+    if (nonBlockerRow === null) {
+      throw new Error('Expected Main deck row for OP16-005.')
+    }
+    expect(
+      within(nonBlockerRow).queryByText('Blocker', {
+        selector: '.deck-line__blocker-label',
+      }),
+    ).not.toBeInTheDocument()
     expect(screen.getByText('Sideboard 1')).toBeVisible()
     expect(
       screen.getByRole('heading', { name: 'Cost and color curve' }),
