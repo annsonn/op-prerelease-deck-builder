@@ -807,7 +807,7 @@ git commit -m "docs: verify collapsible workflow steps"
 
 Dispatch independent reviewers against the feature branch’s merge-base with `main`. Resolve every Critical or Important finding, rerun the affected focused tests, and repeat review until both axes approve.
 
-- [ ] **Step 7: Merge locally to `main` and verify the integrated tree**
+- [x] **Step 7: Merge locally to `main` and verify the integrated tree**
 
 After review approval, use the finishing-a-development-branch workflow, merge the feature branch into local `main` without pushing, then rerun:
 
@@ -848,3 +848,7 @@ Verified in the `codex/collapse-workflow-steps` worktree on 2026-08-20.
 - Aggregate review against merge-base `239382e`:
   - Spec axis: approved with no missing, partial, incorrect, or extra behavior.
   - Standards axis: no documented-standard violations; one non-blocking duplication judgement call for the intentionally specialized WorkflowStep and PoolReview disclosure shells.
+- Local `main` integration:
+  - Fast-forwarded `codex/collapse-workflow-steps` into `main` without pushing.
+  - `npm run verify`: exit 0; lint and both TypeScript projects passed, 53/53 test files and 791/791 tests passed, and catalog validation reported 17 sets / 85 files.
+  - `npm run build`: exit 0; Vite 8.2.1 transformed 127 modules and produced the production artifact successfully.
