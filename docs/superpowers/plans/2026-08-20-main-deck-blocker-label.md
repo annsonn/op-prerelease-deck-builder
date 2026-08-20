@@ -464,7 +464,7 @@ git add docs/superpowers/plans/2026-08-20-main-deck-blocker-label.md
 git commit -m "docs: verify main deck blocker label"
 ```
 
-- [ ] **Step 6: Request aggregate Spec and Standards review**
+- [x] **Step 6: Request aggregate Spec and Standards review**
 
 Dispatch independent reviewers against the feature branch's merge-base with
 `main`. Resolve every Critical or Important finding and repeat affected tests
@@ -540,6 +540,17 @@ expanded before measurements.
   descendants. It was therefore proven as visible static text, with no button,
   tooltip hook, or interactive role.
 - Captured console warning/error logs were empty in both viewport passes.
+
+### Aggregate review
+
+- Spec review approved the feature against the merge-base with `main` with no
+  findings.
+- Standards review raised one non-blocking Mysterious Name judgement call for
+  the `showColors` boolean. Commit `5cb2a1b` resolved it with the nonfunctional
+  rename to `showMainDeckMetadata`.
+- After the rename, 35/35 focused tests passed, along with lint, typecheck, and
+  `git diff --check`. Standards re-review approved the resolution, leaving both
+  aggregate review axes approved.
 
 The original QA examples named OP16-006 as the blocker and OP16-005 as the
 non-blocker because the App integration test intentionally uses synthetic
