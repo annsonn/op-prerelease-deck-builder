@@ -401,7 +401,7 @@ git commit -m "feat: make pool review collapsible"
 - Modify: `src/App.test.tsx`
 - Modify: `src/App.tsx`
 
-- [ ] **Step 1: Add App integration helpers and failing transition tests**
+- [x] **Step 1: Add App integration helpers and failing transition tests**
 
 Import `DeckSolver` from `src/solver/types.ts`, then add:
 
@@ -566,7 +566,7 @@ Update existing tests whose intended pool interaction follows a successful build
 
 These are user-flow updates, not weakened assertions: closed native disclosure content must not be queried as though it were currently interactive.
 
-- [ ] **Step 2: Run the App test to verify RED**
+- [x] **Step 2: Run the App test to verify RED**
 
 Run:
 
@@ -576,7 +576,7 @@ npx vitest run --project browser src/App.test.tsx
 
 Expected: FAIL because a successful build does not close the disclosure, mutations do not explicitly reopen it, and `App` does not yet accept an injected `deckSolver`.
 
-- [ ] **Step 3: Implement App-owned transition rules**
+- [x] **Step 3: Implement App-owned transition rules**
 
 Import `DeckSolver` beside `DeckSolution`, replace the module solver with a typed default, and extend the app boundary:
 
@@ -621,7 +621,7 @@ const handleBuild = useCallback(() => {
 
 Do not clear or mutate the pool when toggling, and do not change any existing `revealedCard` behavior.
 
-- [ ] **Step 4: Run focused tests to verify GREEN**
+- [x] **Step 4: Run focused tests to verify GREEN**
 
 Run:
 
@@ -631,7 +631,7 @@ npx vitest run --project browser src/App.test.tsx src/components/PoolReview.test
 
 Expected: all focused tests pass, including existing card-image ownership and reset behavior.
 
-- [ ] **Step 5: Commit the transition behavior**
+- [x] **Step 5: Commit the transition behavior**
 
 ```bash
 git add src/App.tsx src/App.test.tsx

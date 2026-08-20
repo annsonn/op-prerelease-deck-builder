@@ -27,7 +27,7 @@ import {
   type PoolState,
 } from './pool/pool.js'
 import { StrategyDeckSolver } from './solver/strategy-solver.js'
-import type { DeckSolution } from './solver/types.js'
+import type { DeckSolution, DeckSolver } from './solver/types.js'
 import {
   generateTestPool,
   type TestPoolGeneration,
@@ -49,6 +49,7 @@ export interface TestPoolApi {
 interface AppProps {
   catalogApi?: CatalogApi
   testPoolApi?: TestPoolApi
+  deckSolver?: DeckSolver
 }
 
 const defaultCatalogApi: CatalogApi = {
@@ -66,7 +67,7 @@ const defaultTestPoolApi: TestPoolApi = {
   generate: (catalog, mode) => generateTestPool(catalog, undefined, mode),
 }
 
-const solver = new StrategyDeckSolver()
+const defaultDeckSolver: DeckSolver = new StrategyDeckSolver()
 
 function emptyPool(): PoolState {
   return {
@@ -90,6 +91,7 @@ function formatRarityConfirmation(
 function App({
   catalogApi = defaultCatalogApi,
   testPoolApi = defaultTestPoolApi,
+  deckSolver = defaultDeckSolver,
 }: AppProps) {
   const [index, setIndex] = useState<RuntimeCatalogIndex | null>(null)
   const [selectedSetId, setSelectedSetId] = useState('')
@@ -113,6 +115,7 @@ function App({
     setSelectedSetId('')
     setCatalog(null)
     setPool(emptyPool())
+    setIsPoolReviewOpen(true)
     setSolution(null)
     setLoadingSetId(null)
     setError(null)
@@ -181,6 +184,7 @@ function App({
     setSelectedSetId(setId)
     setCatalog(null)
     setPool(emptyPool())
+    setIsPoolReviewOpen(true)
     setSolution(null)
     setError(null)
     setConfirmation('')
@@ -196,6 +200,7 @@ function App({
       )
       return next
     })
+    setIsPoolReviewOpen(true)
     setSolution(null)
     setError(null)
   }, [])
@@ -212,6 +217,7 @@ function App({
       const nextPool = replaceCards(pool, generated.cardNumbers)
       setRevealedCard(null)
       setPool(nextPool)
+      setIsPoolReviewOpen(true)
       setSolution(null)
       setError(null)
       setConfirmation(
@@ -229,6 +235,7 @@ function App({
   const handleUndo = useCallback(() => {
     setRevealedCard(null)
     setPool((current) => undoLast(current))
+    setIsPoolReviewOpen(true)
     setSolution(null)
     setError(null)
     setConfirmation('Undid last change.')
@@ -238,6 +245,7 @@ function App({
     (cardNumber: string, quantity: number) => {
       setRevealedCard(null)
       setPool((current) => setQuantity(current, cardNumber, quantity))
+      setIsPoolReviewOpen(true)
       setSolution(null)
       setError(null)
       setConfirmation(
@@ -252,16 +260,17 @@ function App({
   const handleBuild = useCallback(() => {
     if (catalog === null) return
     try {
-      const nextSolution = solver.solve(catalog, pool.counts)
+      const nextSolution = deckSolver.solve(catalog, pool.counts)
       setRevealedCard(null)
       setSolution(nextSolution)
+      setIsPoolReviewOpen(false)
       setError(null)
       setConfirmation('Built a 40-card main deck.')
     } catch (cause) {
       setError(errorMessage(cause))
       setConfirmation('')
     }
-  }, [catalog, pool.counts])
+  }, [catalog, deckSolver, pool.counts])
 
   const handleReveal = useCallback((card: PlayableCard) => {
     setRevealedCard(card)

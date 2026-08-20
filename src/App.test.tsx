@@ -23,6 +23,7 @@ import {
   browserSha256,
   type RuntimeCatalog,
 } from './catalog/load-catalog.js'
+import type { DeckSolver } from './solver/types.js'
 import type { TestPoolGeneration } from './test-pool/generate-test-pool.js'
 
 const catalogLoaderMocks = vi.hoisted(() => ({
@@ -214,6 +215,30 @@ function poolTotals(): HTMLElement {
   return screen.getByLabelText(/^Pool totals:/)
 }
 
+function poolDisclosure(): HTMLDetailsElement {
+  const disclosure = screen.getByText('Review your pool').closest('details')
+  if (!(disclosure instanceof HTMLDetailsElement)) {
+    throw new Error('Expected Review your pool inside a details disclosure.')
+  }
+  return disclosure
+}
+
+function poolSummary(): HTMLElement {
+  const summary = screen.getByText('Review your pool').closest('summary')
+  if (summary === null) throw new Error('Expected a pool disclosure summary.')
+  return summary
+}
+
+async function generateDevelopmentPool(
+  user: ReturnType<typeof userEvent.setup>,
+): Promise<void> {
+  await user.click(
+    await screen.findByRole('button', {
+      name: 'Generate 60-card development pool',
+    }),
+  )
+}
+
 function cardImage(): HTMLImageElement {
   const image = document.body.querySelector<HTMLImageElement>(
     '.card-image-dialog__image',
@@ -339,6 +364,10 @@ describe('sealed pool builder', () => {
     expect(
       screen.getByRole('heading', { name: 'Strategy sealed build' }),
     ).toBeVisible()
+    expect(poolDisclosure()).not.toHaveAttribute('open')
+
+    await user.click(poolSummary())
+    await waitFor(() => expect(poolDisclosure()).toHaveAttribute('open'))
 
     await user.click(screen.getByRole('button', { name: 'Undo last change' }))
     expect(poolTotals()).toHaveTextContent('0 copies')
@@ -347,6 +376,180 @@ describe('sealed pool builder', () => {
       screen.queryByLabelText('Latest accepted card'),
     ).not.toBeInTheDocument()
   })
+
+  it('collapses the pool after a successful build and lets the user reopen it', async () => {
+    const user = userEvent.setup()
+    render(
+      <App
+        catalogApi={catalogApi()}
+        testPoolApi={{ generate: () => testPoolGeneration() }}
+      />,
+    )
+
+    await user.selectOptions(
+      await screen.findByRole('combobox', { name: 'Card set' }),
+      'OP16',
+    )
+    await generateDevelopmentPool(user)
+    expect(poolDisclosure()).toHaveAttribute('open')
+
+    await user.click(screen.getByRole('button', { name: 'Build deck' }))
+
+    expect(
+      screen.getByRole('heading', { name: 'Strategy sealed build' }),
+    ).toBeVisible()
+    expect(poolDisclosure()).not.toHaveAttribute('open')
+    expect(
+      screen.getByRole('heading', { name: 'Review your pool' }),
+    ).toBeVisible()
+    expect(poolTotals()).toBeVisible()
+    expect(poolTotals()).toHaveTextContent('60 copies')
+    expect(poolTotals()).toHaveTextContent('59 eligible')
+
+    await user.click(poolSummary())
+    await waitFor(() => expect(poolDisclosure()).toHaveAttribute('open'))
+    expect(
+      screen.getByRole('button', { name: 'Undo last change' }),
+    ).toBeVisible()
+    expect(
+      within(poolDisclosure()).getByRole('spinbutton', {
+        name: 'Quantity for OP16-005 Test Card (OP16-005)',
+      }),
+    ).toBeVisible()
+    expect(
+      within(poolDisclosure()).getByRole('button', {
+        name: 'View OP16-005 Test Card, OP16-005',
+      }),
+    ).toBeVisible()
+  })
+
+  it('reopens the pool after accepted cards, test replacement, quantity, Remove, Undo, and set changes', async () => {
+    const user = userEvent.setup()
+    render(
+      <App
+        catalogApi={catalogApi()}
+        testPoolApi={{ generate: () => testPoolGeneration() }}
+      />,
+    )
+    const picker = await screen.findByRole('combobox', { name: 'Card set' })
+    await user.selectOptions(picker, 'OP16')
+    await generateDevelopmentPool(user)
+
+    await user.click(screen.getByRole('button', { name: 'Build deck' }))
+    expect(poolDisclosure()).not.toHaveAttribute('open')
+    const suffixInput = screen.getByRole('textbox', {
+      name: 'Card number (1–3 digits)',
+    })
+    await user.type(suffixInput, '5')
+    await user.click(screen.getByRole('button', { name: 'Add number' }))
+    expect(poolDisclosure()).toHaveAttribute('open')
+    expect(document.querySelector('.result-panel')).toBeNull()
+
+    await user.click(screen.getByRole('button', { name: 'Build deck' }))
+    expect(poolDisclosure()).not.toHaveAttribute('open')
+    await generateDevelopmentPool(user)
+    expect(poolDisclosure()).toHaveAttribute('open')
+    expect(document.querySelector('.result-panel')).toBeNull()
+
+    await user.click(screen.getByRole('button', { name: 'Build deck' }))
+    expect(poolDisclosure()).not.toHaveAttribute('open')
+    const quantity = document.querySelector<HTMLInputElement>(
+      'input[aria-label="Quantity for OP16-005 Test Card (OP16-005)"]',
+    )
+    if (quantity === null) throw new Error('Expected hidden pool quantity input.')
+    fireEvent.change(quantity, { target: { value: '36' } })
+    fireEvent.blur(quantity)
+    await waitFor(() => expect(poolDisclosure()).toHaveAttribute('open'))
+    expect(document.querySelector('.result-panel')).toBeNull()
+    expect(quantity).toHaveValue(36)
+
+    await user.click(screen.getByRole('button', { name: 'Build deck' }))
+    expect(poolDisclosure()).not.toHaveAttribute('open')
+    const remove = document.querySelector<HTMLButtonElement>(
+      'button[aria-label="Remove OP16-012 Test Card (OP16-012)"]',
+    )
+    if (remove === null) throw new Error('Expected hidden pool Remove button.')
+    fireEvent.click(remove)
+    await waitFor(() => expect(poolDisclosure()).toHaveAttribute('open'))
+    expect(document.querySelector('.result-panel')).toBeNull()
+    expect(
+      screen.queryByRole('spinbutton', {
+        name: 'Quantity for OP16-012 Test Card (OP16-012)',
+      }),
+    ).not.toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Build deck' }))
+    expect(poolDisclosure()).not.toHaveAttribute('open')
+    const undo = document.querySelector<HTMLButtonElement>(
+      '.pool-review__actions .text-button',
+    )
+    if (undo === null) throw new Error('Expected hidden Undo button.')
+    fireEvent.click(undo)
+    await waitFor(() => expect(poolDisclosure()).toHaveAttribute('open'))
+    expect(document.querySelector('.result-panel')).toBeNull()
+    expect(
+      screen.getByRole('spinbutton', {
+        name: 'Quantity for OP16-012 Test Card (OP16-012)',
+      }),
+    ).toHaveValue(1)
+
+    await user.click(screen.getByRole('button', { name: 'Build deck' }))
+    expect(poolDisclosure()).not.toHaveAttribute('open')
+    await user.selectOptions(picker, 'OP17')
+    expect(await screen.findByText('OP17 is ready for pool entry.')).toBeVisible()
+    expect(poolDisclosure()).toHaveAttribute('open')
+    expect(poolTotals()).toHaveTextContent('0 copies')
+    expect(document.querySelector('.result-panel')).toBeNull()
+  })
+
+  it.each([true, false])(
+    'preserves pool disclosure state when deck building fails (open=%s)',
+    async (startsOpen) => {
+      const user = userEvent.setup()
+      const deckSolver: DeckSolver = {
+        solve: () => {
+          throw new Error('solver failed')
+        },
+      }
+      render(
+        <App
+          catalogApi={catalogApi()}
+          testPoolApi={{ generate: () => testPoolGeneration() }}
+          deckSolver={deckSolver}
+        />,
+      )
+      await user.selectOptions(
+        await screen.findByRole('combobox', { name: 'Card set' }),
+        'OP16',
+      )
+      await generateDevelopmentPool(user)
+      const buildButton = screen.getByRole('button', { name: 'Build deck' })
+
+      if (startsOpen) {
+        await user.click(
+          within(poolCardRow('OP16-005 Test Card', 'OP16-005')).getByRole(
+            'button',
+            { name: 'View OP16-005 Test Card, OP16-005' },
+          ),
+        )
+        expect(screen.getByRole('dialog')).toBeVisible()
+        fireEvent.click(buildButton)
+      } else {
+        await user.click(poolSummary())
+        await waitFor(() =>
+          expect(poolDisclosure()).not.toHaveAttribute('open'),
+        )
+        await user.click(buildButton)
+      }
+
+      expect(screen.getByRole('alert')).toHaveTextContent('solver failed')
+      expect(document.querySelector('.result-panel')).toBeNull()
+      expect(poolDisclosure().open).toBe(startsOpen)
+      expect(poolTotals()).toHaveTextContent('60 copies')
+      expect(poolTotals()).toHaveTextContent('59 eligible')
+      if (startsOpen) expect(screen.getByRole('dialog')).toBeVisible()
+    },
+  )
 
   it('replaces a manual card with a 72-card tournament pool', async () => {
     const user = userEvent.setup()
@@ -481,6 +684,7 @@ describe('sealed pool builder', () => {
       }),
     )
     await user.click(screen.getByRole('button', { name: 'Build deck' }))
+    expect(poolDisclosure()).not.toHaveAttribute('open')
 
     await user.click(
       screen.getByRole('button', {
@@ -496,6 +700,7 @@ describe('sealed pool builder', () => {
     expect(
       screen.getByRole('heading', { name: 'Strategy sealed build' }),
     ).toBeVisible()
+    expect(poolDisclosure()).not.toHaveAttribute('open')
   })
 
   it('preserves the pool and solution when generated replacement is empty', async () => {
@@ -519,6 +724,10 @@ describe('sealed pool builder', () => {
       }),
     )
     await user.click(screen.getByRole('button', { name: 'Build deck' }))
+    expect(poolDisclosure()).not.toHaveAttribute('open')
+
+    await user.click(poolSummary())
+    await waitFor(() => expect(poolDisclosure()).toHaveAttribute('open'))
 
     await user.click(
       screen.getByRole('button', {
@@ -534,6 +743,7 @@ describe('sealed pool builder', () => {
     expect(
       screen.getByRole('heading', { name: 'Strategy sealed build' }),
     ).toBeVisible()
+    expect(poolDisclosure()).toHaveAttribute('open')
   })
 
   it('hides the test utility and resets its batch when the set changes', async () => {
@@ -919,6 +1129,9 @@ describe('sealed pool builder', () => {
       }),
     )
     await user.click(screen.getByRole('button', { name: 'Build deck' }))
+
+    await user.click(poolSummary())
+    await waitFor(() => expect(poolDisclosure()).toHaveAttribute('open'))
 
     await user.click(
       within(poolCardRow('OP16-005 Test Card', 'OP16-005')).getByRole(
