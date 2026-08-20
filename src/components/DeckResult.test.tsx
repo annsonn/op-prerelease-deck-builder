@@ -397,6 +397,41 @@ describe('DeckResult', () => {
     expect(direction).toHaveTextContent('Descending')
   })
 
+  it.each([
+    ['Enter', '{Enter}'],
+    ['Space', ' '],
+  ] as const)(
+    'uses native %s activation once for the sort direction button',
+    async (_keyName, key) => {
+      const user = userEvent.setup()
+      render(
+        <DeckResult
+          solution={solution}
+          featuresByCardNumber={featuresByCardNumber}
+          onReveal={vi.fn()}
+        />,
+      )
+
+      const mainDeck = screen.getByRole('region', { name: 'Main deck' })
+      const direction = within(mainDeck).getByRole('button', {
+        name: 'Change sort direction to ascending',
+      })
+
+      expect(direction).toHaveTextContent('Descending')
+      expect(mainDeckCardNumbers()).toEqual(['OP16-005', 'OP16-007'])
+
+      direction.focus()
+      await user.keyboard(key)
+
+      expect(direction).toHaveTextContent('Ascending')
+      expect(direction).toHaveAccessibleName(
+        'Change sort direction to descending',
+      )
+      expect(mainDeckCardNumbers()).toEqual(['OP16-007', 'OP16-005'])
+      expect(direction).toHaveFocus()
+    },
+  )
+
   it('sorts Main deck by each field, resets natural direction, and preserves focus', async () => {
     const user = userEvent.setup()
     render(
