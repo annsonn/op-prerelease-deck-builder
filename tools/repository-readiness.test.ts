@@ -5,8 +5,28 @@ import { promisify } from 'node:util'
 
 import { describe, expect, test } from 'vitest'
 
+import { printedCardIdSchema } from '../shared/catalog.js'
+
 const repositoryRoot = process.cwd()
 const execFileAsync = promisify(execFile)
+
+function pathContainsPrintedCardId(path: string): boolean {
+  const candidates = path.matchAll(
+    /(?:^|[^a-z0-9])([a-z][a-z0-9]*-\d{3})(?:_EN)?(?=$|[^a-z0-9])/gi,
+  )
+
+  for (const match of candidates) {
+    const candidate = match[1]
+    if (
+      candidate &&
+      printedCardIdSchema.safeParse(candidate.toUpperCase()).success
+    ) {
+      return true
+    }
+  }
+
+  return false
+}
 
 function isTrackedCardImageArtifact(path: string): boolean {
   const normalizedPath = path.replaceAll('\\', '/')
@@ -21,17 +41,14 @@ function isTrackedCardImageArtifact(path: string): boolean {
     /(?:^|[-_ ])(?:card[-_ ]images(?:[-_ ]archive)?|card[-_ ]image[-_ ]archive)\.(?:7z|tar(?:\.gz)?|tgz|zip)$/i.test(
       basename,
     )
-  const isBitmap =
-    /\.(?:avif|bmp|gif|heic|heif|jpe?g|png|tiff?|webp)$/i.test(basename)
-  const containsPrintedCardId =
-    /(?:^|[^a-z0-9])(?:OP|ST|EB|PRB)\d+-\d{3}(?:_EN)?(?=$|[^a-z0-9])/i.test(
-      normalizedPath,
-    )
+  const isImage =
+    /\.(?:avif|bmp|gif|heic|heif|jpe?g|png|svg|tiff?|webp)$/i.test(basename)
+  const containsPrintedCardId = pathContainsPrintedCardId(normalizedPath)
 
   return (
     hasExplicitCardImagePath ||
     isExplicitCardImageArchive ||
-    (isBitmap && containsPrintedCardId)
+    (isImage && containsPrintedCardId)
   )
 }
 
@@ -47,6 +64,10 @@ describe('tracked card image artifact detection', () => {
       'public/assets/previews/front-ST01-002.jpg',
       'public/assets/eb02-003.PNG',
       'public/assets/previews/PRB01-004.jpeg',
+      'public/assets/P-001_EN.webp',
+      'public/assets/DON-001.png',
+      'public/assets/OP16-001.svg',
+      'public/assets/ABCDE12-999.tiff',
       'public/card-images/provider-logo.svg',
       'public/assets/Card Images/archive.txt',
       'public/assets/card-images.zip',
@@ -67,6 +88,8 @@ describe('tracked card image artifact detection', () => {
       'public/assets/logo.webp',
       'docs/card-image-notes.md',
       'public/assets/OP16-001.txt',
+      'public/assets/ABCDEF-001.webp',
+      'public/assets/OP123-001.png',
     ]
 
     expect(allowedPaths.filter(isTrackedCardImageArtifact)).toEqual([])
