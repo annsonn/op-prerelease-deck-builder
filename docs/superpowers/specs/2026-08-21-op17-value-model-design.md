@@ -49,7 +49,7 @@ tournament pools under the then-current engine:
 | OP17-093 Monkey.D.Luffy | 0 / 954 | play a cost-2 Character from trash and conditional cost-12 Rush support |
 | OP17-112 Charlotte Linlin | 122 / 906 | Life gain or opposing-Life pressure |
 | OP17-118 Rocks.D.Xebec | 52 / 481 | multi-deploy totaling nine cost |
-| OP17-065 Queen | about 3% | two-target attack lock through the opponent's next turn |
+| OP17-065 Queen | 99 / 2393 | two-target attack lock through the opponent's next turn |
 | OP17-119 Loki | 328 / 546 | `any number` removal flattened to ordinary removal |
 
 The same audit found missed value on OP17-114 The 3 Sweet Commanders,
@@ -165,6 +165,9 @@ interface TargetSpec {
   readonly predicate: CardPredicate
   readonly differentNames: boolean
   readonly totalCostMaximum: number | null
+  // True only when the printed wording explicitly allows the candidate to
+  // satisfy its own target/support requirement.
+  readonly allowsSelf: boolean
 }
 
 type RequirementExpression =
@@ -198,6 +201,7 @@ type EffectAction =
   | { readonly kind: 'draw'; readonly subject: EffectSubject; readonly amount: number }
   | { readonly kind: 'filter'; readonly subject: EffectSubject; readonly lookedAt: number; readonly kept: number; readonly target: TargetSpec }
   | { readonly kind: 'remove'; readonly mode: 'ko' | 'bottomDeck' | 'returnHand' | 'rest' | 'powerReduction'; readonly target: TargetSpec; readonly powerDelta: number | null }
+  | { readonly kind: 'negateEffect'; readonly target: TargetSpec }
   | { readonly kind: 'lockAttack'; readonly target: TargetSpec; readonly duration: TimingModifier }
   | { readonly kind: 'deploy'; readonly target: TargetSpec }
   | { readonly kind: 'protect'; readonly target: TargetSpec }
@@ -205,8 +209,10 @@ type EffectAction =
   | { readonly kind: 'handDiscard'; readonly subject: EffectSubject; readonly amount: number }
   | { readonly kind: 'donChange'; readonly mode: 'refresh' | 'rampActive' | 'rampRested'; readonly amount: number }
   | { readonly kind: 'counterModifier'; readonly amount: number; readonly target: TargetSpec }
-  | { readonly kind: 'powerModifier'; readonly amount: number; readonly target: TargetSpec; readonly duration: TimingModifier }
-  | { readonly kind: 'leaderBasePower'; readonly amount: number; readonly duration: TimingModifier }
+  // `powerDelta` is an increase/reduction from the printed base, never the
+  // resulting absolute power printed after "becomes".
+  | { readonly kind: 'powerModifier'; readonly powerDelta: number; readonly target: TargetSpec; readonly duration: TimingModifier }
+  | { readonly kind: 'leaderBasePower'; readonly powerDelta: number; readonly duration: TimingModifier }
   | { readonly kind: 'unknown'; readonly normalizedText: string }
 
 interface EffectBranch {
@@ -228,6 +234,7 @@ interface EffectInstance {
 
 interface CardFeatures {
   readonly effectModelVersion: 2
+  readonly effectParserRevision: 1
   readonly effects: readonly EffectInstance[]
   readonly unparsedClauses: readonly string[]
   // Existing flags, Rainbow-usable flags, support summaries, compatibility,
@@ -239,8 +246,29 @@ interface EffectContribution {
   readonly grossValue: number
   readonly costValue: number
   readonly activationFactor: number
-  readonly supportFactor: number
+  readonly conditionSupportFactor: number
+  readonly actions: readonly ActionContribution[]
+  readonly categoryValues: Readonly<Record<PremiumCategory, number>>
   readonly netValue: number
+  readonly reason: string
+}
+
+interface ActionContribution {
+  readonly effectId: string
+  readonly branchIndex: number
+  readonly actionIndex: number
+  readonly category: PremiumCategory | null
+  readonly rawGrossValue: number
+  readonly targetSupportFactor: number
+  readonly effectiveTargetCount: number
+  readonly cappedGrossValue: number
+  readonly activation: ActivationChannel
+  readonly conditionSupportFactor: number
+  readonly supportDependent: boolean
+  readonly allocatedCostValue: number
+  readonly netValue: number
+  readonly chooser: EffectChooser
+  readonly rainbowLuffyCompatibility: 'compatible' | 'neutral' | 'incompatible'
   readonly reason: string
 }
 
@@ -263,13 +291,31 @@ interface EffectValuation {
 The exact TypeScript may split these declarations into focused files, but the
 external seam must preserve these semantics. Results are deeply frozen,
 ordered by printed occurrence, finite, and deterministic. `unknown` is a real
-safe result, not an exception and not positive value.
+safe result, not an exception and not positive value. `effectModelVersion`
+versions the serialized shape; `effectParserRevision` versions the parser's
+semantics. A runtime may trust serialized effects only when both values match
+its current implementation. Derived flags and support summaries are never
+authoritative serialized inputs: the loader always recomputes them from the
+trusted structured effects and current summary policy.
 
 An `EffectInstance` groups sequential actions that share one activation,
 condition, and cost. This prevents a cost such as `DON!!-1` from being deducted
 once per action. `branches` preserves `choose one` behavior: player choices use
 the highest-valued branch, opponent choices use the lowest-valued branch, and
-ordinary sequential text has one branch containing all its actions.
+ordinary sequential text has one branch containing all its actions. Actions
+printed before `choose one` are common actions and are duplicated into every
+branch in canonical output so they are resolved exactly once whichever branch
+is chosen.
+
+Instance-condition availability and action-target availability are separate.
+For example, OP17-118's On Play instance is unconditional: its draw remains
+fully available while only its deploy action is discounted by available Rocks
+Pirates. `ActionContribution` preserves that distinction and also provides the
+category-level evidence required for premium qualification. Shared cost is
+deducted once from the instance, then allocated proportionally across the
+chosen branch's positive gross action values. If every chosen action is
+non-positive, the shared cost is assigned to the first printed action. This
+keeps the instance total, action totals, and category totals reconcilable.
 
 ## Phase 1: clause and effect-context parsing
 
@@ -288,9 +334,24 @@ printed continuations:
   activation block;
 - `Then` inherits the preceding activation, condition, and already-paid cost;
 - bullets inherit the immediately preceding `choose one` chooser and context;
+- actions before `choose one` are common to, and copied into, every resulting
+  branch;
 - a colon separates activation costs from results;
 - Trigger-field text always has `source: 'trigger'` and activation `trigger`,
   even when it contains an action that resembles On Play text.
+
+An unannotated continuous or conditional clause defaults to `static`; it does
+not inherit the previous bracketed activation. A timing annotation printed
+before an activation annotation, such as `[Your Turn] [On Play]`, belongs to
+that activation instance. The parser represents `negate the effect of ...` as
+its own opponent-target action even when a following `K.O. that Character`
+shares the same target. Text saying power "becomes N" is normalized to a
+power delta, never stored as an N-point bonus. For the fixed 5000-power Rainbow
+Luffy, "your Leader's base power becomes 6000" therefore produces a +1000
+Leader-base-power delta. When target text states its original base power, the
+parser subtracts that printed predicate value; otherwise an unresolved
+absolute-power change remains diagnostic rather than receiving optimistic
+value.
 
 Explicit subjects win. An omitted subject is inherited only when grammar makes
 it unambiguous. In particular, `Your opponent chooses one: Draw 2 cards` gives
@@ -324,12 +385,17 @@ Parsing is intentionally conservative:
 
 Golden parser tests cover every activation channel, subject inheritance,
 `Then`, bullet choices, shared costs, target quantities, duration, and
-clause-specific Rainbow compatibility. Exact OP17 tests must establish:
+clause-specific Rainbow compatibility. They also cover unannotated static
+clauses, common actions before a choice, explicit-self support, negation, and
+absolute-to-delta base-power wording. Exact OP17 tests must establish:
 
 - OP17-049 produces an opponent-choice group whose draw subject is opponent;
-- OP17-063 resolves `that Character` to the cost-6-or-less opposing target;
+- OP17-063 emits negation and K.O. actions that resolve `that Character` to the
+  same cost-6-or-less opposing target;
 - OP17-065 produces draw plus two-target lockdown with a shared `DON!!-1` cost;
-- OP17-114 keeps effect text and Trigger deployment as separate instances; and
+- OP17-112 duplicates its common draw into both Life-choice branches;
+- OP17-114 keeps effect text and Trigger deployment as separate instances;
+- OP17-043 records a +1000 Leader base-power delta rather than +6000; and
 - an incompatible Leader clause does not suppress an adjacent unconditional
   clause.
 
@@ -383,6 +449,7 @@ calibration policy, not claims about game-state probability:
 | bottom-deck removal | `+4.5` base |
 | return to hand | `+3.0` base |
 | rest | `+1.5` base |
+| negate an opposing Character's effect | `+1.5` base |
 | power reduction | `+0.75` per 1000 power per effective target |
 | cannot-attack lockdown | `+2.5` base per effective target |
 | deploy | `+1.5` per card plus `+0.5` per maximum cost saved, total capped at `+9.0` |
@@ -426,6 +493,28 @@ effect retains its negative value. A player choice uses the best branch; an
 opponent choice uses the worst branch from the player's perspective. This
 corrects OP17-049 rather than awarding both possible outcomes.
 
+Each action's raw gross is first multiplied by its action-target support factor.
+Branch ownership is resolved from those target-adjusted values, so an
+unsupported deploy cannot win a branch or dilute an independent draw. If the
+chosen branch exceeds the instance cap, scale its positive target-adjusted
+action values proportionally while retaining adverse values. With positive
+subtotal `P` and non-positive subtotal `N`, the scale is
+`(effectInstanceCap - N) / P`; assign rounding residue to the last positive
+action. Its one shared cost is then allocated
+across those capped positive values proportionally. When no action is positive,
+the first printed action receives the full cost. Finally, instance activation
+and condition-support factors apply to the action nets. This ordered accounting
+keeps action totals equal to the instance total while deducting cost exactly
+once, and keeps category totals traceable to the positive premium subset.
+
+`categoryValues` contains every `PremiumCategory` key in canonical order. Sum
+signed selected action nets inside each category. If the instance net is not
+positive, every category value is zero. Otherwise, take the positive category
+subtotals and scale them proportionally so their sum equals the positive
+instance net; assign rounding residue to the last positive category. Thus
+mandatory adverse actions reduce premium impact rather than disappearing,
+while every category remains traceable to its selected actions.
+
 Activation availability multiplies the net result:
 
 | Channel | Factor |
@@ -449,6 +538,11 @@ Phase 2 supports unconditional and self-timing conditions. A dynamic condition
 that Phase 3 cannot yet evaluate has support factor zero rather than receiving
 optimistic value or the old generic combo penalty. Name/trait search support
 may continue through the current matcher until Phase 3 replaces it.
+
+An Event with a missing printed cost does not receive a free Main or Counter
+mode. Those modes have availability zero with an explicit diagnostic; a direct
+Trigger mode may still be valued because it does not pay the printed Event
+cost.
 
 ### Phase gate
 
@@ -492,6 +586,13 @@ zone access is an explicit conservative factor rather than a simulated fact:
 | trash | `0.55` |
 | Life | `0.25` |
 
+When a target may come from more than one printed zone, use the maximum of the
+listed zone factors. The target is accessible through any one allowed route;
+factors are not added. An opponent-board condition is never matched against
+the player's pool and uses the conservative profile factor `0.50` when its
+subject and predicate are otherwise safely parsed. Unknown opponent conditions
+remain zero.
+
 Support is still dynamic. For a required target count `T`, selected support and
 eligible remaining pool support each contribute half of the available ratio:
 
@@ -499,12 +600,46 @@ eligible remaining pool support each contribute half of the available ratio:
 supportFactor = zoneFactor × min(1, (selected + 0.5 × poolPotential) / T)
 ```
 
-The current candidate is excluded from its own pool potential unless the text
-explicitly permits self-reference. `differentNames`, total-cost ceilings, and
-quantity limits are honored when estimating deploy capacity. Unsupported
-opponent-board conditions do not use the player's pool and remain neutral or
-zero according to the parsed condition; they never create a false positive
-combo bonus.
+`poolPotential` means genuinely remaining physical copies. For each card
+number, subtract selected copies from original pool quantity, then subtract the
+currently scored candidate copy unless `allowsSelf` is true. Clamp every
+remaining quantity at zero. This prevents selected support from being counted
+again at half weight. `allowsSelf` is part of canonical v2 from Phase 1 and is
+true only for explicit self-reference.
+
+Instance conditions and action targets are evaluated separately. A condition
+factor applies to all actions in the instance; a filter, deploy, aura, or other
+support-dependent action receives an additional target-support factor based on
+its own `TargetSpec`. Independent draw or Life actions in the same instance do
+not inherit the deploy/search target factor. The parser therefore creates a
+`RequirementExpression` only for printed activation wording such as "if" or
+"when"; it must not copy an action's eligible output target into the instance
+condition, which would apply the same support twice and suppress sibling
+actions.
+
+`differentNames`, total-cost ceilings, and quantity limits are honored by an
+exact deterministic dynamic program. Sort eligible physical copies by card
+number; when `differentNames` is true, group choices by normalized name and
+take at most one option from each group. Advance states by `(usedCount,
+totalCost)` up to requested count and total-cost ceiling, retaining the
+lexicographically smallest card-number sequence for equal states. A null-cost
+card is ineligible when a total-cost ceiling must be enforced. Select greatest
+used count, then greatest total cost, then lexicographically smallest sequence.
+Without a printed total-cost ceiling, use the finite eligible-pool cost sum as
+the DP bound. This avoids exponential subset enumeration while remaining exact
+for the 72-card pool. Unsupported opponent-board conditions never create a
+pool-based combo bonus.
+
+The target-support result exposes selected count, remaining-pool count,
+constrained capacity, effective target count, factor, and reason. Deploy saved
+cost and aura raw magnitude come from printed quantities/ceilings and their
+existing action caps; the reconciled target factor discounts that theoretical
+value exactly once using constrained capacity and weighted remaining support.
+`effectiveTargetCount` is retained as explanation evidence, not multiplied a
+second time. The caller supplies a positive requested count: printed deploy
+quantity, filter/search kept quantity, or the eligible-card count needed to hit
+an aura's configured cap. The evaluator never independently rescans the
+original pool.
 
 Trait matching uses exact normalized values plus one controlled alias table.
 For the current provisional data, `Elbaf` and `Elbaph` map to the canonical
@@ -560,7 +695,7 @@ A first copy qualifies for the existing profile floor only when all of these
 are true:
 
 1. it is a Character and is either an existing `boss` or costs at least 6;
-2. premium impact reaches the initial profile threshold of `8.0`;
+2. premium impact reaches the initial profile threshold of `7.5`;
 3. at least two independent categories each contribute at least `2.0`;
 4. at least one category is available through On Play, static, Activate: Main,
    When Attacking, or Counter rather than only through Trigger;
@@ -568,6 +703,15 @@ are true:
 6. support factor for every support-dependent qualifying contribution is at
    least `0.50`; and
 7. the qualifying value is not solely an opponent-choice branch.
+
+For condition 6, an effect contribution is premium-eligible only when its net
+is positive and every positive support-dependent action inside it has combined
+condition/target support at least `0.50`. If one such action is below the
+threshold, exclude the whole contribution from premium impact so its shared
+cost and adverse effects are never split away; ordinary effect scoring remains
+action-specific and unchanged. Eligible contributions from all remaining
+effect instances are then aggregated once across the card before applying the
+impact and category gates.
 
 The first-copy marginal-score floor remains `15`. The floor is a non-negative
 adjustment after ordinary positive and negative scoring; it does not bypass the
@@ -580,8 +724,15 @@ DON!! refresh. Cards with one large but narrow effect, conditional effects with
 insufficient pool support, or Trigger-only upside do not automatically qualify.
 Rarity and card identity are never inputs.
 
+The initial `7.5` threshold is the highest one-decimal general threshold that
+retains the already accepted Shanks behavior under the same tables: Rush
+`1 x 0.80 = 0.80`, refresh two DON!! `2 x 1.5 = 3.00`, and rest-all
+`1.5 x 2.5 = 3.75`, totaling `7.55` across pressure, DON!! advantage, and
+interaction. This is general profile calibration, not a card-identity rule.
+
 The profile gains named effect weights, availability factors, target/duration
-multipliers, zone factors, `premiumImpactThreshold: 8`,
+multipliers, zone factors, `opponentBoardConditionFactor: 0.50`,
+`premiumImpactThreshold: 7.5`,
 `premiumCategoryMinimum: 2`, and `premiumBombFirstCopyFloor: 15`. All must be
 finite and non-negative; bounded factors must be in `[0, 1]`; target
 multipliers and the effect-instance cap must be positive. Defaults apply to all
@@ -590,10 +741,27 @@ must not alter parsing.
 
 ### Empirical acceptance
 
-Use the checked-in OP17 catalog and the same 5,000 deterministic tournament
-pool seeds used by the audit. Record the catalog checksum, profile, baseline,
-and after-rates so a later catalog refresh cannot masquerade as an engine
-change.
+Before Phase 1 production work, use engine commit `1aa63a5` and the checked-in
+catalog bytes to capture the same 5,000 deterministic tournament-pool seeds
+used by the audit. Record the OP17 and OP16 catalog checksums, profile, exact
+gated-card opened/Main counts, raw guardrail counts where exposed, and the
+evaluator's exact reported deck averages in an immutable fixture. The docs-only
+design commit `2f7ed4b` is code-equivalent, but `1aa63a5` is the named code
+baseline. Final after-rates must use the same fixture and seeds so a catalog
+refresh cannot masquerade as an engine
+change. The existing evaluator's `BasicDeckSolver` column is not this baseline;
+the fixture must come from the pre-upgrade `StrategyDeckSolver`.
+
+The captured checksums are OP17
+`80185f046091d3def85245b291df31e81b349508adb29842152393c743632a52`
+and OP16
+`d98327c9708ef94aa3180de5cfea058d37a01e3825774748f7bff8536773d1f7`.
+The immutable Phase-0 plan fixture owns the exact gated OP17 card/Event counts.
+The OP16 5,000-seed Strategy V2 baseline has averages: size 40, 2K 13.00,
+blocker 8.67, vanilla-like 5.75, interaction 12.23, boss 3.98, counter
+49398.80, bricks 3.60, early 16.04, middle 14.81, and high 9.15; reachable
+misses are 2K 158, blocker 603, vanilla-like 2534, interaction 0, and boss
+3262, with zero decks below both 24,000 and 30,000 counter thresholds.
 
 - For Gloriosa, Kaido OP17-063, Luffy OP17-093, Linlin OP17-112, Xebec
   OP17-118, and Queen OP17-065, Main inclusion when opened must improve by at
@@ -609,7 +777,7 @@ change.
   opened, and each must have positive controlled-fixture value. Events with
   incompatible Leader conditions or net-negative costs are not forced in.
 - OP17-049 Linlin must fall by at least 20 percentage points from its recorded
-  approximately 99.9% baseline and must be at or below 80%, proving that the
+  1636 / 1640 baseline and must be at or below 80%, proving that the
   opponent-draw correction changes decisions without banning the card.
 - OP17-022 Shanks must retain the existing bounded 1,000-seed guarantee: every
   sampled pool containing it puts at least one copy in Main. Extra copies are
@@ -620,9 +788,10 @@ pool copy across Main and Sideboard, and produce byte-for-byte deterministic
 results for a fixed catalog/profile/seed. A parallel 5,000-seed OP16 guardrail
 must show no more than a two-percentage-point regression in counter, boss,
 blocker, or vanilla-like target misses, no more than a one-percentage-point
-increase in decks below the configured total-counter threshold, and no more
-than `+0.25` average bricks. Any failed guardrail requires an explicit profile
-calibration decision; it must not be hidden by weakening the test.
+increase in decks below either configured 24,000 neutral or 30,000 strength
+total-counter threshold, and no more than `+0.25` average bricks. Any failed
+guardrail requires an explicit profile calibration decision; it must not be
+hidden by weakening the test.
 
 ## Catalog migration and compatibility
 
@@ -632,25 +801,34 @@ is independently versioned with required `effectModelVersion: 2`.
 
 The catalog schema accepts:
 
-- canonical version-2 feature metadata with complete strict instances;
+- canonical version-2 parse metadata with complete strict instances and the
+  current `effectParserRevision`;
 - the current premium-feature shape;
 - pre-premium and earlier supported legacy shapes already accepted today; and
 - no feature metadata.
 
 Strict parsing continues to reject unknown keys, partial version-2 instances,
 invalid numbers, or mixed shapes. The runtime loader exposes only canonical
-version-2 `CardFeatures`. If serialized metadata is absent or lacks a complete
-version-2 model, it reclassifies from the current card's printed effect and
-Trigger text. It does not mutate the serialized strategy suggestion. Current
-checked-in catalogs therefore work immediately without a bulk rewrite; the
-next normal catalog build emits canonical version 2.
+version-2 `CardFeatures`. It trusts serialized effects only when both
+`effectModelVersion` and `effectParserRevision` match the runtime. An explicitly
+accepted prior revision reclassifies from the current card's printed effect and
+Trigger text; an unknown future revision or malformed shape is rejected. Even
+for trusted serialized effects, it recomputes flags, Rainbow-usable summaries,
+support summaries, compatibility summary, and evidence from the structured
+parse plus current policy; these evolving projections are not authoritative
+serialized inputs. It does not mutate the serialized strategy suggestion.
+Current checked-in catalogs therefore work immediately without a bulk rewrite;
+the next normal catalog build emits canonical version 2 with parser revision
+1.
 
 This migration logic belongs behind one adapter such as
 `upgradeSerializedCardFeatures(card, serialized)`. Callers must not branch on
-legacy shapes. The adapter and canonical outputs are deeply frozen. Once all
-checked-in and deployed catalogs have been regenerated, removing legacy input
-variants can be considered in a separate schema-version change; it is not part
-of this work.
+legacy shapes. The adapter and canonical outputs are deeply frozen. A grammar
+change after Phase 1 must increment `effectParserRevision`, retain the prior
+revision as accepted input, and reparse it at runtime; silently changing parser
+semantics under the same revision is forbidden. Once all checked-in and
+deployed catalogs have been regenerated, removing legacy input variants can be
+considered in a separate schema-version change; it is not part of this work.
 
 ## Safety and false-positive rules
 
@@ -688,6 +866,10 @@ Each phase follows test-driven development and has four test layers:
 4. **Seeded solver acceptance:** before/after inclusion rates and OP16
    guardrails, plus the complete test suite, lint, type checking, catalog
    validation, and production build.
+
+The long 5,000-seed OP17 and OP16 tests declare an explicit 300,000 ms timeout
+and reuse generated pool counts across baseline/final measurements. Unit and
+catalog-semantic tests remain under the ordinary fast timeout.
 
 Tests assert semantic causes as well as selection outcomes. An inclusion-rate
 change alone cannot pass if the parser still attributes the wrong subject or
