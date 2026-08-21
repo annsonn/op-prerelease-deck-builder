@@ -666,3 +666,12 @@ Verified on 2026-08-21 in the isolated `codex/shanks-premium-bomb` worktree.
   than card- or set-specific. The branch diff contains no UI or generated
   catalog files; Leaders and DON!! remain intentionally outside solver
   conservation.
+
+Final review on merged `main`: classifier-hardening commit `fe8623b` resolved
+alternate mono-color wording, multiline whitespace, and full negative cases;
+both the standards and specification review axes approved the result. A fresh
+`npm run verify` passed 55 test files and 871 tests and validated 17 catalogs
+with 85 runtime files. `npm run build` passed with 128 transformed modules and
+emitted `index-BRABfUD5.js` at 341.59 kB (102.57 kB gzip). `git diff --check`
+passed and the worktree was clean. Local `main` remained ahead of `origin/main`
+and was not pushed.
