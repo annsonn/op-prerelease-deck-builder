@@ -17,6 +17,7 @@ import {
   type StrategySuggestion,
 } from '../../shared/catalog.js'
 import {
+  cardFeaturesSchema,
   classifyCardFeatures,
   type CardFeatures,
 } from '../../shared/card-features.js'
@@ -131,6 +132,22 @@ function freezeCardFeatures(features: CardFeatures): CardFeatures {
     requiredNames: Object.freeze([...features.requiredNames]),
     evidence: Object.freeze([...features.evidence]),
   })
+}
+
+type CurrentSerializedCardFeatures = z.infer<typeof cardFeaturesSchema>
+
+function hasCurrentFeatureMetadata(
+  features: StrategySuggestion['features'],
+): features is CurrentSerializedCardFeatures {
+  return Boolean(
+    features &&
+      'rainbowUsableFlags' in features &&
+      'supportRequirementsByFlag' in features &&
+      'massRest' in features.flags &&
+      'donRefresh' in features.flags &&
+      'massRest' in features.rainbowUsableFlags &&
+      'donRefresh' in features.rainbowUsableFlags,
+  )
 }
 
 export async function browserSha256(bytes: Uint8Array): Promise<string> {
@@ -336,9 +353,7 @@ export async function loadRuntimeCatalog(
     cards.map((card) => {
       const suppliedFeatures = suggestionsByCardNumber.get(card.cardNumber)?.features
       const resolvedFeatures =
-        suppliedFeatures &&
-        'rainbowUsableFlags' in suppliedFeatures &&
-        'supportRequirementsByFlag' in suppliedFeatures
+        hasCurrentFeatureMetadata(suppliedFeatures)
           ? suppliedFeatures
           : classifyCardFeatures(card)
       return [

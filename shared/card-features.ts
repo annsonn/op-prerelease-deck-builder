@@ -12,6 +12,8 @@ export const cardFeatureKeys = [
   'rush',
   'banish',
   'twoForOne',
+  'massRest',
+  'donRefresh',
   'searcher',
   'comboDependent',
   'brick',
@@ -56,7 +58,7 @@ export interface CardFeatures {
   readonly evidence: readonly string[]
 }
 
-const featureFlagsSchema = z.strictObject({
+export const featureFlagsSchema = z.strictObject({
   twoKCounter: z.boolean(),
   blocker: z.boolean(),
   vanillaLike: z.boolean(),
@@ -66,6 +68,8 @@ const featureFlagsSchema = z.strictObject({
   rush: z.boolean(),
   banish: z.boolean(),
   twoForOne: z.boolean(),
+  massRest: z.boolean(),
+  donRefresh: z.boolean(),
   searcher: z.boolean(),
   comboDependent: z.boolean(),
   brick: z.boolean(),
@@ -250,6 +254,23 @@ function hasTwoForOne(text: string): boolean {
   )
 }
 
+const imperativeEffectPrefix =
+  String.raw`(?:^|[\n.;]\s*)(?:\[[^\]]+\]\s*)*(?:then,\s*)?(?:if\b[^.;\n]{0,240},\s*)?`
+
+function hasMassRest(text: string): boolean {
+  return new RegExp(
+    `${imperativeEffectPrefix}rest all of your opponent's characters?\\b`,
+    'i',
+  ).test(text)
+}
+
+function hasDonRefresh(text: string): boolean {
+  return new RegExp(
+    `${imperativeEffectPrefix}set(?: up to)? (?:10|[1-9]) of your DON!! cards? as active\\b`,
+    'i',
+  ).test(text)
+}
+
 function searchClause(text: string): string {
   const match = /\b(?:look at|search)\b[\s\S]*?\badd\b[\s\S]*?\b(?:hand|deck)\b/i.exec(
     text,
@@ -297,7 +318,7 @@ function rainbowLuffyCompatibility(
       text,
     )
   const leaderType =
-    /\bleader\s+has(?:\s+the)?\s+(?:\{[^}]+\}|\[[^\]]+\])\s+(?:type|trait)\b/i.test(
+    /\bleader\s+has(?:\s+the)?\s+(?:\{[^}]+\}|\[[^\]]+\])(?:\s+or\s+(?:\{[^}]+\}|\[[^\]]+\]))*\s+(?:type|trait)\b/i.test(
       text,
     ) ||
     /\bleader\s+is\s+(?:a\s+)?(?:\{[^}]+\}|\[[^\]]+\])\s+(?:type|trait)\b/i.test(
@@ -317,6 +338,8 @@ interface TextFeatureFlags {
   readonly rush: boolean
   readonly banish: boolean
   readonly twoForOne: boolean
+  readonly massRest: boolean
+  readonly donRefresh: boolean
   readonly searcher: boolean
   readonly comboDependent: boolean
 }
@@ -329,6 +352,8 @@ function detectTextFeatureFlags(rulesText: string): TextFeatureFlags {
     rush: hasRush(rulesText),
     banish: hasBanish(rulesText),
     twoForOne: hasTwoForOne(rulesText),
+    massRest: hasMassRest(rulesText),
+    donRefresh: hasDonRefresh(rulesText),
     searcher: hasSearchPattern(rulesText),
     comboDependent: hasComboDependency(rulesText),
   }
@@ -367,6 +392,8 @@ function buildFeatureFlags(
     rush: textFlags.rush,
     banish: textFlags.banish,
     twoForOne: textFlags.twoForOne,
+    massRest: textFlags.massRest,
+    donRefresh: textFlags.donRefresh,
     searcher: textFlags.searcher,
     comboDependent: textFlags.comboDependent,
     brick:
@@ -407,6 +434,25 @@ function rainbowUsableRulesText(rulesText: string): string {
   }
 
   return usableClauses.join('\n')
+}
+
+function unconditionalMassRestRulesText(rulesText: string): string {
+  const unconditionalClauses: string[] = []
+  let suppressThenContinuation = false
+
+  for (const clause of splitRulesClauses(rulesText)) {
+    if (/^then\b[,:]?/i.test(clause) && suppressThenContinuation) continue
+
+    if (/\bif\b/i.test(clause)) {
+      suppressThenContinuation = true
+      continue
+    }
+
+    suppressThenContinuation = false
+    unconditionalClauses.push(clause)
+  }
+
+  return unconditionalClauses.join('\n')
 }
 
 function supportClaims(text: string): ReadonlySet<SupportRequirementFlag> {
@@ -518,8 +564,12 @@ export function classifyCardFeatures(card: PlayableCard): CardFeatures {
   const usableRulesText = rainbowUsableRulesText(rulesText)
   const usableTextFlags = detectTextFeatureFlags(usableRulesText)
   const detectedUsableFlags = buildFeatureFlags(card, usableTextFlags)
+  const usableMassRest = hasMassRest(
+    unconditionalMassRestRulesText(usableRulesText),
+  )
   const rainbowUsableFlags: Record<CardFeatureKey, boolean> = {
     ...detectedUsableFlags,
+    massRest: usableMassRest,
     twoKCounter: flags.twoKCounter,
     brick: flags.brick,
   }

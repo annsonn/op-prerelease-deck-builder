@@ -58,6 +58,8 @@ function candidate(
     rush: false,
     banish: false,
     twoForOne: false,
+    massRest: false,
+    donRefresh: false,
     searcher: false,
     comboDependent: false,
     brick: false,

@@ -400,6 +400,60 @@ describe('loadRuntimeCatalog', () => {
     )
   })
 
+  it('reclassifies authoritative-looking metadata created before premium flags', async () => {
+    const { artifacts, fetcher, rebuildChecksums } = await runtimeFixture()
+    const cards = JSON.parse(
+      artifacts['/catalogs/op16/cards.json']!,
+    ) as PlayableCard[]
+    cards[0] = {
+      ...cards[0]!,
+      name: 'Shanks',
+      rarity: 'SR',
+      cost: 10,
+      power: 12000,
+      counter: 0,
+      effect:
+        "[Rush]<br/>[On Play] Set up to 2 of your DON!! cards as active. Then, rest all of your opponent's Characters.",
+    }
+    artifacts['/catalogs/op16/cards.json'] = `${JSON.stringify(cards)}\n`
+    const firstFeatures = classifyCardFeatures(cards[0]!)
+    const swappedFeatures = structuredClone(
+      classifyCardFeatures(cards[1]!),
+    ) as unknown as {
+      flags: Record<string, boolean>
+      rainbowUsableFlags: Record<string, boolean>
+    }
+    delete swappedFeatures.flags.massRest
+    delete swappedFeatures.flags.donRefresh
+    delete swappedFeatures.rainbowUsableFlags.massRest
+    delete swappedFeatures.rainbowUsableFlags.donRefresh
+    artifacts['/catalogs/op16/strategy-suggestions.json'] = `${JSON.stringify([
+      { ...suggestion(cards[0]!.cardNumber), features: swappedFeatures },
+      suggestion(cards[1]!.cardNumber),
+    ])}\n`
+    await rebuildChecksums()
+
+    const catalog = await loadRuntimeCatalog(entry, fetcher)
+    const suppliedFeatures = catalog.strategySuggestions[0]!.features!
+    const resolvedFeatures = catalog.featuresByCardNumber.get('OP16-005')!
+
+    expect('rainbowUsableFlags' in suppliedFeatures).toBe(true)
+    expect('supportRequirementsByFlag' in suppliedFeatures).toBe(true)
+    if (!('rainbowUsableFlags' in suppliedFeatures)) {
+      throw new Error('expected pre-premium Rainbow feature metadata')
+    }
+    expect('massRest' in suppliedFeatures.flags).toBe(false)
+    expect('donRefresh' in suppliedFeatures.flags).toBe(false)
+    expect('massRest' in suppliedFeatures.rainbowUsableFlags).toBe(false)
+    expect('donRefresh' in suppliedFeatures.rainbowUsableFlags).toBe(false)
+    expect(resolvedFeatures).toEqual(firstFeatures)
+    expect(resolvedFeatures).not.toEqual(suppliedFeatures)
+    expect(resolvedFeatures.flags.massRest).toBe(true)
+    expect(resolvedFeatures.flags.donRefresh).toBe(true)
+    expect(resolvedFeatures.rainbowUsableFlags.massRest).toBe(true)
+    expect(resolvedFeatures.rainbowUsableFlags.donRefresh).toBe(true)
+  })
+
   it('classifies legacy suggestions without adding features to the suggestions', async () => {
     const { artifacts, fetcher } = await runtimeFixture()
     const cards = JSON.parse(

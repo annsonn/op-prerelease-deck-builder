@@ -14,6 +14,7 @@ import {
 } from './catalog.js'
 import {
   cardFeatureKeys,
+  featureFlagsSchema,
   supportRequirementFlagKeys,
 } from './card-features.js'
 import {
@@ -187,6 +188,96 @@ describe('strategySuggestionSchema', () => {
     expect(strategySuggestionSchema.parse(legacySuggestion)).toEqual(
       legacySuggestion,
     )
+  })
+
+  it('accepts complete current and pre-premium flags across every historical feature layer', () => {
+    const prePremiumFlags = Object.fromEntries(
+      cardFeatureKeys
+        .filter((key) => key !== 'massRest' && key !== 'donRefresh')
+        .map((key) => [key, false]),
+    )
+    const currentFlags = {
+      ...prePremiumFlags,
+      massRest: false,
+      donRefresh: false,
+    }
+    const supportRequirementsByFlag = Object.fromEntries(
+      supportRequirementFlagKeys.map((key) => [key, null]),
+    )
+    const common = {
+      rainbowLuffyCompatibility: 'compatible',
+      searchableTraits: [],
+      searchableNames: [],
+      requiredTraits: [],
+      requiredNames: [],
+      evidence: [],
+    }
+    const featureLayers = (flags: Record<string, boolean>) => [
+      {
+        flags,
+        rainbowUsableFlags: { ...flags },
+        supportRequirementsByFlag,
+        ...common,
+      },
+      { flags, rainbowUsableFlags: { ...flags }, ...common },
+      { flags, supportRequirementsByFlag, ...common },
+      { flags, ...common },
+    ]
+
+    expect(featureFlagsSchema.parse(currentFlags)).toEqual(currentFlags)
+    for (const flags of [currentFlags, prePremiumFlags]) {
+      for (const features of featureLayers(flags)) {
+        expect(
+          strategySuggestionSchema.safeParse({
+            cardNumber: 'OP17-001',
+            roles: [],
+            reviewStatus: 'suggested',
+            features,
+          }).success,
+        ).toBe(true)
+      }
+    }
+  })
+
+  it('rejects partial premium vocabulary in either feature flag record', () => {
+    const prePremiumFlags = Object.fromEntries(
+      cardFeatureKeys
+        .filter((key) => key !== 'massRest' && key !== 'donRefresh')
+        .map((key) => [key, false]),
+    )
+    const currentFlags = {
+      ...prePremiumFlags,
+      massRest: false,
+      donRefresh: false,
+    }
+    const baseFeatures = {
+      flags: currentFlags,
+      rainbowUsableFlags: { ...currentFlags },
+      supportRequirementsByFlag: Object.fromEntries(
+        supportRequirementFlagKeys.map((key) => [key, null]),
+      ),
+      rainbowLuffyCompatibility: 'compatible',
+      searchableTraits: [],
+      searchableNames: [],
+      requiredTraits: [],
+      requiredNames: [],
+      evidence: [],
+    }
+    const partialFlags = { ...prePremiumFlags, massRest: false }
+
+    for (const features of [
+      { ...baseFeatures, flags: partialFlags },
+      { ...baseFeatures, rainbowUsableFlags: partialFlags },
+    ]) {
+      expect(
+        strategySuggestionSchema.safeParse({
+          cardNumber: 'OP17-001',
+          roles: [],
+          reviewStatus: 'suggested',
+          features,
+        }).success,
+      ).toBe(false)
+    }
   })
 
   it('strictly rejects malformed serialized card features', () => {

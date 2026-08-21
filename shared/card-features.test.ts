@@ -52,6 +52,8 @@ describe('classifyCardFeatures', () => {
       'rush',
       'banish',
       'twoForOne',
+      'massRest',
+      'donRefresh',
       'searcher',
       'comboDependent',
       'brick',
@@ -136,6 +138,130 @@ describe('classifyCardFeatures', () => {
       boss: true,
       brick: false,
     })
+  })
+
+  it('classifies the exact OP17-022 board swing text', () => {
+    const features = classifyCardFeatures(
+      card({
+        cardNumber: 'OP17-022',
+        name: 'Shanks',
+        cost: 10,
+        power: 12000,
+        counter: 0,
+        effect:
+          "[Rush]<br/>[On Play] Set up to 2 of your DON!! cards as active. Then, rest all of your opponent's Characters.",
+      }),
+    )
+
+    expect(features.flags).toMatchObject({
+      rush: true,
+      removal: true,
+      boss: true,
+      brick: true,
+      massRest: true,
+      donRefresh: true,
+    })
+    expect(features.rainbowUsableFlags).toMatchObject({
+      massRest: true,
+      donRefresh: true,
+    })
+    expect(features.evidence).toEqual(
+      expect.arrayContaining(['massRest', 'donRefresh']),
+    )
+  })
+
+  it.each([
+    "Rest all of your opponent's Character.",
+    "Then, rest all of your opponent's Characters.",
+  ])('classifies imperative global opponent rest text: %s', (effect) => {
+    expect(classifyCardFeatures(card({ effect })).flags).toMatchObject({
+      massRest: true,
+    })
+  })
+
+  it.each([
+    'Set 1 of your DON!! card as active.',
+    'Set up to 10 of your DON!! cards as active.',
+  ])('classifies bounded imperative DON refresh text: %s', (effect) => {
+    expect(classifyCardFeatures(card({ effect })).flags).toMatchObject({
+      donRefresh: true,
+    })
+  })
+
+  it.each([
+    "Rest up to 2 of your opponent's Characters.",
+    "You may rest all of your opponent's Characters.",
+    "If you rest all of your opponent's Characters, draw 1 card.",
+    'Rest all of your Characters.',
+    'Rest all of your opponents Characters.',
+    "All of your opponent's Characters are rested.",
+  ])('does not classify non-imperative or non-global rest text: %s', (effect) => {
+    expect(classifyCardFeatures(card({ effect })).flags).toMatchObject({
+      massRest: false,
+    })
+  })
+
+  it.each([
+    'Set up to 0 of your DON!! cards as active.',
+    'Set up to 11 of your DON!! cards as active.',
+    'You may set up to 2 of your DON!! cards as active.',
+    'Set up to 2 of your Characters as active.',
+    'Set 2 DON!! cards as active.',
+  ])('does not classify out-of-bound or non-imperative DON refresh text: %s', (effect) => {
+    expect(classifyCardFeatures(card({ effect })).flags).toMatchObject({
+      donRefresh: false,
+    })
+  })
+
+  it('suppresses incompatible Leader-conditional board swing effects and Then continuations', () => {
+    const features = classifyCardFeatures(
+      card({
+        effect:
+          "[On Play] If your Leader is [Nami], set up to 2 of your DON!! cards as active. Then, rest all of your opponent's Characters.",
+      }),
+    )
+
+    expect(features.flags).toMatchObject({
+      massRest: true,
+      donRefresh: true,
+    })
+    expect(features.rainbowUsableFlags).toMatchObject({
+      massRest: false,
+      donRefresh: false,
+    })
+  })
+
+  it('preserves generic conditional premium effects without counting them as Rainbow-usable', () => {
+    const features = classifyCardFeatures(
+      card({
+        effect:
+          "[On Play] If your opponent has 5 Characters, set up to 2 of your DON!! cards as active. Then, rest all of your opponent's Characters.",
+      }),
+    )
+
+    expect(features.rainbowLuffyCompatibility).toBe('neutral')
+    expect(features.flags).toMatchObject({
+      massRest: true,
+      donRefresh: true,
+    })
+    expect(features.rainbowUsableFlags).toMatchObject({
+      massRest: false,
+      donRefresh: true,
+    })
+  })
+
+  it('rejects a compound Leader trait condition for Rainbow Luffy', () => {
+    const features = classifyCardFeatures(
+      card({
+        effect:
+          '[On Play] If your Leader has the {FILM} or {Straw Hat Crew} type, set up to 2 of your DON!! cards as active.',
+      }),
+    )
+
+    expect(features.rainbowLuffyCompatibility).toBe('incompatible')
+    expect(features.requiredTraits).toEqual(['FILM', 'Straw Hat Crew'])
+    expect(features.flags).toMatchObject({ donRefresh: true })
+    expect(features.rainbowUsableFlags).toMatchObject({ donRefresh: false })
   })
 
   it('classifies each independent flag with a positive and negative boundary', () => {

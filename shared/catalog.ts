@@ -1,6 +1,9 @@
 import { z } from 'zod'
 
-import { cardFeaturesSchema } from './card-features.js'
+import {
+  cardFeaturesSchema,
+  featureFlagsSchema,
+} from './card-features.js'
 
 export const cardTypeSchema = z.enum([
   'LEADER',
@@ -79,11 +82,40 @@ const legacyRainbowCardFeaturesSchema = cardFeaturesSchema.omit({
   rainbowUsableFlags: true,
 })
 
+const prePremiumFeatureFlagsSchema = featureFlagsSchema.omit({
+  massRest: true,
+  donRefresh: true,
+})
+
+const prePremiumCardFeaturesSchema = cardFeaturesSchema.extend({
+  flags: prePremiumFeatureFlagsSchema,
+  rainbowUsableFlags: prePremiumFeatureFlagsSchema,
+})
+
+const prePremiumPreSupportRequirementsCardFeaturesSchema =
+  prePremiumCardFeaturesSchema.omit({
+    supportRequirementsByFlag: true,
+  })
+
+const prePremiumLegacyCardFeaturesSchema =
+  prePremiumPreSupportRequirementsCardFeaturesSchema.omit({
+    rainbowUsableFlags: true,
+  })
+
+const prePremiumLegacyRainbowCardFeaturesSchema =
+  prePremiumCardFeaturesSchema.omit({
+    rainbowUsableFlags: true,
+  })
+
 const serializedCardFeaturesSchema = z.union([
   cardFeaturesSchema,
   preSupportRequirementsCardFeaturesSchema,
   legacyCardFeaturesSchema,
   legacyRainbowCardFeaturesSchema,
+  prePremiumCardFeaturesSchema,
+  prePremiumPreSupportRequirementsCardFeaturesSchema,
+  prePremiumLegacyCardFeaturesSchema,
+  prePremiumLegacyRainbowCardFeaturesSchema,
 ])
 
 export const strategySuggestionSchema = z.strictObject({
