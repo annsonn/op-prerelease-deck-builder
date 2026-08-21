@@ -173,6 +173,7 @@ describe('classifyCardFeatures', () => {
   it.each([
     "Rest all of your opponent's Character.",
     "Then, rest all of your opponent's Characters.",
+    "Rest all of your\nopponent's Characters.",
   ])('classifies imperative global opponent rest text: %s', (effect) => {
     expect(classifyCardFeatures(card({ effect })).flags).toMatchObject({
       massRest: true,
@@ -182,6 +183,7 @@ describe('classifyCardFeatures', () => {
   it.each([
     'Set 1 of your DON!! card as active.',
     'Set up to 10 of your DON!! cards as active.',
+    'Set up to 2 of your\nDON!! cards as active.',
   ])('classifies bounded imperative DON refresh text: %s', (effect) => {
     expect(classifyCardFeatures(card({ effect })).flags).toMatchObject({
       donRefresh: true,
@@ -195,9 +197,13 @@ describe('classifyCardFeatures', () => {
     'Rest all of your Characters.',
     'Rest all of your opponents Characters.',
     "All of your opponent's Characters are rested.",
+    "Your opponent may rest all of your opponent's Characters.",
+    "Rest all of your opponent's DON!! cards.",
+    "Your opponent's Characters cannot be set as active.",
   ])('does not classify non-imperative or non-global rest text: %s', (effect) => {
     expect(classifyCardFeatures(card({ effect })).flags).toMatchObject({
       massRest: false,
+      donRefresh: false,
     })
   })
 
@@ -207,8 +213,14 @@ describe('classifyCardFeatures', () => {
     'You may set up to 2 of your DON!! cards as active.',
     'Set up to 2 of your Characters as active.',
     'Set 2 DON!! cards as active.',
+    'Set up to 1 DON!! from your DON!! deck as active.',
+    'Set up to 1 of your Leader as active.',
+    'Give up to 2 rested DON!! cards to your Leader.',
+    'Rest 2 of your DON!! cards.',
+    "Set up to 2 of your opponent's DON!! cards as active.",
   ])('does not classify out-of-bound or non-imperative DON refresh text: %s', (effect) => {
     expect(classifyCardFeatures(card({ effect })).flags).toMatchObject({
+      massRest: false,
       donRefresh: false,
     })
   })
@@ -262,6 +274,25 @@ describe('classifyCardFeatures', () => {
     expect(features.requiredTraits).toEqual(['FILM', 'Straw Hat Crew'])
     expect(features.flags).toMatchObject({ donRefresh: true })
     expect(features.rainbowUsableFlags).toMatchObject({ donRefresh: false })
+  })
+
+  it('rejects a Leader-is-mono-colored condition and its Then continuation', () => {
+    const features = classifyCardFeatures(
+      card({
+        effect:
+          "[On Play] If your Leader is mono-colored, set up to 2 of your DON!! cards as active. Then, rest all of your opponent's Characters.",
+      }),
+    )
+
+    expect(features.rainbowLuffyCompatibility).toBe('incompatible')
+    expect(features.flags).toMatchObject({
+      massRest: true,
+      donRefresh: true,
+    })
+    expect(features.rainbowUsableFlags).toMatchObject({
+      massRest: false,
+      donRefresh: false,
+    })
   })
 
   it('classifies each independent flag with a positive and negative boundary', () => {

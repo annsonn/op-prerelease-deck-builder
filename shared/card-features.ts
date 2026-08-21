@@ -259,14 +259,14 @@ const imperativeEffectPrefix =
 
 function hasMassRest(text: string): boolean {
   return new RegExp(
-    `${imperativeEffectPrefix}rest all of your opponent's characters?\\b`,
+    `${imperativeEffectPrefix}rest\\s+all\\s+of\\s+your\\s+opponent's\\s+characters?\\b`,
     'i',
   ).test(text)
 }
 
 function hasDonRefresh(text: string): boolean {
   return new RegExp(
-    `${imperativeEffectPrefix}set(?: up to)? (?:10|[1-9]) of your DON!! cards? as active\\b`,
+    `${imperativeEffectPrefix}set(?:\\s+up\\s+to)?\\s+(?:10|[1-9])\\s+of\\s+your\\s+DON!!\\s+cards?\\s+as\\s+active\\b`,
     'i',
   ).test(text)
 }
@@ -303,7 +303,11 @@ function rainbowLuffyCompatibility(
   text: string,
   comboDependent: boolean,
 ): RainbowLuffyCompatibility {
-  if (/\b(?:your|the)\s+mono-colored\s+leader\b/i.test(text)) {
+  if (
+    /\b(?:your|the)\s+(?:mono-colored\s+leader|leader\s+is\s+mono-colored)\b/i.test(
+      text,
+    )
+  ) {
     return 'incompatible'
   }
 
