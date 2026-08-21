@@ -18,6 +18,7 @@ import {
   type DeckState,
 } from './deck-state.js'
 import {
+  marginalScoreComponentLabels,
   marginalScoreComponentOrder,
   scoreCandidateAgainstCompletedDeck,
   scoreMarginalCandidate,
@@ -466,6 +467,114 @@ describe('combo support', () => {
 })
 
 describe('Rainbow compatibility and effect quality', () => {
+  it('adds every distinct Rainbow-usable broad effect', () => {
+    const score = scoreMarginalCandidate(
+      candidate(
+        'OP17-022',
+        { cost: 10, power: 12_000 },
+        ['boss', 'rush', 'removal', 'massRest', 'donRefresh'],
+      ),
+      createEmptyDeckState(),
+      EMPTY_POOL,
+      PROFILE,
+    )
+
+    expect(score.components.effectQuality).toBe(
+      4 * PROFILE.weights.compatibility.effect,
+    )
+    expect(score.reasonsByComponent.effectQuality).toBe(
+      'Broadly useful Rainbow-usable effects: 4 (4)',
+    )
+  })
+
+  it('reports effect count before aggregate value when the effect weight is non-unit', () => {
+    const weightedProfile = mergeStrategyProfile(PROFILE, {
+      weights: { compatibility: { effect: 1.5 } },
+    })
+    const score = scoreMarginalCandidate(
+      candidate(
+        'OP17-019',
+        {},
+        ['removal', 'rush', 'massRest', 'donRefresh'],
+      ),
+      createEmptyDeckState(),
+      EMPTY_POOL,
+      weightedProfile,
+    )
+
+    expect(score.components.effectQuality).toBe(6)
+    expect(score.reasonsByComponent.effectQuality).toBe(
+      'Broadly useful Rainbow-usable effects: 4 (6)',
+    )
+  })
+
+  it('credits all eight Rainbow-usable broad-effect flags', () => {
+    const score = scoreMarginalCandidate(
+      candidate(
+        'OP17-021',
+        {},
+        ['blocker', 'draw', 'removal', 'rush', 'banish', 'twoForOne', 'massRest', 'donRefresh'],
+      ),
+      createEmptyDeckState(),
+      EMPTY_POOL,
+      PROFILE,
+    )
+
+    expect(PROFILE.weights.compatibility.effect).toBe(1)
+    expect(score.components.effectQuality).toBe(8)
+    expect(score.reasonsByComponent.effectQuality).toBe(
+      'Broadly useful Rainbow-usable effects: 8 (8)',
+    )
+  })
+
+  it('does not count or floor raw-only incompatible premium-effect flags', () => {
+    const emptyUsable = candidate('OP17-098').features.rainbowUsableFlags
+    const score = scoreMarginalCandidate(
+      candidate(
+        'OP17-023',
+        {},
+        ['blocker', 'draw', 'removal', 'boss', 'rush', 'banish', 'twoForOne', 'massRest', 'donRefresh'],
+        {
+          rainbowUsableFlags: { ...emptyUsable },
+          rainbowLuffyCompatibility: 'incompatible',
+        },
+      ),
+      createEmptyDeckState(),
+      EMPTY_POOL,
+      PROFILE,
+    )
+
+    expect(score.components.effectQuality).toBeUndefined()
+    expect(score.components.premiumBombFloor).toBeUndefined()
+  })
+
+  it('counts only usable effects when raw mass-rest and DON-refresh flags remain', () => {
+    const emptyUsable = candidate('OP17-097').features.rainbowUsableFlags
+    const score = scoreMarginalCandidate(
+      candidate(
+        'OP17-020',
+        {},
+        ['removal', 'rush', 'massRest', 'donRefresh'],
+        {
+          rainbowUsableFlags: {
+            ...emptyUsable,
+            removal: true,
+            rush: true,
+          },
+          rainbowLuffyCompatibility: 'incompatible',
+        },
+      ),
+      createEmptyDeckState(),
+      EMPTY_POOL,
+      PROFILE,
+    )
+
+    expect(score.components.effectQuality).toBe(2)
+    expect(score.reasonsByComponent.effectQuality).toBe(
+      'Broadly useful Rainbow-usable effects: 2 (2)',
+    )
+  })
+
   it('keeps printed stats and usable Rush while removing restricted interaction', () => {
     const mixed = candidate(
       'OP16-014',
@@ -727,6 +836,165 @@ describe('redundancy scoring', () => {
   })
 })
 
+describe('premium bomb first-copy floor', () => {
+  const premiumBomb = candidate(
+    'OP17-022',
+    { cost: 10, power: 12_000 },
+    ['boss', 'rush', 'removal', 'massRest', 'donRefresh', 'brick'],
+  )
+  const saturatedRoleCard = candidate(
+    'OP17-099',
+    { cost: 10, power: 10_000 },
+    ['boss', 'removal'],
+  )
+  const saturatedBrick = candidate(
+    'OP17-098',
+    { cost: 10, power: 10_000 },
+    ['boss', 'removal', 'brick'],
+  )
+  const saturatedState = addCopies(
+    addCopies(
+      createEmptyDeckState(),
+      saturatedBrick,
+      PROFILE.limits.brickTolerance,
+    ),
+    saturatedRoleCard,
+    PROFILE.curve.late.maximum - PROFILE.limits.brickTolerance,
+  )
+
+  it('raises an otherwise saturated first copy after applying its brick penalty', () => {
+    expect(saturatedState.brickCount).toBe(PROFILE.limits.brickTolerance)
+
+    const score = scoreMarginalCandidate(
+      premiumBomb,
+      saturatedState,
+      EMPTY_POOL,
+      PROFILE,
+    )
+    const ordinarySubtotal = Object.entries(score.components).reduce(
+      (sum, [component, value]) =>
+        component === 'premiumBombFloor' ? sum : sum + value,
+      0,
+    )
+
+    expect(score.components.brickPenalty).toBe(
+      -PROFILE.weights.progressiveBricks.first,
+    )
+    expect(ordinarySubtotal).toBe(4)
+    expect(score.components.premiumBombFloor).toBe(11)
+    expect(score.reasonsByComponent.premiumBombFloor).toBe(
+      'First-copy premium bomb floor: 11',
+    )
+    expect(score.total).toBe(PROFILE.limits.premiumBombFirstCopyFloor)
+  })
+
+  const saturatedStateWithoutBricks = addCopies(
+    createEmptyDeckState(),
+    saturatedRoleCard,
+    PROFILE.curve.late.maximum,
+  )
+
+  it('raises a saturated first copy without bricks from an ordinary subtotal of 5 to 15', () => {
+    const score = scoreMarginalCandidate(
+      premiumBomb,
+      saturatedStateWithoutBricks,
+      EMPTY_POOL,
+      PROFILE,
+    )
+    const ordinarySubtotal = Object.entries(score.components).reduce(
+      (sum, [component, value]) =>
+        component === 'premiumBombFloor' ? sum : sum + value,
+      0,
+    )
+
+    expect(ordinarySubtotal).toBe(5)
+    expect(score.components.premiumBombFloor).toBe(10)
+    expect(score.reasonsByComponent.premiumBombFloor).toBe(
+      'First-copy premium bomb floor: 10',
+    )
+    expect(score.total).toBe(PROFILE.limits.premiumBombFirstCopyFloor)
+  })
+
+  it('omits the floor when ordinary first-copy scoring already exceeds it', () => {
+    const score = scoreMarginalCandidate(
+      premiumBomb,
+      createEmptyDeckState(),
+      EMPTY_POOL,
+      PROFILE,
+    )
+
+    expect(score.total).toBe(17)
+    expect(score.components.premiumBombFloor).toBeUndefined()
+  })
+
+  it('does not floor a second copy and preserves duplicate-effect redundancy', () => {
+    const score = scoreMarginalCandidate(
+      premiumBomb,
+      addCandidateToDeckState(saturatedStateWithoutBricks, premiumBomb),
+      EMPTY_POOL,
+      PROFILE,
+    )
+
+    expect(score.components.premiumBombFloor).toBeUndefined()
+    expect(score.components.redundancyEffect).toBe(
+      -PROFILE.weights.redundancy.effect,
+    )
+    expect(score.total).toBe(4)
+  })
+
+  it.each([
+    ['boss', ['rush', 'removal', 'massRest', 'donRefresh']],
+    ['rush', ['boss', 'removal', 'massRest', 'donRefresh']],
+    ['massRest', ['boss', 'rush', 'removal', 'donRefresh']],
+    ['donRefresh', ['boss', 'rush', 'removal', 'massRest']],
+  ] as const)('does not floor a CHARACTER missing usable %s', (_missing, flags) => {
+    const score = scoreMarginalCandidate(
+      candidate('OP17-024', { cost: 10, power: 12_000 }, flags),
+      saturatedStateWithoutBricks,
+      EMPTY_POOL,
+      PROFILE,
+    )
+
+    expect(score.total).toBeLessThan(PROFILE.limits.premiumBombFirstCopyFloor)
+    expect(score.components.premiumBombFloor).toBeUndefined()
+  })
+
+  it('does not floor a non-CHARACTER with every qualifying flag', () => {
+    const score = scoreMarginalCandidate(
+      candidate(
+        'OP17-025',
+        { cardType: 'EVENT', cost: 10, power: null },
+        ['boss', 'rush', 'removal', 'massRest', 'donRefresh'],
+      ),
+      saturatedStateWithoutBricks,
+      EMPTY_POOL,
+      PROFILE,
+    )
+
+    expect(score.total).toBeLessThan(PROFILE.limits.premiumBombFirstCopyFloor)
+    expect(score.components.premiumBombFloor).toBeUndefined()
+  })
+
+  it('keeps the premium floor last in the component and reason contract', () => {
+    expect(marginalScoreComponentOrder.at(-1)).toBe('premiumBombFloor')
+    expect(marginalScoreComponentLabels.effectQuality).toBe(
+      'Broadly useful Rainbow-usable effects',
+    )
+    expect(marginalScoreComponentLabels.premiumBombFloor).toBe(
+      'First-copy premium bomb floor',
+    )
+
+    const score = scoreMarginalCandidate(
+      premiumBomb,
+      saturatedStateWithoutBricks,
+      EMPTY_POOL,
+      PROFILE,
+    )
+    expect(Object.keys(score.components).at(-1)).toBe('premiumBombFloor')
+    expect(score.reasons.at(-1)).toBe('First-copy premium bomb floor: 10')
+  })
+})
+
 describe('score result contract', () => {
   it('scores sideboard candidates against a truthful completed 40-card state', () => {
     const filler = candidate('OP16-040')
@@ -810,7 +1078,7 @@ describe('score result contract', () => {
       `Boss target: ${PROFILE.weights.softTargets.boss}`,
       'Late curve need: 2',
       'High-cost curve need: 2',
-      'Broadly useful Rainbow-usable effect',
+      'Broadly useful Rainbow-usable effects: 2 (2)',
       'Searcher support selected 6, pool potential 6: 2',
       'Combo support selected 6, pool potential 6: 2',
     ])

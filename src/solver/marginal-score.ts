@@ -30,6 +30,7 @@ export const marginalScoreComponentOrder = Object.freeze([
   'comboSupport',
   'redundancyEffect',
   'redundancyRole',
+  'premiumBombFloor',
 ] as const)
 
 export type MarginalScoreComponent =
@@ -52,12 +53,13 @@ export const marginalScoreComponentLabels: Readonly<
   curveHighCost: 'High-cost curve need',
   curveHighCostSaturation: 'High-cost curve saturation',
   brickPenalty: 'Brick risk beyond tolerance',
-  effectQuality: 'Broadly useful Rainbow-usable effect',
+  effectQuality: 'Broadly useful Rainbow-usable effects',
   compatibilityEffect: 'Rainbow Luffy conditional-effect compatibility',
   searcherSupport: 'Searcher support',
   comboSupport: 'Combo support',
   redundancyEffect: 'Repeated usable effect copies',
   redundancyRole: 'Satisfied-role redundancy',
+  premiumBombFloor: 'First-copy premium bomb floor',
 })
 
 export interface MarginalScore {
@@ -120,6 +122,8 @@ const BROAD_EFFECT_FLAGS: readonly CardFeatureKey[] = [
   'rush',
   'banish',
   'twoForOne',
+  'massRest',
+  'donRefresh',
 ]
 
 const REDUNDANT_EFFECT_FLAGS: readonly CardFeatureKey[] = [
@@ -371,14 +375,15 @@ function scoreCandidate(
     entries.push(['brickPenalty', -penalty, `Brick risk beyond tolerance: ${penalty}`])
   }
 
-  const hasBroadEffect = BROAD_EFFECT_FLAGS.some(
+  const broadEffectCount = BROAD_EFFECT_FLAGS.filter(
     (flag) => candidate.features.rainbowUsableFlags[flag],
-  )
-  if (hasBroadEffect) {
+  ).length
+  if (broadEffectCount > 0) {
+    const value = broadEffectCount * profile.weights.compatibility.effect
     entries.push([
       'effectQuality',
-      profile.weights.compatibility.effect,
-      'Broadly useful Rainbow-usable effect',
+      value,
+      `Broadly useful Rainbow-usable effects: ${broadEffectCount} (${stableNumber(value)})`,
     ])
   }
 
@@ -467,6 +472,26 @@ function scoreCandidate(
       -profile.weights.redundancy.role,
       'Candidate roles are already satisfied',
     ])
+  }
+
+  const usableFlags = candidate.features.rainbowUsableFlags
+  const isPremiumBomb =
+    candidate.card.cardType === 'CHARACTER' &&
+    usableFlags.boss &&
+    usableFlags.rush &&
+    usableFlags.massRest &&
+    usableFlags.donRefresh
+  if (selectedCopies === 0 && isPremiumBomb) {
+    const provisionalScore = freezeResult(entries).total
+    const floorContribution =
+      profile.limits.premiumBombFirstCopyFloor - provisionalScore
+    if (floorContribution > 0) {
+      entries.push([
+        'premiumBombFloor',
+        floorContribution,
+        `First-copy premium bomb floor: ${stableNumber(floorContribution)}`,
+      ])
+    }
   }
 
   return freezeResult(entries)

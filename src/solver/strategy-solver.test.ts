@@ -375,7 +375,7 @@ describe('StrategyDeckSolver marginal selection', () => {
       'Printed body efficiency (avg +200)',
       'Blocker target (avg +1.4)',
       'Brick risk beyond tolerance (avg -3.05)',
-      'Broadly useful Rainbow-usable effect (avg +1)',
+      'Broadly useful Rainbow-usable effects (avg +1)',
       'Satisfied-role redundancy (avg -0.75)',
     ])
     expect(line?.reasons).toHaveLength(5)
