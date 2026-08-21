@@ -37,7 +37,7 @@
 - Create: `tools/fixtures/value-model-baseline.json`
 - Create: `tools/value-model-baseline.test.ts`
 
-- [ ] **Step 1: Generate from the named engine baseline before production edits**
+- [x] **Step 1: Generate from the named engine baseline before production edits**
 
 Run the existing `StrategyDeckSolver` from engine commit `1aa63a5` (the
 docs-only `2f7ed4b` tree is code-equivalent) against the checked-in OP17 and
@@ -57,7 +57,7 @@ OP16 catalog bytes for tournament seeds `0..4999`. Do not use
   evaluator exposes them so Phase 4 need not reverse rounded values; and
 - exactly-40 and physical-copy-conservation failure totals for both sets.
 
-- [ ] **Step 2: Lock provenance and shape with a failing-then-passing test**
+- [x] **Step 2: Lock provenance and shape with a failing-then-passing test**
 
 Create `tools/value-model-baseline.test.ts` to validate every count as a
 non-negative safe integer and every reported average as finite/non-negative,
@@ -101,7 +101,7 @@ and these exact `{ opened, main }` counts: 043 `{2350,72}`, 046 `{941,0}`,
 097 `{3125,0}`, and 098 `{3174,0}`. Keys expand to `OP17-NNN`; tuple order is
 opened then Main.
 
-- [ ] **Step 3: Commit the baseline before Task 1**
+- [x] **Step 3: Commit the baseline before Task 1**
 
 ```bash
 git add tools/fixtures/value-model-baseline.json tools/value-model-baseline.test.ts
@@ -109,6 +109,28 @@ git commit -m "test: capture pre-upgrade value model baseline"
 ```
 
 No production file may change before this commit exists.
+
+Task 0 evidence (2026-08-21):
+
+- RED: `npm test -- tools/value-model-baseline.test.ts` failed all 6 tests
+  with the expected missing-fixture `ENOENT`.
+- Capture: a temporary, subsequently removed generator ran
+  `StrategyDeckSolver` twice for tournament seeds `0..4999` against both
+  checked-in catalogs. All audited OP17 gated-card and Counter-Event counts
+  exactly matched the approved design; OP16 raw metric sums are retained beside
+  the specified reported averages.
+- Invariants: OP16 and OP17 each evaluated 5,000 pools with 0 skipped, invalid,
+  nondeterministic, non-40-card, or physical-copy-conservation failures.
+- GREEN: `npm test -- tools/value-model-baseline.test.ts` passed 1 file / 6
+  tests; `npm run lint` and `npm run typecheck` passed.
+- Quality-review RED: mutation tests proved the original permissive cast
+  accepted a missing metric and a forged solution digest; running Vitest from
+  `/private/tmp` with `--root` produced 8 path-dependent `ENOENT` failures.
+- Quality-review GREEN: a strict Zod schema now enforces exact set/artifact and
+  metric shapes, safe counts, reconciliation invariants, the fixed historical
+  profile snapshot/digest, and the pinned aggregate digest for ordered seeds
+  `0..99`. The focused suite passes 1 file / 8 tests from both the repository
+  and `/private/tmp`; `npm run lint` and `npm run typecheck` pass.
 
 ### Task 1: Define and validate the canonical effect vocabulary
 
