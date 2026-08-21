@@ -72,6 +72,7 @@ describe('getStrategyProfile', () => {
       brickTolerance: 8,
       searcherMinimumTargets: 6,
       comboMinimumSupport: 4,
+      premiumBombFirstCopyFloor: 15,
     })
     expect(profile.analysis).toEqual({
       totalCounter: {
@@ -80,6 +81,11 @@ describe('getStrategyProfile', () => {
         scoringSaturationMinimum: 52_000,
       },
     })
+  })
+
+  it('publishes the premium-bomb first-copy floor for base and calibrated sets', () => {
+    expect(getStrategyProfile('OP01').limits.premiumBombFirstCopyFloor).toBe(15)
+    expect(getStrategyProfile('OP17').limits.premiumBombFirstCopyFloor).toBe(15)
   })
 
   it('keeps every weight category explicit and numeric for scorer tuning', () => {
@@ -228,6 +234,36 @@ describe('mergeStrategyProfile', () => {
     })
     expectDeeplyFrozen(merged)
   })
+
+  it('overrides the premium-bomb floor without changing sibling policy', () => {
+    const base = getStrategyProfile('OP17')
+
+    const merged = mergeStrategyProfile(base, {
+      limits: { premiumBombFirstCopyFloor: 9 },
+    })
+
+    expect(merged.limits).toEqual({
+      ...base.limits,
+      premiumBombFirstCopyFloor: 9,
+    })
+    expect(merged.targets).toEqual(base.targets)
+    expect(merged.weights).toEqual(base.weights)
+    expect(Object.isFrozen(merged.limits)).toBe(true)
+    expectDeeplyFrozen(merged)
+  })
+
+  it.each([-1, Number.NaN, Number.POSITIVE_INFINITY])(
+    'rejects invalid premium-bomb first-copy floor %s with a named range error',
+    (premiumBombFirstCopyFloor) => {
+      const mergeInvalidProfile = () =>
+        mergeStrategyProfile(getStrategyProfile('OP17'), {
+          limits: { premiumBombFirstCopyFloor },
+        })
+
+      expect(mergeInvalidProfile).toThrowError(RangeError)
+      expect(mergeInvalidProfile).toThrow(/premiumBombFirstCopyFloor/)
+    },
+  )
 
   it.each([
     [{ neutralMinimum: -1 }, /non-negative safe integer/i],

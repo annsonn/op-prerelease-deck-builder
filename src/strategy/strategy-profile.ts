@@ -70,6 +70,7 @@ export type StrategyProfile = Readonly<{
     brickTolerance: number
     searcherMinimumTargets: number
     comboMinimumSupport: number
+    premiumBombFirstCopyFloor: number
   }>
   analysis: Readonly<{
     totalCounter: Readonly<{
@@ -127,6 +128,7 @@ const BASE_PROFILE: StrategyProfile = {
     brickTolerance: 8,
     searcherMinimumTargets: 6,
     comboMinimumSupport: 4,
+    premiumBombFirstCopyFloor: 15,
   },
   analysis: {
     totalCounter: {
@@ -267,6 +269,15 @@ export function mergeStrategyProfile(
   if (scoringSaturationMinimum < strengthMinimum) {
     throw new RangeError(
       'Total-counter scoring saturation minimum must be at least the strength minimum.',
+    )
+  }
+
+  if (
+    !Number.isFinite(merged.limits.premiumBombFirstCopyFloor) ||
+    merged.limits.premiumBombFirstCopyFloor < 0
+  ) {
+    throw new RangeError(
+      'premiumBombFirstCopyFloor must be a finite, non-negative number.',
     )
   }
 
