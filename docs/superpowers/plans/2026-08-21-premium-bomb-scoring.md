@@ -40,7 +40,7 @@
 - Modify: `shared/catalog.ts`
 - Modify: `src/catalog/load-catalog.ts`
 
-- [ ] **Step 1: Write failing classifier boundary tests**
+- [x] **Step 1: Write failing classifier boundary tests**
 
 In `shared/card-features.test.ts`, update the stable vocabulary expectation by
 placing `massRest` and `donRefresh` after `twoForOne`, then add:
@@ -111,7 +111,7 @@ it('suppresses premium effects inside an incompatible Leader condition', () => {
 Extend the existing deep-freeze assertions to cover the two new properties
 through the already-frozen `flags` and `rainbowUsableFlags` records.
 
-- [ ] **Step 2: Write failing schema and loader compatibility tests**
+- [x] **Step 2: Write failing schema and loader compatibility tests**
 
 In `shared/catalog.test.ts`, build `prePremiumFlags` by deleting both new keys
 from a current fixture and assert that an otherwise current suggestion with the
@@ -126,7 +126,7 @@ still lacks both keys while `featuresByCardNumber` contains `massRest: true` and
 swapped current premium flags and prove the supplied current values remain
 authoritative and deeply frozen.
 
-- [ ] **Step 3: Run focused tests and verify RED**
+- [x] **Step 3: Run focused tests and verify RED**
 
 Run:
 
@@ -137,7 +137,7 @@ npm test -- shared/card-features.test.ts shared/catalog.test.ts src/catalog/load
 Expected: FAIL because `massRest` and `donRefresh` are not feature keys and the
 pre-premium/current schema distinction does not exist.
 
-- [ ] **Step 4: Implement the conservative detectors and feature plumbing**
+- [x] **Step 4: Implement the conservative detectors and feature plumbing**
 
 In `shared/card-features.ts`, append the keys after `twoForOne`, export the flag
 schema for exact legacy derivation, extend `TextFeatureFlags`, and add:
@@ -158,7 +158,7 @@ Return these values from `detectTextFeatureFlags`, copy them in
 `buildFeatureFlags`, and let the existing raw/usable passes and sorted evidence
 generation handle them. Do not add them to `supportRequirementFlagKeys`.
 
-- [ ] **Step 5: Implement strict pre-premium schema compatibility**
+- [x] **Step 5: Implement strict pre-premium schema compatibility**
 
 In `shared/catalog.ts`, import the exported `featureFlagsSchema`, derive:
 
@@ -202,7 +202,7 @@ function hasCurrentCardFeatures(
 Replace the inline capability check with this guard. Current metadata remains
 authoritative; every older accepted shape is reclassified from `card`.
 
-- [ ] **Step 6: Run focused tests and verify GREEN**
+- [x] **Step 6: Run focused tests and verify GREEN**
 
 Run:
 
@@ -213,7 +213,7 @@ npm test -- shared/card-features.test.ts shared/catalog.test.ts src/catalog/load
 Expected: PASS, including exact OP17-022 classification, negative wording,
 strict legacy parsing, and loader fallback.
 
-- [ ] **Step 7: Commit the feature and compatibility layer**
+- [x] **Step 7: Commit the feature and compatibility layer**
 
 ```bash
 git add shared/card-features.ts shared/card-features.test.ts shared/catalog.ts shared/catalog.test.ts src/catalog/load-catalog.ts src/catalog/load-catalog.test.ts
@@ -226,7 +226,7 @@ git commit -m "feat: classify premium board swing effects"
 - Modify: `src/strategy/strategy-profile.test.ts`
 - Modify: `src/strategy/strategy-profile.ts`
 
-- [ ] **Step 1: Write failing profile-policy tests**
+- [x] **Step 1: Write failing profile-policy tests**
 
 In `src/strategy/strategy-profile.test.ts`, assert:
 
@@ -253,7 +253,7 @@ Add table-driven rejection tests for `-1`, `Number.NaN`, and
 `Number.POSITIVE_INFINITY` in the floor. Require the error to name the invalid
 field.
 
-- [ ] **Step 2: Run the focused profile test and verify RED**
+- [x] **Step 2: Run the focused profile test and verify RED**
 
 Run:
 
@@ -263,7 +263,7 @@ npm test -- src/strategy/strategy-profile.test.ts
 
 Expected: FAIL because the profile has no premium policy.
 
-- [ ] **Step 3: Implement defaults, override merging, and validation**
+- [x] **Step 3: Implement defaults, override merging, and validation**
 
 In `src/strategy/strategy-profile.ts`:
 
@@ -291,7 +291,7 @@ Validate the floor with `Number.isFinite(value) && value >= 0`; throw a
 `RangeError` naming the field on failure. Do not add an OP17-only override or
 change any existing weight.
 
-- [ ] **Step 4: Run the focused test and verify GREEN**
+- [x] **Step 4: Run the focused test and verify GREEN**
 
 Run:
 
@@ -301,7 +301,7 @@ npm test -- src/strategy/strategy-profile.test.ts
 
 Expected: PASS for defaults, overrides, validation, and deep freezing.
 
-- [ ] **Step 5: Commit the profile policy**
+- [x] **Step 5: Commit the profile policy**
 
 ```bash
 git add src/strategy/strategy-profile.ts src/strategy/strategy-profile.test.ts
@@ -317,7 +317,7 @@ git commit -m "feat: configure premium bomb scoring"
 - Modify: `tools/evaluate-strategy.ts`
 - Modify: exhaustive feature fixtures reported by `npm run typecheck`
 
-- [ ] **Step 1: Update the local exhaustive flag fixture and write failing additive tests**
+- [x] **Step 1: Update the local exhaustive flag fixture and write failing additive tests**
 
 Add `massRest: false` and `donRefresh: false` to the `flags` record in
 `src/solver/marginal-score.test.ts`, then add a qualifying candidate with
@@ -334,7 +334,7 @@ Create the same raw flags with both premium keys false in
 contribute `effectQuality: 2`. With all broad flags false in the usable record,
 assert `effectQuality` is absent.
 
-- [ ] **Step 2: Write failing first-copy-floor and negative-qualifier tests**
+- [x] **Step 2: Write failing first-copy-floor and negative-qualifier tests**
 
 With a zeroed profile except `premiumBombFirstCopyFloor: 15`, assert a
 qualifying first copy with an ordinary subtotal of 5 gets
@@ -356,7 +356,7 @@ brick/curve penalties remain unchanged. Table-test these non-qualifiers:
 
 Also use a qualifying flag set on an `EVENT` and require no floor.
 
-- [ ] **Step 3: Write the failing catalog-backed seed-4 and 1,000-seed tests**
+- [x] **Step 3: Write the failing catalog-backed seed-4 and 1,000-seed tests**
 
 Rename and export the existing `localCatalogs` helper in
 `tools/evaluate-strategy.ts` as `loadLocalCatalogs`, updating its command caller.
@@ -431,7 +431,7 @@ the larger sample is the bounded acceptance gate. Do not add a synthetic paired
 negative solver test; missing qualifier combinations are already isolated in
 Step 2.
 
-- [ ] **Step 4: Run the scorer and acceptance tests and verify RED**
+- [x] **Step 4: Run the scorer and acceptance tests and verify RED**
 
 Run:
 
@@ -442,7 +442,7 @@ npm test -- src/solver/marginal-score.test.ts tools/op17-premium-bomb.acceptance
 Expected: FAIL because broad effects still collapse to one point, the floor
 component does not exist, and seed 4 leaves OP17-022 outside the Main deck.
 
-- [ ] **Step 5: Implement additive components and the general predicate**
+- [x] **Step 5: Implement additive components and the general predicate**
 
 In `src/solver/marginal-score.ts`, insert `premiumBombFloor` last in
 `marginalScoreComponentOrder` and add its label:
@@ -515,7 +515,7 @@ if (floorAdjustment > 0) {
 return freezeResult(entries)
 ```
 
-- [ ] **Step 6: Repair exhaustive test fixtures mechanically**
+- [x] **Step 6: Repair exhaustive test fixtures mechanically**
 
 Run `npm run typecheck`. For each reported exhaustive
 `Record<CardFeatureKey, boolean>` fixture, add only:
@@ -527,7 +527,7 @@ donRefresh: false,
 
 Do not weaken fixture types with casts and do not change expected behavior.
 
-- [ ] **Step 7: Run scoring tests and static checks**
+- [x] **Step 7: Run scoring tests and static checks**
 
 Run:
 
@@ -540,7 +540,7 @@ npm run typecheck
 Expected: all exit 0; additive values, the exact floor difference, first-copy
 boundary, non-qualifiers, totals, and frozen outputs pass.
 
-- [ ] **Step 8: Commit scoring behavior**
+- [x] **Step 8: Commit scoring behavior**
 
 ```bash
 git add src/solver/marginal-score.ts src/solver/marginal-score.test.ts src tools shared
@@ -555,7 +555,7 @@ whose only purpose is not an exhaustive feature-fixture update.
 **Files:**
 - Modify: `docs/superpowers/plans/2026-08-21-premium-bomb-scoring.md`
 
-- [ ] **Step 1: Re-run the focused regression and acceptance tests**
+- [x] **Step 1: Re-run the focused regression and acceptance tests**
 
 Run:
 
@@ -567,7 +567,7 @@ Expected: PASS for exact additive scoring, controlled non-qualifiers, seed-4
 selection and conservation, and every OP17-022 appearance in seeds 0 through
 999.
 
-- [ ] **Step 2: Run the full automated gate**
+- [x] **Step 2: Run the full automated gate**
 
 Run:
 
@@ -581,7 +581,7 @@ Expected: lint, both TypeScript projects, all Vitest projects, catalog runtime
 checks, production build, and whitespace validation exit 0. Existing checked-in
 catalogs remain untouched and load through the legacy reclassification path.
 
-- [ ] **Step 3: Record deterministic calibration evidence**
+- [x] **Step 3: Record deterministic calibration evidence**
 
 Run the deterministic evaluation after implementation:
 
@@ -594,7 +594,7 @@ count in `Verification Record`. The confirmed pre-change card-level baseline is
 seed 4 excluding OP17-022; the evaluation report is observational, while the
 1,000-seed test is the bounded card-level acceptance gate.
 
-- [ ] **Step 4: Review the implementation against scope**
+- [x] **Step 4: Review the implementation against scope**
 
 Run:
 
@@ -608,7 +608,7 @@ Expected: the production-code search has no matches; the diff contains only the
 feature, schema compatibility, profile, scorer, tests/fixtures, and this plan.
 There are no regenerated catalog artifacts or UI changes.
 
-- [ ] **Step 5: Update this plan and commit verification evidence**
+- [x] **Step 5: Update this plan and commit verification evidence**
 
 Check completed boxes and replace the empty record below with exact commands,
 exit results, test counts, build result, and calibration summary. Then run:
@@ -620,5 +620,49 @@ git commit -m "docs: verify premium bomb scoring"
 
 ## Verification Record
 
-- Not yet executed. Implementation workers must replace this line with dated,
-  exact automated and calibration evidence before declaring the feature done.
+Verified on 2026-08-21 in the isolated `codex/shanks-premium-bomb` worktree.
+
+- Regression mutation RED: temporarily restored the old broad-effect behavior
+  (removed `massRest`/`donRefresh` from broad effects, collapsed broad effects
+  to one point, and disabled the premium floor), then ran
+  `npm test -- tools/op17-premium-bomb.acceptance.test.ts`. Vitest exited 1;
+  both tests failed, with seed 4 selecting zero copies of OP17-022 and the
+  bounded gate failing at seed 4. The mutation was then fully restored.
+- Focused GREEN: the focused Vitest command for `marginal-score.test.ts` and
+  `op17-premium-bomb.acceptance.test.ts` exited 0 with 2 test files and 37 tests
+  passing. The seed-4 regression builds exactly 40 Main-deck cards, selects
+  OP17-022, conserves every eligible generated card across Main and Sideboard,
+  and produces the same solution on a repeated solve.
+- Bounded acceptance: across deterministic tournament seeds 0 through 999,
+  OP17-022 appeared in 178 pools (190 physical copies). Every one of those 178
+  pools placed at least one copy in Main. The test loads the checked-in OP17
+  catalog once through `loadRuntimeCatalog`; it does not claim a real-world win
+  rate or that every additional copy should be selected.
+- Full automated gate: the first sandboxed `npm run verify` reached 55 passing
+  test files and 860 passing tests, then `catalog:check` could not create the
+  tsx IPC socket (`listen EPERM .../tsx-501/22032.pipe`). Re-running the exact
+  command outside the sandbox exited 0: lint and both TypeScript projects
+  passed, all 55 test files and 860 tests passed, and the catalog runtime check
+  reported `Runtime catalogs ready: 17 sets, 85 files`.
+- Production build: `npm run build` exited 0 after the same catalog runtime
+  check; TypeScript and Vite completed, transforming 128 modules and emitting
+  `dist/index.html` plus the CSS and JavaScript bundles.
+- Deterministic calibration: `npm run strategy:evaluate -- --seeds 1000`
+  evaluated all 1,000 pools for both OP16 and OP17 with zero invalid/skipped
+  decks. OP17 Strategy V2 averaged 49,074 counter, 5.98 bricks, 7.40 bosses,
+  and 9.18 high-cost cards; its evaluation acceptance passed. The command
+  exited 1 because OP16 reduced reachable blocker misses from 153 to 144, one
+  short of the generic required reduction of 10; OP16 reported no counter,
+  boss, vanilla-like, or brick regression. This report is observational and is
+  not evidence of win percentage.
+- Card-level comparison: the confirmed pre-change 5,000-seed OP17 baseline had
+  OP17-022 in 943 pools and selected it in 211 (22.4%). The post-change bounded
+  acceptance uses a different 1,000-seed window and selected the first copy in
+  all 178 appearances, so it proves the intended deterministic policy rather
+  than a real-world performance improvement.
+- Scope/cleanliness: `git diff --check` exited 0. The production-code `rg`
+  search for `OP17-022|Shanks` in `shared`, `src/solver`, and `src/strategy`
+  returned no matches, confirming the production predicate is general rather
+  than card- or set-specific. The branch diff contains no UI or generated
+  catalog files; Leaders and DON!! remain intentionally outside solver
+  conservation.
