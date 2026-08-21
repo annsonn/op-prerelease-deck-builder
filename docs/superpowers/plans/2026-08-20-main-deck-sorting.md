@@ -880,9 +880,9 @@ changing the pool. This replaces the solution while `DeckResult` stays mounted.
 Confirm the replacement deck returns to Score descending rather than retaining
 Cost descending.
 
-- [x] **Step 6: Fix any QA defect with a new failing regression test** — Not
-  applicable: QA found no product defect, so no source or regression-test change
-  was required.
+- [x] **Step 6: Fix any QA defect with a new failing regression test** — Follow-up
+  lifecycle review found the A→B→A stale-sort resurrection and fixed it in
+  `5d48fe4` with mutation-sensitive regression coverage.
 
 If QA finds a defect, stop and use systematic debugging. Add a focused failing
 test that reproduces the observed behavior, run it to prove RED, make the
@@ -916,19 +916,22 @@ user explicitly asks.
 
 - Initial browser verification ran from `codex/main-deck-sorting` at `7b5e193`.
   Task 1 and Task 2 artifacts are present in `fd0fdcb`, `045b806`, `2153b42`,
-  and `7b5e193`; the fresh Task 3 run verified their resulting behavior but did
-  not recreate the historical RED states. Follow-up commit `95a4454` adds only
-  the mutation-sensitive keyboard tests described below.
+  and `7b5e193`. Follow-up `95a4454` added mutation-sensitive keyboard tests,
+  `f6c395b` clarified their evidence, and production fix `5d48fe4` now resets
+  sorting on every solution-identity transition. The current evidence below is
+  refreshed through `5d48fe4`; the original Task 1/2 RED states were not
+  recreated.
 - `npm run verify` initially reached catalog validation after lint, typecheck,
   and tests, then hit the known sandbox-only `tsx` IPC `EPERM`. The exact
   command was rerun with approval and exited 0: lint 0 diagnostics; app and
   tools TypeScript 0 diagnostics; Vitest **54/54 files and 816/816 tests** in
-  **8.00s**; runtime catalogs **17 sets / 85 files**.
+  **7.56s**; runtime catalogs **17 sets / 85 files**.
 - `npm run build` initially hit the same sandbox-only `tsx` IPC `EPERM` in its
   catalog prehook. The exact command was rerun with approval and exited 0:
   catalogs **17 sets / 85 files**, Vite 8.2.1, **128 modules transformed**, and
-  production build in **111ms**. Output was `index.html` 0.59 kB (0.35 kB
-  gzip), CSS 24.59 kB (5.70 kB gzip), and JS 339.90 kB (102.00 kB gzip).
+  production build in **84ms**. Output was `dist/index.html` 0.59 kB (0.35 kB
+  gzip), `dist/assets/index-Bj6b2VTz.css` 24.59 kB (5.70 kB gzip), and
+  `dist/assets/index-CmgpUJcV.js` 339.92 kB (102.02 kB gzip).
 - Before the full gate, the focused sorting suite passed **3/3 files and 59/59
   tests**. For mutation sensitivity, temporarily neutralizing the direction
   button `onClick` made both parameterized keyboard cases fail: **1 file, 2
@@ -939,7 +942,27 @@ user explicitly asks.
   fresh development server passed its catalog prehook and started at
   `http://127.0.0.1:5173/` in **82ms**.
 
-### Browser QA — 412x915
+### Solution-lifecycle root cause and fix — `5d48fe4`
+
+- Root cause: the prior component derived Score/Descending when moving from
+  solution A to replacement B but did not persist B's identity/default into
+  `storedMainDeckSort`. Returning to A therefore matched the old stored A object
+  and resurrected A's stale Power sort instead of treating the return as another
+  replacement.
+- Fix: when the stored and incoming solution identities differ,
+  `DeckResult` now synchronizes `storedMainDeckSort` to the derived default for
+  the incoming solution. Every A→B and B→A identity transition therefore commits
+  Score/Descending rather than retaining a sort attached to an earlier visit.
+- The regression starts on A, changes A to Power/Ascending, renders B and checks
+  Score/Descending, then returns to A and again requires Score/Descending with
+  the score-ordered rows `OP16-005, OP16-007`.
+- Fresh mutation evidence: with only the three-line synchronization removed,
+  the targeted test was **RED: 1 file, 1 failed, 12 skipped**. At the B→A return,
+  the field expected `score` but received stale `power` at
+  `DeckResult.test.tsx:534`. Restoring the fix removed the production diff and
+  produced **GREEN: 1 file, 1 passed, 12 skipped**.
+
+### Full browser QA before the lifecycle follow-up — 412x915
 
 - A fresh local tab had no `.main-deck` or `.main-deck-sort` before build.
   OP16 was selected; **Generate 60-card development pool** replaced the pool
@@ -998,7 +1021,7 @@ user explicitly asks.
   Sideboard order, and analysis remained unchanged. Console warning/error log:
   **0 entries**.
 
-### Browser QA — 1440x900
+### Full browser QA before the lifecycle follow-up — 1440x900
 
 - A separate fresh local tab confirmed exact `innerWidth=1440` and
   `innerHeight=900`, no pre-build Main/sorting controls, OP16 development-pool
@@ -1039,13 +1062,47 @@ user explicitly asks.
   additional check, Cost/Descending to Score/Descending while retaining Main,
   Sideboard, and analysis. Console warning/error log: **0 entries**.
 
+### Targeted post-fix mobile sanity — `5d48fe4` at 412x915
+
+- A fresh current-HEAD server passed its 17-set / 85-file catalog prehook and
+  started at `http://127.0.0.1:5173/` in **80ms**. The in-app browser backend
+  was unavailable for this follow-up, so the only available connected Chrome
+  browser was used and is identified here explicitly; the earlier full in-app
+  browser viewport evidence and its keyboard-injection limitation remain above.
+- The exact viewport reported `innerWidth=412` and `innerHeight=915`. Before
+  build, `.main-deck` and `.main-deck-sort` were both absent. Selecting OP16,
+  replacing the pool with the 60-card development utility, and building produced
+  **Strategy sealed build**, Main **40**, Sideboard **17**, with all three
+  workflow disclosures collapsed.
+- The initial result was Score/Descending; its first rows were
+  `OP16-050:24`, `OP16-046:21.8`, `OP16-005:21.2`, `OP16-029:20.4`, and
+  `OP16-104:19.2`. Cost defaulted to Ascending, visibly reordered the Main deck,
+  and passed adjacent cost/card-number ordering. The first cost-1 rows were
+  `OP16-018`, `OP16-023`, `OP16-034`, and `OP16-064`.
+- Revealing reordered first row `OP16-018 Rockstar` opened the correct identity,
+  alt text, and `OP16-018_EN.webp`; closing removed the dialog and left both
+  sorting controls enabled.
+- Activating the same Build deck button again without pool mutation reset Cost
+  Ascending to Score/Descending. The score order passed, Main remained **40**,
+  and the exact Main card-number/quantity set matched the first build.
+- The select retained focus with a visible **3px** outline. Select and direction
+  button were each **48px** high. Document `397/397`, Main `347/347`, and toolbar
+  `347/347` scroll/client widths were equal; both controls remained inside Main.
+  Console warning/error log: **0 entries**.
+- This targeted sanity did not repeat desktop layout because `5d48fe4` changed
+  component lifecycle state/tests but no CSS. It also did not add browser null or
+  keyboard-activation evidence; the explicitly bounded null and IAB limitations
+  from the earlier full run remain unchanged.
+
 ### Outcome
 
-No product defect was observed and no production file was changed during
-verification. The follow-up change is test-only, and all automated, pointer
-activation and touch-target sizing, ordering, invariance, reveal, reset, sizing,
-overflow, and console gates passed. The sole concern is that in-app Browser
-keyboard injection could not demonstrate activation even on an unrelated native
-disclosure; focus retention and visible focus styling were observed, automated
-Enter/Space activation coverage passed, and the browser limitation is explicitly
-not counted as browser keyboard-activation evidence.
+Lifecycle review found and fixed one production defect in `5d48fe4`: returning
+to a previously seen solution identity could resurrect its stale sort. The
+mutation-sensitive A→B→A regression, fresh full gate, and targeted current-HEAD
+mobile rebuild sanity now pass. All other automated, pointer activation and
+touch-target sizing, ordering, invariance, reveal, sizing, overflow, and console
+evidence remains green. The sole concern remains the earlier in-app Browser
+keyboard-injection limitation: it could not demonstrate activation even on an
+unrelated native disclosure; focus retention and visible focus styling were
+observed, automated Enter/Space activation coverage passed, and the browser
+limitation is explicitly not counted as browser keyboard-activation evidence.
