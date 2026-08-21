@@ -668,7 +668,9 @@ export function parseSeedCount(argv: readonly string[]): number {
   return parsed
 }
 
-async function localCatalogs(setIds: readonly string[]): Promise<readonly RuntimeCatalog[]> {
+export async function loadLocalCatalogs(
+  setIds: readonly string[],
+): Promise<readonly RuntimeCatalog[]> {
   const publicRoot = resolve('public/catalogs')
   const indexPath = resolve(publicRoot, 'index.json')
   const index = runtimeCatalogIndexSchema.parse(
@@ -701,7 +703,7 @@ export async function runEvaluationCommand(
   argv: readonly string[] = process.argv.slice(2),
 ): Promise<void> {
   const seeds = parseSeedCount(argv)
-  const catalogs = await localCatalogs(['OP16', 'OP17'])
+  const catalogs = await loadLocalCatalogs(['OP16', 'OP17'])
   const results = catalogs.map((catalog) => evaluateSet(catalog, seeds))
   process.stdout.write(formatEvaluationReport(results))
   if (results.some((result) => result.failed)) process.exitCode = 1
