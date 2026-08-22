@@ -926,3 +926,25 @@ Task 6 evidence (2026-08-21):
   cost, condition, zone, or predicate values fail exact comparison. Final
   focused and full counts are the 299 and 1,021 totals recorded above; all
   other gates were rerun after these corrections.
+
+Aggregate Standards follow-up (2026-08-21):
+
+- [x] Extract the duplicated cloning/freezing logic into the shared typed
+  `cloneAndDeepFreeze` primitive and use it from both the canonical model
+  constructor and runtime catalog upgrader.
+- [x] Prove recursive freezing, full detachment, and preservation of object,
+  array, branch, and action order with direct utility tests. The helper remains
+  scoped to the acyclic structured data contracts used by these callers.
+- [x] Define `RainbowLuffyCompatibility` once in the shared effect model, reuse
+  it in the parser, and re-export it from `card-features.ts` so existing API
+  imports remain source-compatible.
+- [x] Keep the parser as one deep module; the proposed parser split was
+  deliberately rejected because it would expose implementation seams without
+  simplifying the public contract.
+- RED: the focused test command failed because the shared utility module did
+  not exist, and typecheck separately failed because the canonical model did
+  not export `RainbowLuffyCompatibility`.
+- GREEN: the focused command passed 5 files / 228 tests. The full suite passed
+  61 files / 1,025 tests. `npm run lint`, `npm run typecheck`, and
+  `git diff --check` passed; `npm run catalog:check` reported 17 sets / 85
+  files; and `npm run build` completed the production Vite build.

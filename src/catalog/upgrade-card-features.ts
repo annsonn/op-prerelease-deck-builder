@@ -7,20 +7,7 @@ import {
   type CardFeatures,
 } from '../../shared/card-features.js'
 import { CURRENT_EFFECT_PARSER_REVISION } from '../../shared/card-effect-model.js'
-
-function deepCopyAndFreeze<T>(value: T): T {
-  const copy = structuredClone(value)
-
-  function freezeRecursively(candidate: unknown): void {
-    if (candidate === null || typeof candidate !== 'object') return
-
-    for (const child of Object.values(candidate)) freezeRecursively(child)
-    Object.freeze(candidate)
-  }
-
-  freezeRecursively(copy)
-  return copy
-}
+import { cloneAndDeepFreeze } from '../../shared/clone-and-deep-freeze.js'
 
 function structurallyEqual(left: unknown, right: unknown): boolean {
   if (Object.is(left, right)) return true
@@ -69,7 +56,7 @@ export function upgradeSerializedCardFeatures(
     structurallyEqual(serialized.effects, projected.effects) &&
     structurallyEqual(serialized.unparsedClauses, projected.unparsedClauses)
   ) {
-    return deepCopyAndFreeze({
+    return cloneAndDeepFreeze({
       ...projected,
       effectModelVersion: serialized.effectModelVersion,
       effectParserRevision: serialized.effectParserRevision,
@@ -78,5 +65,5 @@ export function upgradeSerializedCardFeatures(
     })
   }
 
-  return deepCopyAndFreeze(projected)
+  return cloneAndDeepFreeze(projected)
 }

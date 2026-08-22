@@ -4,8 +4,11 @@ import type { PlayableCard } from './catalog.js'
 import {
   cardEffectModelSchema,
   type CardEffectModel,
+  type RainbowLuffyCompatibility,
 } from './card-effect-model.js'
 import { parseCardEffects } from './card-effect-parser.js'
+
+export type { RainbowLuffyCompatibility } from './card-effect-model.js'
 
 export const cardFeatureKeys = [
   'twoKCounter',
@@ -43,11 +46,6 @@ export interface SupportRequirement {
   readonly requiredNames: readonly string[]
   readonly requiredTraits: readonly string[]
 }
-
-export type RainbowLuffyCompatibility =
-  | 'compatible'
-  | 'neutral'
-  | 'incompatible'
 
 export interface CardFeatures extends CardEffectModel {
   readonly flags: Readonly<Record<CardFeatureKey, boolean>>

@@ -8,6 +8,7 @@ import {
   effectActionSchema,
   requirementExpressionSchema,
   type EffectInstance,
+  type RainbowLuffyCompatibility,
   type TargetSpec,
 } from './card-effect-model.js'
 
@@ -51,6 +52,8 @@ const EFFECT: EffectInstance = {
   rainbowLuffyCompatibility: 'compatible',
 }
 
+const COMPATIBILITY: RainbowLuffyCompatibility = 'compatible'
+
 const SECOND_EFFECT: EffectInstance = {
   id: 'effect:1',
   source: 'trigger',
@@ -91,6 +94,10 @@ const SECOND_EFFECT: EffectInstance = {
 }
 
 describe('card effect model', () => {
+  it('publishes the canonical Rainbow Luffy compatibility vocabulary', () => {
+    expect(COMPATIBILITY).toBe('compatible')
+  })
+
   it('accepts LEADER as a strict card predicate type', () => {
     expect(
       cardPredicateSchema.safeParse({

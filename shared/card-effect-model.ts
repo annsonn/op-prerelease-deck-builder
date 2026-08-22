@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+import { cloneAndDeepFreeze } from './clone-and-deep-freeze.js'
+
 export type EffectSource = 'effect' | 'trigger'
 
 export type ActivationChannel =
@@ -29,6 +31,11 @@ export type EffectSubject =
   | 'unknown'
 
 export type EffectChooser = 'player' | 'opponent' | 'none'
+
+export type RainbowLuffyCompatibility =
+  | 'compatible'
+  | 'neutral'
+  | 'incompatible'
 
 export type CardType = 'LEADER' | 'CHARACTER' | 'EVENT' | 'STAGE'
 
@@ -171,7 +178,7 @@ export interface EffectInstance {
   readonly chooser: EffectChooser
   readonly optional: boolean
   readonly branches: readonly EffectBranch[]
-  readonly rainbowLuffyCompatibility: 'compatible' | 'neutral' | 'incompatible'
+  readonly rainbowLuffyCompatibility: RainbowLuffyCompatibility
 }
 
 export interface CardEffectModel {
@@ -430,16 +437,6 @@ export function emptyCardPredicate(): CardPredicate {
   }
 }
 
-function deepFreeze<T>(value: T): T {
-  if (value !== null && typeof value === 'object' && !Object.isFrozen(value)) {
-    for (const child of Object.values(value as Record<string, unknown>)) {
-      deepFreeze(child)
-    }
-    Object.freeze(value)
-  }
-  return value
-}
-
 export function createCardEffectModel(
   input: Omit<CardEffectModel, 'effectModelVersion' | 'effectParserRevision'>,
 ): CardEffectModel {
@@ -448,5 +445,5 @@ export function createCardEffectModel(
     effectParserRevision: CURRENT_EFFECT_PARSER_REVISION,
     ...input,
   })
-  return deepFreeze(structuredClone(parsed))
+  return cloneAndDeepFreeze(parsed)
 }

@@ -12,6 +12,7 @@ import {
   type EffectSource,
   type EffectSubject,
   type RequirementExpression,
+  type RainbowLuffyCompatibility,
   type TargetSpec,
   type TimingModifier,
 } from './card-effect-model.js'
@@ -67,10 +68,7 @@ interface InstanceDraft {
   readonly chooser: EffectChooser
   readonly optional: boolean
   readonly branches: readonly { readonly actions: readonly EffectAction[] }[]
-  readonly rainbowLuffyCompatibility:
-    | 'compatible'
-    | 'neutral'
-    | 'incompatible'
+  readonly rainbowLuffyCompatibility: RainbowLuffyCompatibility
   readonly unavailable: boolean
 }
 
@@ -1086,7 +1084,7 @@ function parseRequirement(text: string): RequirementExpression {
 
 function effectCompatibility(
   requirement: RequirementExpression,
-): 'compatible' | 'neutral' | 'incompatible' {
+): RainbowLuffyCompatibility {
   if (requirement.kind === 'leader') return 'incompatible'
   if (requirement.kind === 'all') {
     const children = requirement.children.map(effectCompatibility)
