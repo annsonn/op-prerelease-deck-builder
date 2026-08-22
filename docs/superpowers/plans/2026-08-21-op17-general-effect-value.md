@@ -49,7 +49,7 @@ not allowed.
 - Modify: `src/strategy/strategy-profile.test.ts`
 - Modify: `src/strategy/strategy-profile.ts`
 
-- [ ] **Step 1: Write failing default, merge, freeze, and validation tests**
+- [x] **Step 1: Write failing default, merge, freeze, and validation tests**
 
 Add one exact snapshot-style expectation for the new profile section:
 
@@ -88,13 +88,13 @@ expect(getStrategyProfile('OP17').effectModel).toEqual({
 
 Assert an override changes one nested action and one factor without dropping siblings, and all nested objects are frozen. Add table-driven invalid values: `NaN`, `Infinity`, and negative for every group; activation factors below 0 or above 1; zero/non-positive target multipliers and cap; positive `opponentDrawPerCard` must fail because it is an adverse value; non-negative values are required elsewhere.
 
-- [ ] **Step 2: Run profile tests and verify RED**
+- [x] **Step 2: Run profile tests and verify RED**
 
 Run `npm test -- src/strategy/strategy-profile.test.ts`.
 
 Expected: FAIL because `effectModel` and its override shape do not exist.
 
-- [ ] **Step 3: Add the typed profile section and exact defaults**
+- [x] **Step 3: Add the typed profile section and exact defaults**
 
 Define exported readonly types `EffectActionValues`, `EffectCostValues`, and `EffectModelProfile`; add `effectModel` to `StrategyProfile` and an optional recursively partial `effectModel` to `StrategyProfileOverride`. Put the exact approved numbers in `BASE_PROFILE`. Extend `mergeStrategyProfile` one nesting level for `actions`, `costs`, `activationFactors`, `targetMultipliers`, and `costCeilingFactors`, then validate every leaf with a named error.
 
@@ -114,18 +114,33 @@ function finitePositive(label: string, value: number): void {
 
 Validate `opponentDrawPerCard` separately as finite and `<= 0`. No set-specific override is introduced in this phase.
 
-- [ ] **Step 4: Run profile tests and verify GREEN**
+- [x] **Step 4: Run profile tests and verify GREEN**
 
 Run `npm test -- src/strategy/strategy-profile.test.ts`.
 
 Expected: PASS for exact defaults, partial override preservation, freezing, and every invalid boundary.
 
-- [ ] **Step 5: Commit profile policy**
+- [x] **Step 5: Commit profile policy**
 
 ```bash
 git add src/strategy/strategy-profile.ts src/strategy/strategy-profile.test.ts
 git commit -m "feat: configure structured effect values"
 ```
+
+Task 1 evidence (2026-08-21):
+
+- RED: `npm test -- src/strategy/strategy-profile.test.ts` failed 21 of 47
+  tests because `effectModel` and its merge and validation contract did not
+  exist.
+- GREEN: `npm test -- src/strategy/strategy-profile.test.ts` passed 1 file / 58
+  tests, covering exact defaults, recursive partial overrides, detached and
+  deeply frozen results, named validation, adverse opponent draw, bounded
+  activation factors, positive multipliers and caps, and non-negative action
+  and cost values.
+- Full suite: `npm test` passed 61 files / 1,057 tests.
+- Verification: `npm run lint`, `npm run typecheck`, and `git diff --check`
+  passed. Self-review confirmed all values live in the base profile with no
+  card, set, name, color, or rarity override.
 
 ### Task 2: Value individual actions with exact magnitude and caps
 
