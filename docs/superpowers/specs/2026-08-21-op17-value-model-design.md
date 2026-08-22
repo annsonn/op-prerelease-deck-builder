@@ -149,7 +149,7 @@ type EffectChooser = 'player' | 'opponent' | 'none'
 interface CardPredicate {
   readonly names: readonly string[]
   readonly traits: readonly string[]
-  readonly cardTypes: readonly ('CHARACTER' | 'EVENT' | 'STAGE')[]
+  readonly cardTypes: readonly ('LEADER' | 'CHARACTER' | 'EVENT' | 'STAGE')[]
   readonly minimumCost: number | null
   readonly maximumCost: number | null
   readonly minimumPower: number | null

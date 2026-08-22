@@ -30,7 +30,7 @@ export type EffectSubject =
 
 export type EffectChooser = 'player' | 'opponent' | 'none'
 
-export type CardType = 'CHARACTER' | 'EVENT' | 'STAGE'
+export type CardType = 'LEADER' | 'CHARACTER' | 'EVENT' | 'STAGE'
 
 export type EffectZone = 'deck' | 'hand' | 'field' | 'trash' | 'life'
 
@@ -221,7 +221,7 @@ export const effectChooserSchema = z.enum(['player', 'opponent', 'none'])
 export const cardPredicateSchema: z.ZodType<CardPredicate> = z.strictObject({
   names: z.array(nonEmptyString),
   traits: z.array(nonEmptyString),
-  cardTypes: z.array(z.enum(['CHARACTER', 'EVENT', 'STAGE'])),
+  cardTypes: z.array(z.enum(['LEADER', 'CHARACTER', 'EVENT', 'STAGE'])),
   minimumCost: finiteNonNegativeNumber.nullable(),
   maximumCost: finiteNonNegativeNumber.nullable(),
   minimumPower: finiteNonNegativeNumber.nullable(),

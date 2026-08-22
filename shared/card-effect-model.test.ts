@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import {
   cardEffectModelSchema,
+  cardPredicateSchema,
   createCardEffectModel,
   emptyCardPredicate,
   effectActionSchema,
@@ -90,6 +91,27 @@ const SECOND_EFFECT: EffectInstance = {
 }
 
 describe('card effect model', () => {
+  it('accepts LEADER as a strict card predicate type', () => {
+    expect(
+      cardPredicateSchema.safeParse({
+        ...emptyCardPredicate(),
+        cardTypes: ['LEADER', 'CHARACTER'],
+      }).success,
+    ).toBe(true)
+    expect(
+      cardPredicateSchema.safeParse({
+        ...emptyCardPredicate(),
+        cardTypes: ['leader'],
+      }).success,
+    ).toBe(false)
+    expect(
+      cardPredicateSchema.safeParse({
+        ...emptyCardPredicate(),
+        cardTypes: ['DON'],
+      }).success,
+    ).toBe(false)
+  })
+
   it('accepts and deeply freezes a deterministic canonical model', () => {
     const mutableEffect = structuredClone(EFFECT)
     const mutableSecondEffect = structuredClone(SECOND_EFFECT)

@@ -462,7 +462,7 @@ Task 2 evidence (2026-08-21):
 - Modify: `shared/card-effect-parser.test.ts`
 - Modify: `shared/card-effect-parser.ts`
 
-- [ ] **Step 1: Add failing action and safety tables**
+- [x] **Step 1: Add failing action and safety tables**
 
 Append table-driven tests covering every Phase-1 action family. Each row must assert the complete parsed action, not a boolean. Include own/opponent draw, filter, hand discard, K.O., bottom deck, return hand, rest, power reduction, effect negation, attack lock, deploy, trash deploy, protection, Life gain, opposing Life to hand, DON refresh/ramp, counter modifier, power modifier, and Leader base power. Include `quantity: 1`, `2`, `all`, and `anyNumber`, cost ceilings, power bounds, card types, counter predicates, Trigger predicates, different names, total-cost ceilings, `allowsSelf` true/false, and all declared durations.
 
@@ -507,13 +507,13 @@ it('marks only the Leader-locked instance incompatible', () => {
 })
 ```
 
-- [ ] **Step 2: Run action tests and verify RED**
+- [x] **Step 2: Run action tests and verify RED**
 
 Run `npm test -- shared/card-effect-parser.test.ts`.
 
 Expected: FAIL on the first unimplemented action/target field and clause-local compatibility.
 
-- [ ] **Step 3: Implement conservative action and requirement parsing**
+- [x] **Step 3: Implement conservative action and requirement parsing**
 
 Add focused private functions `parseTargetSpec`, `parseRequirement`, `parseCosts`, `parseActions`, and `effectCompatibility`. Process specific patterns before broad ones. Numeric words `one`, `two`, and `three` may normalize to integers; other unknown quantities stay diagnostic. Explicit `your opponent`/`opponent's` targets are opponent; `your` targets are player; `this Character` is `thisCard`. The owner-deck wording may be opponent only when the same target phrase already established an opposing Character, or the clause is the unambiguous `Place up to N Character ... bottom of the owner's deck` board-removal form. Emit `negateEffect` before resolving a same-instance `K.O. that Character` to the identical target. Power actions store a signed delta. For the fixed 5000-power Rainbow Luffy, absolute Leader-base wording subtracts 5000; target-base wording such as "4000 base power becomes 8000" subtracts the exact parsed predicate value. If no safe baseline exists, retain the clause as unknown rather than storing the absolute result as a bonus.
 
@@ -524,18 +524,90 @@ Only explicit activation conditions such as `if`/`when` become the instance
 action's eligible output `TargetSpec` into the instance condition; Phase 3
 evaluates that target per action so independent sibling actions remain usable.
 
-- [ ] **Step 4: Run parser tests and verify GREEN**
+- [x] **Step 4: Run parser tests and verify GREEN**
 
 Run `npm test -- shared/card-effect-parser.test.ts`.
 
 Expected: PASS for all action families and safety negatives.
 
-- [ ] **Step 5: Commit complete Phase-1 parsing**
+- [x] **Step 5: Commit complete Phase-1 parsing**
 
 ```bash
 git add shared/card-effect-parser.ts shared/card-effect-parser.test.ts
 git commit -m "feat: parse structured card actions"
 ```
+
+Task 3 evidence (2026-08-21):
+
+- RED: `npm test -- shared/card-effect-parser.test.ts` retained all 50 prior
+  parser tests as passing and failed 27 new action, target, requirement,
+  duration, compatibility, and Event-cost cases.
+- GREEN: the focused suite passed 1 file / 77 tests after adding conservative
+  parsing for every Phase-1 action family, exact target predicates and zones,
+  same-instance target references, compound requirements, and clause-local
+  Rainbow Luffy compatibility.
+- Self-review RED: 3 of 81 focused tests failed for jointly rested self costs,
+  standalone negation, and named-Leader target locking; a further cost audit
+  failed 1 of 82 tests for qualified discard and replacement costs.
+- Self-review GREEN: the focused suite passed 1 file / 82 tests with all four
+  omissions corrected and an opponent-turn duration guard retained.
+- Verification: the complete suite passed 58 files / 973 tests;
+  `npm run lint`, `npm run typecheck`, and `git diff --check` passed. Production
+  parser rules contain no set IDs, card numbers, card names, rarities, or color
+  exceptions.
+- Spec-review RED: 8 of 90 focused tests failed, proving condition-first costs
+  lost compatibility, a loose conjunction invented `restSelf`, incomplete
+  targets lacked unknown actions, exclusionary self wording became self-deploy,
+  three conditional modifier forms were missing, power-target quantities were
+  flattened, and both-player draw became player draw.
+- Spec-review GREEN: the focused suite passed 1 file / 90 tests after parsing
+  condition/cost prefixes in either printed order, requiring verb-local self
+  costs, replacing every failed target with an unknown action plus diagnostic,
+  and adding the reviewed general grammar with near-negative coverage.
+- Post-review verification: the complete suite passed 58 files / 981 tests;
+  `npm run lint`, `npm run typecheck`, and `git diff --check` passed, and no
+  fallback `TargetSpec` remains in a target-parsing failure path.
+- Final spec-review RED: 5 of 107 focused model/parser tests failed, proving a
+  cost-first condition leaked into diagnostics, condition-first payment text
+  lost optionality, exclusionary self wording could be rediscovered by a
+  suffix action match, mixed Leader/Character targets lost `LEADER`, and the
+  strict predicate schema did not yet admit that canonical target type.
+- Final spec-review GREEN: the focused model/parser suite passed 2 files / 107
+  tests after producing one fully condition-stripped action string, deriving
+  optionality from the original clause, masking `other than this Character`
+  before all action and target parsing, and adding strict `LEADER` predicate
+  support while retaining parser revision 1 before release.
+- Final post-review verification: the complete suite passed 58 files / 986
+  tests; `npm run lint`, `npm run typecheck`, and `git diff --check` passed.
+- Protection-review RED: 1 of 97 parser tests failed because the clause parser
+  split `one of your Characters other than this Character would be removed`
+  into an unknown condition/action before replacement protection could own the
+  wording.
+- Protection-review GREEN: the focused parser suite passed 1 file / 97 tests
+  after recognizing the complete future replacement condition and matching its
+  centrally masked non-self target; an explicit-self positive and past-tense
+  near-negative guard both pass. The complete suite passed 58 files / 989
+  tests, with lint, typecheck, and `git diff --check` green.
+- Quality-review RED: 11 of 120 focused model/parser tests failed, proving an
+  unsupported or alternative colon cost could expose free actions, a
+  self-deploy from trash chose the wrong zone, an unknown leading action lost
+  its explicit activation and shared cost before `Then`, the parser injected
+  printed Event cost owned by Phase 2, `all` and `any` shared one incorrect
+  compatibility rule, and an unqualified `there is` condition was assigned to
+  the player.
+- A mutation-sensitive near-negative then failed 1 of 121 focused tests because
+  `cost of 2 or less` was initially mistaken for an alternative payment.
+- Quality-review GREEN: the focused model/parser suite passed 2 files / 121
+  tests after making unsupported-cost drafts internally unavailable, retaining
+  annotated unknown drafts for continuation ownership, parsing explicit
+  self-deployment zones before fallback, leaving printed Event cost to the
+  evaluator, implementing distinct tri-state `all`/`any` truth tables, and
+  representing unqualified board-state conditions with `bothPlayers`.
+  Near-negatives also prove that alternative payments are never charged
+  cumulatively, payment predicates containing `or less` remain valid, and
+  unsupported payment text cannot leak a recognized `Then` action. The
+  complete suite passed 58 files / 1000 tests; lint, typecheck, and
+  `git diff --check` passed.
 
 ### Task 4: Publish v2 features without changing legacy summaries
 
