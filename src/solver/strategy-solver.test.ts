@@ -77,6 +77,10 @@ function candidate(
       ...cardOverrides,
     },
     features: {
+      effectModelVersion: 2,
+      effectParserRevision: 1,
+      effects: [],
+      unparsedClauses: [],
       flags: { ...flags },
       rainbowUsableFlags: { ...flags },
       supportRequirementsByFlag: Object.fromEntries(

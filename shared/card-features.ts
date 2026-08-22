@@ -1,6 +1,11 @@
 import { z } from 'zod'
 
 import type { PlayableCard } from './catalog.js'
+import {
+  cardEffectModelSchema,
+  type CardEffectModel,
+} from './card-effect-model.js'
+import { parseCardEffects } from './card-effect-parser.js'
 
 export const cardFeatureKeys = [
   'twoKCounter',
@@ -44,7 +49,7 @@ export type RainbowLuffyCompatibility =
   | 'neutral'
   | 'incompatible'
 
-export interface CardFeatures {
+export interface CardFeatures extends CardEffectModel {
   readonly flags: Readonly<Record<CardFeatureKey, boolean>>
   readonly rainbowUsableFlags: Readonly<Record<CardFeatureKey, boolean>>
   readonly supportRequirementsByFlag: Readonly<
@@ -91,6 +96,7 @@ export const supportRequirementsByFlagSchema = z.strictObject({
 })
 
 export const cardFeaturesSchema = z.strictObject({
+  ...cardEffectModelSchema.shape,
   flags: featureFlagsSchema,
   rainbowUsableFlags: featureFlagsSchema,
   supportRequirementsByFlag: supportRequirementsByFlagSchema,
@@ -562,6 +568,7 @@ function buildSupportRequirementsByFlag(
 }
 
 export function classifyCardFeatures(card: PlayableCard): CardFeatures {
+  const effectModel = parseCardEffects(card)
   const rulesText = normalizeRulesText(`${card.effect}\n${card.trigger}`)
   const textFlags = detectTextFeatureFlags(rulesText)
   const flags = buildFeatureFlags(card, textFlags)
@@ -586,6 +593,10 @@ export function classifyCardFeatures(card: PlayableCard): CardFeatures {
     .map((key) => key)
 
   return Object.freeze({
+    effectModelVersion: effectModel.effectModelVersion,
+    effectParserRevision: effectModel.effectParserRevision,
+    effects: effectModel.effects,
+    unparsedClauses: effectModel.unparsedClauses,
     flags: Object.freeze(flags),
     rainbowUsableFlags: Object.freeze(rainbowUsableFlags),
     supportRequirementsByFlag:

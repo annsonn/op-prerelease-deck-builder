@@ -75,6 +75,10 @@ function candidate(
   return {
     card: card(cardNumber, cardOverrides),
     features: {
+      effectModelVersion: 2,
+      effectParserRevision: 1,
+      effects: [],
+      unparsedClauses: [],
       flags,
       rainbowUsableFlags,
       supportRequirementsByFlag: Object.fromEntries(

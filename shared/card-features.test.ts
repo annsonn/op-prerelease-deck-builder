@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import type { PlayableCard } from './catalog.js'
 import {
   cardFeatureKeys,
+  cardFeaturesSchema,
   classifyCardFeatures,
   supportRequirementFlagKeys,
   type CardFeatureKey,
@@ -41,6 +42,148 @@ function expectFlag(
 }
 
 describe('classifyCardFeatures', () => {
+  it('publishes parsed v2 metadata without changing legacy summary semantics', () => {
+    const features = classifyCardFeatures(
+      card({
+        effect:
+          "[On Play] Draw 1 card. Then, K.O. up to 1 of your opponent's Characters.",
+      }),
+    )
+
+    expect(features.effectModelVersion).toBe(2)
+    expect(features.effectParserRevision).toBe(1)
+    expect(features.effects).toHaveLength(1)
+    expect(
+      features.effects[0]?.branches[0]?.actions.map(({ kind }) => kind),
+    ).toEqual(['draw', 'remove'])
+    expect(features.flags).toMatchObject({
+      draw: true,
+      removal: true,
+      twoForOne: false,
+    })
+    expect(features.rainbowUsableFlags).toMatchObject({
+      draw: true,
+      removal: true,
+    })
+    expect(cardFeaturesSchema.parse(features)).toEqual(features)
+    expect(Object.isFrozen(features.effects[0]?.branches[0]?.actions)).toBe(true)
+  })
+
+  it.each([
+    {
+      label: 'unconditional',
+      overrides: { effect: '[On Play] Draw 1 card.' },
+      flags: ['draw'],
+      usableFlags: ['draw'],
+      compatibility: 'compatible',
+      supportRequirements: {},
+      requiredNames: [],
+      evidence: ['draw'],
+    },
+    {
+      label: 'Leader-incompatible',
+      overrides: {
+        effect:
+          "[On Play] If your Leader is [Nami], K.O. up to 1 of your opponent's Characters.",
+      },
+      flags: ['removal', 'comboDependent'],
+      usableFlags: [],
+      compatibility: 'incompatible',
+      supportRequirements: {},
+      requiredNames: ['Nami'],
+      evidence: ['comboDependent', 'removal'],
+    },
+    {
+      label: 'generic-conditional',
+      overrides: {
+        effect:
+          "[On Play] If your opponent has 5 Characters, set up to 2 of your DON!! cards as active. Then, rest all of your opponent's Characters.",
+      },
+      flags: ['removal', 'massRest', 'donRefresh', 'comboDependent'],
+      usableFlags: ['removal', 'donRefresh', 'comboDependent'],
+      compatibility: 'neutral',
+      supportRequirements: { removal: { requiredNames: [], requiredTraits: [] } },
+      requiredNames: [],
+      evidence: ['comboDependent', 'donRefresh', 'massRest', 'removal'],
+    },
+    {
+      label: 'Trigger-only',
+      overrides: { trigger: '[Trigger] Draw 1 card.' },
+      flags: ['draw'],
+      usableFlags: ['draw'],
+      compatibility: 'compatible',
+      supportRequirements: {},
+      requiredNames: [],
+      evidence: ['draw'],
+    },
+    {
+      label: 'mixed-clause',
+      overrides: {
+        effect:
+          '[Blocker]<br/>[On Play] If you have a Character named [Missing Ally], draw 1 card.',
+      },
+      flags: ['blocker', 'draw', 'comboDependent'],
+      usableFlags: ['blocker', 'draw', 'comboDependent'],
+      compatibility: 'neutral',
+      supportRequirements: {
+        draw: { requiredNames: ['Missing Ally'], requiredTraits: [] },
+      },
+      requiredNames: ['Missing Ally'],
+      evidence: ['blocker', 'comboDependent', 'draw'],
+    },
+  ] as const)(
+    'preserves the exact legacy summary for $label text',
+    ({
+      overrides,
+      flags: enabledFlags,
+      usableFlags,
+      compatibility,
+      supportRequirements,
+      requiredNames,
+      evidence,
+    }) => {
+      const features = classifyCardFeatures(card(overrides))
+      const enabledFlagSet = new Set<CardFeatureKey>(enabledFlags)
+      const usableFlagSet = new Set<CardFeatureKey>(usableFlags)
+      const flags = Object.fromEntries(
+        cardFeatureKeys.map((key) => [key, enabledFlagSet.has(key)]),
+      )
+      const rainbowUsableFlags = Object.fromEntries(
+        cardFeatureKeys.map((key) => [key, usableFlagSet.has(key)]),
+      )
+      const supportRequirementsByFlag = Object.fromEntries(
+        supportRequirementFlagKeys.map((key) => [
+          key,
+          key in supportRequirements
+            ? supportRequirements[key as keyof typeof supportRequirements]
+            : null,
+        ]),
+      )
+
+      expect({
+        flags: features.flags,
+        rainbowUsableFlags: features.rainbowUsableFlags,
+        supportRequirementsByFlag: features.supportRequirementsByFlag,
+        rainbowLuffyCompatibility: features.rainbowLuffyCompatibility,
+        searchableTraits: features.searchableTraits,
+        searchableNames: features.searchableNames,
+        requiredTraits: features.requiredTraits,
+        requiredNames: features.requiredNames,
+        evidence: features.evidence,
+      }).toEqual({
+        flags,
+        rainbowUsableFlags,
+        supportRequirementsByFlag,
+        rainbowLuffyCompatibility: compatibility,
+        searchableTraits: [],
+        searchableNames: [],
+        requiredTraits: [],
+        requiredNames,
+        evidence,
+      })
+    },
+  )
+
   it('publishes the complete stable feature vocabulary', () => {
     expect(cardFeatureKeys).toEqual([
       'twoKCounter',

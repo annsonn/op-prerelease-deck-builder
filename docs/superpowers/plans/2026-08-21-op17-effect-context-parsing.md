@@ -618,7 +618,7 @@ Task 3 evidence (2026-08-21):
 - Modify: `src/solver/marginal-score.test.ts`
 - Modify: `src/solver/strategy-solver.test.ts`
 
-- [ ] **Step 1: Write failing additive-metadata tests**
+- [x] **Step 1: Write failing additive-metadata tests**
 
 In `shared/card-features.test.ts`, add:
 
@@ -638,13 +638,13 @@ it('publishes parsed v2 metadata without changing legacy summary semantics', () 
 
 Capture the existing returned summary fields for a representative unconditional, Leader-incompatible, generic-conditional, Trigger-only, and mixed-clause fixture before editing. Assert those exact flags, compatibility, search targets, requirements, and evidence after v2 metadata is present.
 
-- [ ] **Step 2: Run classifier tests and verify RED**
+- [x] **Step 2: Run classifier tests and verify RED**
 
 Run `npm test -- shared/card-features.test.ts`.
 
 Expected: FAIL because `CardFeatures` has no version-2 fields.
 
-- [ ] **Step 3: Add the model to `CardFeatures`**
+- [x] **Step 3: Add the model to `CardFeatures`**
 
 In `shared/card-features.ts`, make `CardFeatures` extend `CardEffectModel`, extend `cardFeaturesSchema` with `cardEffectModelSchema.shape`, and call `parseCardEffects(card)` once inside `classifyCardFeatures`. Spread only `effectModelVersion`, `effectParserRevision`, `effects`, and `unparsedClauses` into the frozen result. Leave `detectTextFeatureFlags`, `buildFeatureFlags`, `rainbowUsableRulesText`, support summaries, compatibility summary, and evidence unchanged in Phase 1.
 
@@ -659,7 +659,7 @@ unparsedClauses: [],
 
 Do not change any existing score, coverage, or solution expectations.
 
-- [ ] **Step 4: Run classifier and solver unit tests and verify GREEN**
+- [x] **Step 4: Run classifier and solver unit tests and verify GREEN**
 
 Run:
 
@@ -669,12 +669,31 @@ npm test -- shared/card-features.test.ts src/solver/deck-state.test.ts src/solve
 
 Expected: PASS with no updated score snapshots.
 
-- [ ] **Step 5: Commit the additive feature contract**
+- [x] **Step 5: Commit the additive feature contract**
 
 ```bash
 git add shared/card-features.ts shared/card-features.test.ts src/solver/deck-state.test.ts src/solver/marginal-score.test.ts src/solver/strategy-solver.test.ts
 git commit -m "feat: publish version two card features"
 ```
+
+Task 4 evidence (2026-08-21):
+
+- RED: `npm test -- shared/card-features.test.ts` failed only the new additive
+  contract (`effectModelVersion` was `undefined` instead of `2`); the other 97
+  classifier tests passed.
+- GREEN: the four-file classifier/solver command passed 4 files / 168 tests
+  without changing any score, coverage, or solution expectation.
+- Parity: `npm test -- tools/value-model-baseline.test.ts` passed 1 file / 8
+  tests, retaining the pinned score/solution evidence and aggregate digest.
+- Static review: `npm run lint` and `git diff --check` passed. The Task 4 diff
+  changes only the feature contract, its legacy-parity tests, and the three
+  named handwritten solver fixtures.
+- Expected Phase boundary: the full suite has 8 failures in
+  `shared/catalog.test.ts`, `src/catalog/load-catalog.test.ts`, and
+  `tools/op17-premium-bomb.acceptance.test.ts`; `npm run typecheck` has one
+  corresponding `src/catalog/load-catalog.ts` error. They prove the old
+  serialized catalog/loader path cannot yet produce canonical v2 metadata and
+  are the explicit RED inputs for Task 5's schema union and upgrade adapter.
 
 ### Task 5: Accept old catalogs and expose only canonical v2 at runtime
 
