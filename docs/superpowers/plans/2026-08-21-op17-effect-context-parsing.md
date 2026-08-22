@@ -138,7 +138,7 @@ Task 0 evidence (2026-08-21):
 - Create: `shared/card-effect-model.test.ts`
 - Create: `shared/card-effect-model.ts`
 
-- [ ] **Step 1: Write failing schema and immutability tests**
+- [x] **Step 1: Write failing schema and immutability tests**
 
 Create `shared/card-effect-model.test.ts` with a complete minimal instance and the strict boundaries:
 
@@ -198,7 +198,7 @@ describe('card effect model', () => {
 })
 ```
 
-- [ ] **Step 2: Run the model test and verify RED**
+- [x] **Step 2: Run the model test and verify RED**
 
 Run:
 
@@ -208,7 +208,7 @@ npm test -- shared/card-effect-model.test.ts
 
 Expected: FAIL because `shared/card-effect-model.ts` does not exist.
 
-- [ ] **Step 3: Implement the complete model and strict schemas**
+- [x] **Step 3: Implement the complete model and strict schemas**
 
 Create `shared/card-effect-model.ts` with the exact unions from the approved design (`EffectSource`, `ActivationChannel`, `TimingModifier`, `EffectSubject`, `EffectChooser`, `CardPredicate`, `TargetSpec`, `RequirementExpression`, `EffectCost`, `EffectAction`, `EffectBranch`, and `EffectInstance`). `TargetSpec` includes required `allowsSelf`; power actions use signed finite `powerDelta`; and `negateEffect` is a first-class action. Export matching recursive Zod schemas. Use finite non-negative numbers for counts, ceilings, and ordinary amounts; use finite signed numbers for power deltas; use positive integers for target quantities; require at least one branch and at least one action per branch; keep every object strict.
 
@@ -261,18 +261,34 @@ export function createCardEffectModel(
 
 Do not place regexes, card text, score weights, or OP17 identities in this file.
 
-- [ ] **Step 4: Run the model test and verify GREEN**
+- [x] **Step 4: Run the model test and verify GREEN**
 
 Run `npm test -- shared/card-effect-model.test.ts`.
 
 Expected: PASS with strict invalid-shape rejection and recursive freezing.
 
-- [ ] **Step 5: Commit the vocabulary**
+- [x] **Step 5: Commit the vocabulary**
 
 ```bash
 git add shared/card-effect-model.ts shared/card-effect-model.test.ts
 git commit -m "feat: define structured card effect model"
 ```
+
+Task 1 evidence (2026-08-21):
+
+- RED: `npm test -- shared/card-effect-model.test.ts` failed because
+  `shared/card-effect-model.ts` did not exist.
+- GREEN: `npm test -- shared/card-effect-model.test.ts` passed 1 file / 12
+  tests, covering strict recursive schemas, every action family, first-class
+  effect negation, signed finite power deltas, required `allowsSelf`, stable
+  ordering, independent cloning, and recursive freezing.
+- Quality-review RED: a mutation that recursively froze the model while
+  deliberately skipping nested `target` values failed at the new target-freeze
+  assertion. The restored implementation passed with two effects, two ordered
+  branches, nested action objects, target specs, predicates, and predicate
+  arrays all explicitly covered.
+- Verification: `npm run lint`, `npm run typecheck`, and `git diff --check`
+  passed.
 
 ### Task 2: Parse activation blocks, continuations, choices, and shared costs
 
