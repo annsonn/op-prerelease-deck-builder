@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import {
+  classifyCardFeatures,
   supportRequirementFlagKeys,
   type CardFeatures,
 } from '../../shared/card-features.js'
@@ -76,7 +77,7 @@ function candidate(
     card: card(cardNumber, cardOverrides),
     features: {
       effectModelVersion: 2,
-      effectParserRevision: 1,
+      effectParserRevision: 2,
       effects: [],
       unparsedClauses: [],
       flags,
@@ -92,6 +93,14 @@ function candidate(
       evidence: [],
     },
   }
+}
+
+function classifiedCandidate(
+  cardNumber: string,
+  overrides: Partial<PlayableCard>,
+): CandidateCard {
+  const printedCard = card(cardNumber, overrides)
+  return { card: printedCard, features: classifyCardFeatures(printedCard) }
 }
 
 function add(
@@ -131,7 +140,10 @@ describe('deck state role measurements', () => {
   it('counts draw and removal separately but counts their interaction overlap once', () => {
     const state = add(
       createEmptyDeckState(),
-      candidate('OP16-002', {}, ['draw', 'removal']),
+      classifiedCandidate('OP16-002', {
+        effect:
+          "[On Play] Draw 1 card. Then, K.O. up to 1 of your opponent's Characters.",
+      }),
     )
 
     expect(state.coverage.draw).toBe(1)
@@ -139,10 +151,25 @@ describe('deck state role measurements', () => {
     expect(state.coverage.interaction).toBe(1)
   })
 
+  it('does not let stale summary flags create structured interaction', () => {
+    const state = add(
+      createEmptyDeckState(),
+      candidate('OP16-029', {}, ['draw', 'removal']),
+    )
+
+    expect(state.coverage.draw).toBe(1)
+    expect(state.coverage.removal).toBe(1)
+    expect(state.coverage.interaction).toBe(0)
+  })
+
   it('preserves removal and boss overlap', () => {
     const state = add(
       createEmptyDeckState(),
-      candidate('OP16-003', {}, ['removal', 'boss']),
+      classifiedCandidate('OP16-003', {
+        cost: 7,
+        power: 8_000,
+        effect: "[On Play] K.O. up to 1 of your opponent's Characters.",
+      }),
     )
 
     expect(state.coverage.removal).toBe(1)
@@ -153,7 +180,10 @@ describe('deck state role measurements', () => {
   it('excludes raw blocker and removal roles that Rainbow Luffy cannot use', () => {
     const state = add(
       createEmptyDeckState(),
-      candidate('OP16-024', {}, ['blocker', 'removal'], []),
+      classifiedCandidate('OP16-024', {
+        effect:
+          "[On Play] If your Leader is [Nami], this Character gains [Blocker]. Then, K.O. up to 1 of your opponent's Characters.",
+      }),
     )
 
     expect(state.coverage.blocker).toBe(0)
@@ -165,12 +195,10 @@ describe('deck state role measurements', () => {
   it('counts a usable blocker without its conditional raw removal role', () => {
     const state = add(
       createEmptyDeckState(),
-      candidate(
-        'OP16-025',
-        {},
-        ['blocker', 'removal'],
-        ['blocker'],
-      ),
+      classifiedCandidate('OP16-025', {
+        effect:
+          "[Blocker]<br/>[On Play] If your Leader is [Nami], K.O. up to 1 of your opponent's Characters.",
+      }),
     )
 
     expect(state.coverage.blocker).toBe(1)
@@ -178,6 +206,84 @@ describe('deck state role measurements', () => {
     expect(state.coverage.interaction).toBe(0)
     expect(state.importantPlayCounts).toEqual({ odd: 1, even: 0 })
   })
+
+  it.each([
+    {
+      label: 'lockdown',
+      effect:
+        "[On Play] Up to 2 of your opponent's Characters cannot attack until the end of your opponent's next End Phase.",
+    },
+    {
+      label: 'effect negation',
+      effect:
+        '[Activate: Main] [Once Per Turn] DON!!-1: If this Character was played on this turn, negate the effect of up to 1 of your opponent\'s Characters with a cost of 6 or less.',
+    },
+    {
+      label: 'opponent hand discard',
+      effect: '[On Play] Your opponent trashes 2 cards from their hand.',
+    },
+    {
+      label: 'opposing Life pressure',
+      effect:
+        "[On Play] Add up to 1 card from the top of your opponent's Life cards to the owner's hand.",
+    },
+  ])('counts $label as one structural interaction', ({ effect }) => {
+    const state = add(
+      createEmptyDeckState(),
+      classifiedCandidate('OP16-030', {
+        effect,
+      }),
+    )
+
+    expect(state.coverage.interaction).toBe(1)
+  })
+
+  it.each([
+    {
+      label: 'opponent draw',
+      overrides: { effect: '[On Play] Your opponent draws 2 cards.' },
+    },
+    {
+      label: 'own Life gain',
+      overrides: {
+        effect: '[On Play] Add 1 card from the top of your deck to the top of your Life cards.',
+      },
+    },
+    {
+      label: 'unknown action',
+      overrides: { effect: '[On Play] Perform an unfamiliar maneuver.' },
+    },
+    {
+      label: 'Trigger-only removal',
+      overrides: {
+        trigger: "[Trigger] K.O. up to 1 of your opponent's Characters.",
+      },
+    },
+    {
+      label: 'Leader-incompatible removal',
+      overrides: {
+        effect:
+          "[On Play] If your Leader is [Nami], K.O. up to 1 of your opponent's Characters.",
+      },
+    },
+    {
+      label: 'dynamic-condition removal',
+      overrides: {
+        effect:
+          "[On Play] If your opponent has 5 Characters, K.O. up to 1 of your opponent's Characters.",
+      },
+    },
+  ])(
+    'does not count $label as structural interaction',
+    ({ overrides }) => {
+      const state = add(
+        createEmptyDeckState(),
+        classifiedCandidate('OP16-040', overrides),
+      )
+
+      expect(state.coverage.interaction).toBe(0)
+    },
+  )
 
   it('measures vanilla-like rush banish and brick roles independently', () => {
     const state = add(

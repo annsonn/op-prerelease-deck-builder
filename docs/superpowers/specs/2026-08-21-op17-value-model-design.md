@@ -234,7 +234,7 @@ interface EffectInstance {
 
 interface CardFeatures {
   readonly effectModelVersion: 2
-  readonly effectParserRevision: 1
+  readonly effectParserRevision: 2
   readonly effects: readonly EffectInstance[]
   readonly unparsedClauses: readonly string[]
   // Existing flags, Rainbow-usable flags, support summaries, compatibility,
@@ -822,7 +822,8 @@ fresh current classification, so serialized metadata cannot create a hybrid
 runtime model. It does not mutate the serialized strategy suggestion.
 Current checked-in catalogs therefore work immediately without a bulk rewrite;
 the next normal catalog build emits canonical version 2 with parser revision
-1.
+2. Revision 1 remains a strict accepted serialized input and is reparsed at
+runtime.
 
 This migration logic belongs behind one adapter such as
 `upgradeSerializedCardFeatures(card, serialized)`. Callers must not branch on

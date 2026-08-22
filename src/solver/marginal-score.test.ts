@@ -74,7 +74,7 @@ function candidate(
     },
     features: {
       effectModelVersion: 2,
-      effectParserRevision: 1,
+      effectParserRevision: 2,
       effects: [],
       unparsedClauses: [],
       flags,
@@ -884,10 +884,11 @@ describe('premium bomb first-copy floor', () => {
     expect(score.components.brickPenalty).toBe(
       -PROFILE.weights.progressiveBricks.first,
     )
-    expect(ordinarySubtotal).toBe(4)
-    expect(score.components.premiumBombFloor).toBe(11)
+    // Structured rest-all now also exposes the multi-target twoForOne summary.
+    expect(ordinarySubtotal).toBe(8)
+    expect(score.components.premiumBombFloor).toBe(7)
     expect(score.reasonsByComponent.premiumBombFloor).toBe(
-      'First-copy premium bomb floor: 11',
+      'First-copy premium bomb floor: 7',
     )
     expect(score.total).toBe(PROFILE.limits.premiumBombFirstCopyFloor)
   })
@@ -898,7 +899,7 @@ describe('premium bomb first-copy floor', () => {
     PROFILE.curve.late.maximum,
   )
 
-  it('raises a saturated first copy without bricks from an ordinary subtotal of 5 to 15', () => {
+  it('raises a saturated first copy without bricks from an ordinary subtotal of 9 to 15', () => {
     const score = scoreMarginalCandidate(
       premiumBomb,
       saturatedStateWithoutBricks,
@@ -911,10 +912,10 @@ describe('premium bomb first-copy floor', () => {
       0,
     )
 
-    expect(ordinarySubtotal).toBe(5)
-    expect(score.components.premiumBombFloor).toBe(10)
+    expect(ordinarySubtotal).toBe(9)
+    expect(score.components.premiumBombFloor).toBe(6)
     expect(score.reasonsByComponent.premiumBombFloor).toBe(
-      'First-copy premium bomb floor: 10',
+      'First-copy premium bomb floor: 6',
     )
     expect(score.total).toBe(PROFILE.limits.premiumBombFirstCopyFloor)
   })
@@ -943,7 +944,7 @@ describe('premium bomb first-copy floor', () => {
     expect(score.components.redundancyEffect).toBe(
       -PROFILE.weights.redundancy.effect,
     )
-    expect(score.total).toBe(4)
+    expect(score.total).toBe(8)
   })
 
   it.each([
@@ -995,7 +996,7 @@ describe('premium bomb first-copy floor', () => {
       PROFILE,
     )
     expect(Object.keys(score.components).at(-1)).toBe('premiumBombFloor')
-    expect(score.reasons.at(-1)).toBe('First-copy premium bomb floor: 10')
+    expect(score.reasons.at(-1)).toBe('First-copy premium bomb floor: 6')
   })
 })
 

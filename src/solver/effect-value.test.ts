@@ -167,7 +167,7 @@ function candidate(
     card,
     features: {
       effectModelVersion: 2,
-      effectParserRevision: 1,
+      effectParserRevision: 2,
       effects,
       unparsedClauses: [],
       flags,

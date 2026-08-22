@@ -166,6 +166,31 @@ describe('upgradeSerializedCardFeatures', () => {
     expectDeeplyFrozen(upgraded)
   })
 
+  it('reparses accepted revision-one effects with the current parser', () => {
+    const printedCard = card({ effect: '[Rush: Character]' })
+    const blankProjection = classifyCardFeatures(card())
+    const priorRevision = serializedCardFeaturesSchema.parse({
+      ...blankProjection,
+      effectParserRevision: 1,
+      effects: [],
+      unparsedClauses: ['[Rush: Character]'],
+    })
+
+    const upgraded = upgradeSerializedCardFeatures(
+      printedCard,
+      priorRevision,
+    )
+
+    expect(upgraded.effectParserRevision).toBe(2)
+    expect(upgraded.flags.rush).toBe(true)
+    expect(upgraded.rainbowUsableFlags.rush).toBe(true)
+    expect(upgraded.effects).toMatchObject([
+      { branches: [{ actions: [{ kind: 'keyword', keyword: 'rush' }] }] },
+    ])
+    expect(upgraded.unparsedClauses).not.toContain('[Rush: Character]')
+    expectDeeplyFrozen(upgraded)
+  })
+
   it('reparses legacy and absent features from printed text', () => {
     const blocker = upgradeSerializedCardFeatures(
       card({ effect: '[Blocker]' }),
@@ -179,7 +204,7 @@ describe('upgradeSerializedCardFeatures', () => {
     expect(blocker.effects).not.toHaveLength(0)
     expect(blocker.flags.blocker).toBe(true)
     expect(rush.effectModelVersion).toBe(2)
-    expect(rush.effectParserRevision).toBe(1)
+    expect(rush.effectParserRevision).toBe(2)
     expect(rush.flags.rush).toBe(true)
     expectDeeplyFrozen(blocker)
     expectDeeplyFrozen(rush)

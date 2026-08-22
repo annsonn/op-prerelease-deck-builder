@@ -1,4 +1,7 @@
-import type { CardFeatures } from '../../shared/card-features.js'
+import {
+  hasStructuredInteraction,
+  type CardFeatures,
+} from '../../shared/card-features.js'
 import type { PlayableCard } from '../../shared/catalog.js'
 
 import { isImportantPlay } from './card-measurements.js'
@@ -187,7 +190,7 @@ function measuredCoverage(
     if (role === 'interaction') continue
     if (flags[role]) next[role] += 1
   }
-  if (flags.draw || flags.removal) next.interaction += 1
+  if (hasStructuredInteraction(candidate.features)) next.interaction += 1
 
   return next
 }

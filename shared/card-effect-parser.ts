@@ -38,6 +38,7 @@ const TIMINGS = new Map<string, TimingModifier>([
 const KEYWORDS = new Map<string, 'blocker' | 'rush' | 'banish'>([
   ['blocker', 'blocker'],
   ['rush', 'rush'],
+  ['rush: character', 'rush'],
   ['banish', 'banish'],
 ])
 

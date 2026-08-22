@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest'
 
-import type { CardFeatureKey, CardFeatures } from '../shared/card-features.js'
+import {
+  classifyCardFeatures,
+  type CardFeatureKey,
+  type CardFeatures,
+} from '../shared/card-features.js'
 import type {
   PlayableCard,
   StrategySuggestion,
@@ -44,7 +48,7 @@ function featureSet(enabled: readonly CardFeatureKey[]): CardFeatures {
   for (const flag of enabled) flags[flag] = true
   return {
     effectModelVersion: 2,
-    effectParserRevision: 1,
+    effectParserRevision: 2,
     effects: [],
     unparsedClauses: [],
     flags: { ...flags },
@@ -94,6 +98,17 @@ function card(
       ...overrides,
     },
     features: featureSet(enabled),
+  }
+}
+
+function structuredCard(
+  cardNumber: string,
+  overrides: Partial<PlayableCard>,
+): ReturnType<typeof card> {
+  const candidate = card(cardNumber, [], overrides)
+  return {
+    card: candidate.card,
+    features: classifyCardFeatures(candidate.card),
   }
 }
 
@@ -190,6 +205,47 @@ function invalidatingSolver(base: DeckSolver): DeckSolver {
 }
 
 describe('evaluatePool', () => {
+  it('uses structural interaction for pool target reachability', () => {
+    const lockdown = structuredCard('OP16-020', {
+      effect:
+        "[On Play] Up to 2 of your opponent's Characters cannot attack until the end of your opponent's next End Phase.",
+    })
+    const catalog = runtimeCatalog([lockdown])
+
+    expect(
+      evaluatePool(catalog, { 'OP16-020': 5 }).reachableTargets.interaction,
+    ).toBe(true)
+  })
+
+  it.each([
+    {
+      label: 'opponent draw',
+      candidate: structuredCard('OP16-021', {
+        effect: '[On Play] Your opponent draws 2 cards.',
+      }),
+    },
+    {
+      label: 'Trigger-only removal',
+      candidate: structuredCard('OP16-022', {
+        trigger: "[Trigger] K.O. up to 1 of your opponent's Characters.",
+      }),
+    },
+    {
+      label: 'stale flags without structured effects',
+      candidate: card('OP16-023', ['draw', 'removal']),
+    },
+  ])(
+    'does not make the interaction target reachable from $label',
+    ({ candidate }) => {
+      const catalog = runtimeCatalog([candidate])
+
+      expect(
+        evaluatePool(catalog, { [candidate.card.cardNumber]: 10 })
+          .reachableTargets.interaction,
+      ).toBe(false)
+    },
+  )
+
   it('measures a valid V2 deck and reports target reachability from the pool', () => {
     const result = evaluatePool(controlledCatalog(), controlledCounts)
 

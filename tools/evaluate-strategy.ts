@@ -4,6 +4,7 @@ import { resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 
 import { runtimeCatalogIndexSchema } from '../shared/catalog-index.js'
+import { hasStructuredInteraction } from '../shared/card-features.js'
 import type { RuntimeCatalog } from '../src/catalog/load-catalog.js'
 import { loadRuntimeCatalog } from '../src/catalog/load-catalog.js'
 import { BasicDeckSolver } from '../src/solver/basic-solver.js'
@@ -338,9 +339,11 @@ function targetReachability(
 
   for (const [cardNumber, quantity] of Object.entries(inputCounts)) {
     const card = catalog.cardsByNumber.get(cardNumber)
-    const flags = catalog.featuresByCardNumber.get(cardNumber)?.rainbowUsableFlags
+    const features = catalog.featuresByCardNumber.get(cardNumber)
+    const flags = features?.rainbowUsableFlags
     if (
       card === undefined ||
+      features === undefined ||
       flags === undefined ||
       card.cardType === 'LEADER' ||
       card.cardType === 'DON'
@@ -350,7 +353,7 @@ function targetReachability(
     if (flags.twoKCounter) available.twoKCounter += quantity
     if (flags.blocker) available.blocker += quantity
     if (flags.vanillaLike) available.vanillaLike += quantity
-    if (flags.draw || flags.removal) available.interaction += quantity
+    if (hasStructuredInteraction(features)) available.interaction += quantity
     if (flags.boss) available.boss += quantity
   }
 

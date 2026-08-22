@@ -1,6 +1,3 @@
-import { createHash } from 'node:crypto'
-import { readFile } from 'node:fs/promises'
-
 import { beforeAll, describe, expect, it } from 'vitest'
 
 import type { EffectInstance, TargetSpec } from '../shared/card-effect-model.js'
@@ -9,27 +6,7 @@ import type { RuntimeCatalog } from '../src/catalog/load-catalog.js'
 import { StrategyDeckSolver } from '../src/solver/strategy-solver.js'
 import type { DeckLine, StrategyDeckSolution } from '../src/solver/types.js'
 import { generateTestPool } from '../src/test-pool/generate-test-pool.js'
-import { stableStringify } from './catalog/artifacts.js'
 import { loadLocalCatalogs, mulberry32 } from './evaluate-strategy.js'
-
-interface BaselineFixture {
-  readonly sets: {
-    readonly OP17: {
-      readonly solutionDigests: readonly {
-        readonly seed: number
-        readonly sha256: string
-      }[]
-    }
-  }
-}
-
-function sha256(value: string): string {
-  return createHash('sha256').update(value).digest('hex')
-}
-
-function solutionDigest(solution: StrategyDeckSolution): string {
-  return sha256(stableStringify(solution))
-}
 
 function fieldTarget(
   overrides: Partial<TargetSpec> = {},
@@ -121,18 +98,11 @@ function expectPoolConserved(
 
 describe('OP17 effect-context acceptance', () => {
   let catalog: RuntimeCatalog
-  let baseline: BaselineFixture
 
   beforeAll(async () => {
     const [loadedCatalog] = await loadLocalCatalogs(['OP17'])
     if (loadedCatalog === undefined) throw new Error('OP17 catalog did not load.')
     catalog = loadedCatalog
-    baseline = JSON.parse(
-      await readFile(
-        new URL('./fixtures/value-model-baseline.json', import.meta.url),
-        'utf8',
-      ),
-    ) as BaselineFixture
   })
 
   it('accumulates duplicate lines and rejects invalid physical quantities', () => {
@@ -164,9 +134,53 @@ describe('OP17 effect-context acceptance', () => {
     const features = catalog.featuresByCardNumber.get(cardNumber)
     if (features === undefined) throw new Error(`Missing features for ${cardNumber}.`)
     expect(features.effectModelVersion).toBe(2)
-    expect(features.effectParserRevision).toBe(1)
+    expect(features.effectParserRevision).toBe(2)
     return features.effects
   }
+
+  it('recognizes qualified Rush independently from adjacent clause compatibility', () => {
+    for (const cardNumber of [
+      'OP17-003',
+      'OP17-027',
+      'OP17-048',
+      'OP17-069',
+    ]) {
+      const features = catalog.featuresByCardNumber.get(cardNumber)
+      if (features === undefined) throw new Error(`Missing ${cardNumber}.`)
+
+      expect(features.flags.rush, `${cardNumber} raw Rush`).toBe(true)
+      expect(
+        features.rainbowUsableFlags.rush,
+        `${cardNumber} Rainbow-usable Rush`,
+      ).toBe(true)
+      expect(
+        features.effects.some(
+          (instance) =>
+            instance.rainbowLuffyCompatibility === 'compatible' &&
+            instance.branches.some((branch) =>
+              branch.actions.some(
+                (action) =>
+                  action.kind === 'keyword' && action.keyword === 'rush',
+              ),
+            ),
+        ),
+        `${cardNumber} clause-local Rush instance`,
+      ).toBe(true)
+    }
+  })
+
+  it('distinguishes draw-two/trash-one advantage from balanced filtering', () => {
+    const advantage = catalog.featuresByCardNumber.get('OP17-066')
+    const balanced = catalog.featuresByCardNumber.get('OP17-082')
+    if (advantage === undefined || balanced === undefined) {
+      throw new Error('Missing OP17 draw/discard boundary cards.')
+    }
+
+    expect(advantage.flags.twoForOne).toBe(true)
+    expect(advantage.rainbowUsableFlags.twoForOne).toBe(true)
+    expect(balanced.flags.twoForOne).toBe(false)
+    expect(balanced.rainbowUsableFlags.twoForOne).toBe(false)
+  })
 
   function effect(
     cardNumber: string,
@@ -612,14 +626,8 @@ describe('OP17 effect-context acceptance', () => {
     }
   })
 
-  it('preserves all 100 Phase-0 solutions, deck invariants, and determinism', () => {
+  it('preserves 100-seed deck invariants and determinism after the Phase-2 cutover', () => {
     const solver = new StrategyDeckSolver()
-    const expectedDigests = new Map(
-      baseline.sets.OP17.solutionDigests.map(({ seed, sha256: digest }) => [
-        seed,
-        digest,
-      ]),
-    )
 
     for (let seed = 0; seed < 100; seed += 1) {
       const counts = playablePoolCounts(
@@ -632,9 +640,6 @@ describe('OP17 effect-context acceptance', () => {
       expect(solution.mainDeckSize, `seed ${seed} deck size`).toBe(40)
       expectPoolConserved(solution, counts)
       expect(repeated, `seed ${seed} determinism`).toEqual(solution)
-      expect(solutionDigest(solution), `seed ${seed} solution digest`).toBe(
-        expectedDigests.get(seed),
-      )
     }
   }, 30_000)
 })

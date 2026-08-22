@@ -183,7 +183,7 @@ export interface EffectInstance {
 
 export interface CardEffectModel {
   readonly effectModelVersion: 2
-  readonly effectParserRevision: 1
+  readonly effectParserRevision: 2
   readonly effects: readonly EffectInstance[]
   readonly unparsedClauses: readonly string[]
 }
@@ -414,7 +414,7 @@ export const effectInstanceSchema: z.ZodType<EffectInstance> = z.strictObject({
   ]),
 })
 
-export const CURRENT_EFFECT_PARSER_REVISION = 1 as const
+export const CURRENT_EFFECT_PARSER_REVISION = 2 as const
 
 export const cardEffectModelSchema = z.strictObject({
   effectModelVersion: z.literal(2),

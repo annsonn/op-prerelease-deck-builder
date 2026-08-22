@@ -466,6 +466,41 @@ describe('loadRuntimeCatalog', () => {
     )
   })
 
+  it('reparses accepted revision-one effects through the current runtime parser', async () => {
+    const { artifacts, fetcher, rebuildChecksums } = await runtimeFixture()
+    const cards = JSON.parse(
+      artifacts['/catalogs/op16/cards.json']!,
+    ) as PlayableCard[]
+    cards[0] = { ...cards[0]!, effect: '[Rush: Character]' }
+    artifacts['/catalogs/op16/cards.json'] = `${JSON.stringify(cards)}\n`
+    const blankProjection = classifyCardFeatures({ ...cards[0]!, effect: '' })
+    const priorRevision = {
+      ...blankProjection,
+      effectParserRevision: 1,
+      effects: [],
+      unparsedClauses: ['[Rush: Character]'],
+    }
+    artifacts['/catalogs/op16/strategy-suggestions.json'] = `${JSON.stringify([
+      { ...suggestion(cards[0]!.cardNumber), features: priorRevision },
+      suggestion(cards[1]!.cardNumber),
+    ])}\n`
+    await rebuildChecksums()
+
+    const catalog = await loadRuntimeCatalog(entry, fetcher)
+    const supplied = catalog.strategySuggestions[0]!.features!
+    const resolved = catalog.featuresByCardNumber.get(cards[0]!.cardNumber)!
+
+    expect('effectParserRevision' in supplied).toBe(true)
+    if (!('effectParserRevision' in supplied)) {
+      throw new Error('expected revisioned serialized features')
+    }
+    expect(supplied.effectParserRevision).toBe(1)
+    expect(resolved.effectParserRevision).toBe(2)
+    expect(resolved.flags.rush).toBe(true)
+    expect(resolved.rainbowUsableFlags.rush).toBe(true)
+    expect(resolved.unparsedClauses).not.toContain('[Rush: Character]')
+  })
+
   it('reclassifies enriched features created before rainbow usable flags', async () => {
     const { artifacts, fetcher, rebuildChecksums } = await runtimeFixture()
     const cards = JSON.parse(

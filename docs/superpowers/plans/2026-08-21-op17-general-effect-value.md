@@ -346,7 +346,7 @@ Task 3 evidence (2026-08-21):
 - Modify: `tools/evaluate-strategy.test.ts`
 - Modify: `tools/evaluate-strategy.ts`
 
-- [ ] **Step 1: Write failing subject-aware summary tests**
+- [x] **Step 1: Write failing subject-aware summary tests**
 
 Add classifier tests proving:
 
@@ -358,7 +358,7 @@ expect(classifyCardFeatures(card({ effect: "Place up to 1 Character with a cost 
 
 Add deck-state tests where lockdown, effect negation, opponent hand discard, and opposing-Life pressure each increment `interaction` once; own draw plus removal on one card still increments once; opponent draw, own-Life gain alone, unknown action, Trigger-only action with zero structured value, and incompatible action do not increment it.
 
-- [ ] **Step 2: Run summary/coverage tests and verify RED**
+- [x] **Step 2: Run summary/coverage tests and verify RED**
 
 Run:
 
@@ -368,7 +368,7 @@ npm test -- shared/card-features.test.ts src/solver/deck-state.test.ts tools/eva
 
 Expected: FAIL because raw text booleans still treat every draw alike and interaction is `draw || removal`.
 
-- [ ] **Step 3: Derive broad summaries from compatible structured actions**
+- [x] **Step 3: Derive broad summaries from compatible structured actions**
 
 After the Phase-1 legacy-parity gate has shipped, replace only the broad summary derivation for `draw`, `removal`, `twoForOne`, `blocker`, `rush`, `banish`, `massRest`, and `donRefresh` with an ordered scan of compatible/neutral instances. Player draw sets `draw`; opponent draw does not. Board-control remove modes set `removal`; quantity two/all/anyNumber or player draw two sets `twoForOne`. Keywords and recognized rest-all/DON-refresh actions set their existing flags. Keep printed-stat flags (`twoKCounter`, `vanillaLike`, `boss`, `brick`), searcher and combo summaries as documented until Phase 3.
 
@@ -382,18 +382,61 @@ It returns true for a compatible, non-Trigger instance with an `always` or `self
 
 Use `hasStructuredInteraction` in `deck-state.ts` and `tools/evaluate-strategy.ts` so available-role reporting and selected coverage use the same definition. Preserve one-card-one-count overlap.
 
-- [ ] **Step 4: Run summary/coverage tests and verify GREEN**
+- [x] **Step 4: Run summary/coverage tests and verify GREEN**
 
 Run the same three focused files.
 
 Expected: PASS with OP17-049 no longer supplying own draw/interaction and lockdown counted once.
 
-- [ ] **Step 5: Commit summary cutover**
+- [x] **Step 5: Commit summary cutover**
 
 ```bash
 git add shared/card-features.ts shared/card-features.test.ts src/solver/deck-state.ts src/solver/deck-state.test.ts tools/evaluate-strategy.ts tools/evaluate-strategy.test.ts
 git commit -m "feat: derive subject aware effect roles"
 ```
+
+Task 4 evidence (2026-08-22):
+
+- RED: the three-file focused command failed 24 of 178 tests because the
+  structured interaction predicate did not exist, opponent draw still set the
+  player-draw summary, Gloriosa owner-deck wording was missed, and deck and
+  evaluator coverage still used `draw || removal`.
+- GREEN: `npm test -- shared/card-features.test.ts
+  src/solver/deck-state.test.ts tools/evaluate-strategy.test.ts` passed 3 files
+  / 177 tests. Coverage includes raw-versus-Rainbow projection, conservative
+  opponent choices with guaranteed common actions, Trigger and unresolved
+  condition boundaries, balanced draw/discard filtering, every interaction
+  family, one-card overlap, and stale-summary rejection.
+- Downstream RED/GREEN: the intended rest-all `twoForOne` projection changed
+  four interim Shanks broad-score assertions by exactly `+4`; those assertions
+  were updated mechanically. The Phase-1-only 100-seed legacy digest equality
+  was retired at the Phase-2 projection cutover while retaining 40-card,
+  conservation, and repeat-solve determinism gates. The immutable Phase-0
+  fixture remains covered by its dedicated baseline test.
+- Full verification: `npm run verify` passed lint, typecheck, 62 files / 1,208
+  tests, and the runtime catalog check for 17 sets / 85 files. The first
+  sandboxed catalog check hit the known `tsx` IPC `EPERM`; the same full command
+  passed outside the sandbox.
+- Self-review confirmed that only the eight approved broad summaries are
+  projected from structured actions; support/search/combo fields and
+  `isImportantPlay` are unchanged, interaction uses one exported predicate in
+  runtime and evaluation paths, and no card identity rule was introduced.
+- Review-correction RED failed 13 focused assertions across 8 suites: legacy
+  boss derivation was being recomputed from the new draw projection,
+  draw-two/trash-one lost `twoForOne`, qualified Character Rush was unparsed,
+  and the runtime still published parser revision 1.
+- Review-correction GREEN preserves legacy raw/usable boss fields and overlays
+  exactly the eight structured keys, distinguishes OP17-066 draw-two/trash-one
+  from OP17-082 balanced filtering, and recognizes `[Rush: Character]` with
+  strict negative near-matches. Parser revision 2 follows the migration
+  protocol: revision 1 remains a strict accepted serialized input, the adapter
+  and loader reparse it, exact revision 2 may be reused, and catalog-backed
+  acceptance verifies raw and clause-local Rainbow Rush for OP17-003, -027,
+  -048, and -069.
+- Final review-correction verification: `npm run verify` passed lint,
+  typecheck, 62 files / 1,216 tests, and 17-set / 85-file catalog validation;
+  `npm run build` passed the catalog precheck, TypeScript build, and Vite
+  production bundle; `git diff --check` passed.
 
 ### Task 5: Make structured effects authoritative in marginal scoring
 

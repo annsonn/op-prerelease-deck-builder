@@ -133,7 +133,13 @@ describe('card effect model', () => {
     expect(cardEffectModelSchema.parse(model)).toEqual(model)
     expect(repeatedModel).toEqual(model)
     expect(model.effectModelVersion).toBe(2)
-    expect(model.effectParserRevision).toBe(1)
+    expect(model.effectParserRevision).toBe(2)
+    expect(
+      cardEffectModelSchema.safeParse({
+        ...model,
+        effectParserRevision: 1,
+      }).success,
+    ).toBe(false)
     expect(model.effects.map(({ id }) => id)).toEqual(['effect:0', 'effect:1'])
     expect(
       model.effects[1]!.branches.map(({ actions }) =>
@@ -224,7 +230,7 @@ describe('card effect model', () => {
     expect(
       cardEffectModelSchema.safeParse({
         effectModelVersion: 2,
-        effectParserRevision: 1,
+        effectParserRevision: 2,
         effects: [effect],
         unparsedClauses: [],
       }).success,

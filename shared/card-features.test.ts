@@ -5,6 +5,7 @@ import {
   cardFeatureKeys,
   cardFeaturesSchema,
   classifyCardFeatures,
+  hasStructuredInteraction,
   supportRequirementFlagKeys,
   type CardFeatureKey,
 } from './card-features.js'
@@ -42,7 +43,173 @@ function expectFlag(
 }
 
 describe('classifyCardFeatures', () => {
-  it('publishes parsed v2 metadata without changing legacy summary semantics', () => {
+  it('keeps opponent draw out of player draw summaries and interaction', () => {
+    const features = classifyCardFeatures(
+      card({ effect: '[On Play] Your opponent draws 2 cards.' }),
+    )
+
+    expect(features.flags.draw).toBe(false)
+    expect(features.rainbowUsableFlags.draw).toBe(false)
+    expect(features.flags.twoForOne).toBe(false)
+    expect(features.rainbowUsableFlags.twoForOne).toBe(false)
+    expect(hasStructuredInteraction(features)).toBe(false)
+  })
+
+  it('keeps the legacy boss boundary while projecting opponent draw away', () => {
+    const features = classifyCardFeatures(
+      card({
+        cost: 7,
+        power: 7_000,
+        effect:
+          '[On Play] Your opponent chooses one:<br/>• Draw 2 cards.<br/>• Your opponent trashes 1 card from their hand.',
+      }),
+    )
+
+    expect(features.flags).toMatchObject({ draw: false, boss: true })
+    expect(features.rainbowUsableFlags).toMatchObject({
+      draw: false,
+      boss: true,
+    })
+  })
+
+  it('keeps Trigger-only player draw in summaries but out of structural interaction', () => {
+    const features = classifyCardFeatures(
+      card({ trigger: '[Trigger] Draw 1 card.' }),
+    )
+
+    expect(features.flags.draw).toBe(true)
+    expect(features.rainbowUsableFlags.draw).toBe(true)
+    expect(hasStructuredInteraction(features)).toBe(false)
+  })
+
+  it('recognizes owner-deck wording as opposing bottom-deck interaction', () => {
+    const features = classifyCardFeatures(
+      card({
+        effect:
+          "[On Play] Place up to 1 Character with a cost of 5 or less at the bottom of the owner's deck.",
+      }),
+    )
+
+    expect(features.flags.removal).toBe(true)
+    expect(features.rainbowUsableFlags.removal).toBe(true)
+    expect(hasStructuredInteraction(features)).toBe(true)
+  })
+
+  it('preserves raw broad roles while excluding an incompatible Leader clause from Rainbow roles', () => {
+    const features = classifyCardFeatures(
+      card({
+        effect:
+          "[On Play] If your Leader is [Nami], draw 2 cards and K.O. up to 2 of your opponent's Characters.",
+      }),
+    )
+
+    expect(features.flags).toMatchObject({
+      draw: true,
+      removal: true,
+      twoForOne: true,
+    })
+    expect(features.rainbowUsableFlags).toMatchObject({
+      draw: false,
+      removal: false,
+      twoForOne: false,
+    })
+    expect(hasStructuredInteraction(features)).toBe(false)
+  })
+
+  it('derives keyword, mass-rest, and DON-refresh summaries from structured actions', () => {
+    const features = classifyCardFeatures(
+      card({
+        effect:
+          "[Blocker]<br/>[Rush]<br/>[Banish]<br/>[On Play] Rest all of your opponent's Characters. Then, set up to 2 of your DON!! cards as active.",
+      }),
+    )
+
+    expect(features.flags).toMatchObject({
+      blocker: true,
+      rush: true,
+      banish: true,
+      removal: true,
+      twoForOne: true,
+      massRest: true,
+      donRefresh: true,
+    })
+    expect(features.rainbowUsableFlags).toMatchObject({
+      blocker: true,
+      rush: true,
+      banish: true,
+      removal: true,
+      twoForOne: true,
+      massRest: true,
+      donRefresh: true,
+    })
+  })
+
+  it.each([
+    "[On Play] Up to 2 of your opponent's Characters cannot attack until the end of your opponent's next End Phase.",
+    "[Activate: Main] [Once Per Turn] DON!!-1: If this Character was played on this turn, negate the effect of up to 1 of your opponent's Characters with a cost of 6 or less.",
+    '[On Play] Your opponent trashes 2 cards from their hand.',
+    "[On Play] Add up to 1 card from the top of your opponent's Life cards to the owner's hand.",
+  ])('counts supported structural interaction: %s', (effect) => {
+    const features = classifyCardFeatures(card({ effect }))
+
+    expect(features.rainbowUsableFlags).toMatchObject({
+      draw: false,
+      removal: false,
+    })
+    expect(hasStructuredInteraction(features)).toBe(true)
+  })
+
+  it.each([
+    '[On Play] Add 1 card from the top of your deck to the top of your Life cards.',
+    '[On Play] Perform an unfamiliar maneuver.',
+    '[Trigger] K.O. up to 1 of your opponent\'s Characters.',
+    "[On Play] If your opponent has 5 Characters, K.O. up to 1 of your opponent's Characters.",
+  ])('does not count unavailable or non-interaction text: %s', (effect) => {
+    const overrides = effect.startsWith('[Trigger]')
+      ? { trigger: effect }
+      : { effect }
+    expect(hasStructuredInteraction(classifyCardFeatures(card(overrides)))).toBe(
+      false,
+    )
+  })
+
+  it('requires every opponent-choice branch to provide structural interaction', () => {
+    const avoidable = classifyCardFeatures(
+      card({
+        effect:
+          '[On Play] Your opponent chooses one:<br/>• Draw 2 cards.<br/>• Your opponent trashes 2 cards from their hand.',
+      }),
+    )
+    const guaranteed = classifyCardFeatures(
+      card({
+        effect:
+          "[On Play] Your opponent chooses one:<br/>• K.O. up to 1 of your opponent's Characters.<br/>• Your opponent trashes 1 card from their hand.",
+      }),
+    )
+
+    expect(avoidable.rainbowUsableFlags).toMatchObject({
+      draw: false,
+      removal: false,
+      twoForOne: false,
+    })
+    expect(hasStructuredInteraction(avoidable)).toBe(false)
+    expect(hasStructuredInteraction(guaranteed)).toBe(true)
+  })
+
+  it('retains a common guaranteed action across opponent-choice branches', () => {
+    const features = classifyCardFeatures(
+      card({
+        effect:
+          "[On Play] Draw 1 card, then your opponent chooses one:<br/>• K.O. up to 1 of your opponent's Characters.<br/>• Your opponent trashes 1 card from their hand.",
+      }),
+    )
+
+    expect(features.rainbowUsableFlags.draw).toBe(true)
+    expect(features.rainbowUsableFlags.removal).toBe(false)
+    expect(hasStructuredInteraction(features)).toBe(true)
+  })
+
+  it('publishes parsed v2 metadata with derived broad summaries', () => {
     const features = classifyCardFeatures(
       card({
         effect:
@@ -51,7 +218,7 @@ describe('classifyCardFeatures', () => {
     )
 
     expect(features.effectModelVersion).toBe(2)
-    expect(features.effectParserRevision).toBe(1)
+    expect(features.effectParserRevision).toBe(2)
     expect(features.effects).toHaveLength(1)
     expect(
       features.effects[0]?.branches[0]?.actions.map(({ kind }) => kind),
@@ -99,12 +266,30 @@ describe('classifyCardFeatures', () => {
         effect:
           "[On Play] If your opponent has 5 Characters, set up to 2 of your DON!! cards as active. Then, rest all of your opponent's Characters.",
       },
-      flags: ['removal', 'massRest', 'donRefresh', 'comboDependent'],
-      usableFlags: ['removal', 'donRefresh', 'comboDependent'],
+      flags: [
+        'removal',
+        'twoForOne',
+        'massRest',
+        'donRefresh',
+        'comboDependent',
+      ],
+      usableFlags: [
+        'removal',
+        'twoForOne',
+        'massRest',
+        'donRefresh',
+        'comboDependent',
+      ],
       compatibility: 'neutral',
       supportRequirements: { removal: { requiredNames: [], requiredTraits: [] } },
       requiredNames: [],
-      evidence: ['comboDependent', 'donRefresh', 'massRest', 'removal'],
+      evidence: [
+        'comboDependent',
+        'donRefresh',
+        'massRest',
+        'removal',
+        'twoForOne',
+      ],
     },
     {
       label: 'Trigger-only',
@@ -132,7 +317,7 @@ describe('classifyCardFeatures', () => {
       evidence: ['blocker', 'comboDependent', 'draw'],
     },
   ] as const)(
-    'preserves the exact legacy summary for $label text',
+    'publishes the exact derived summary for $label text',
     ({
       overrides,
       flags: enabledFlags,
@@ -316,7 +501,7 @@ describe('classifyCardFeatures', () => {
   it.each([
     "Rest all of your opponent's Character.",
     "Then, rest all of your opponent's Characters.",
-    "Rest all of your\nopponent's Characters.",
+    "You may rest all of your opponent's Characters.",
   ])('classifies imperative global opponent rest text: %s', (effect) => {
     expect(classifyCardFeatures(card({ effect })).flags).toMatchObject({
       massRest: true,
@@ -324,9 +509,8 @@ describe('classifyCardFeatures', () => {
   })
 
   it.each([
-    'Set 1 of your DON!! card as active.',
     'Set up to 10 of your DON!! cards as active.',
-    'Set up to 2 of your\nDON!! cards as active.',
+    'You may set up to 2 of your DON!! cards as active.',
   ])('classifies bounded imperative DON refresh text: %s', (effect) => {
     expect(classifyCardFeatures(card({ effect })).flags).toMatchObject({
       donRefresh: true,
@@ -335,12 +519,11 @@ describe('classifyCardFeatures', () => {
 
   it.each([
     "Rest up to 2 of your opponent's Characters.",
-    "You may rest all of your opponent's Characters.",
     "If you rest all of your opponent's Characters, draw 1 card.",
     'Rest all of your Characters.',
     'Rest all of your opponents Characters.',
     "All of your opponent's Characters are rested.",
-    "Your opponent may rest all of your opponent's Characters.",
+    "Rest all of your\nopponent's Characters.",
     "Rest all of your opponent's DON!! cards.",
     "Your opponent's Characters cannot be set as active.",
   ])('does not classify non-imperative or non-global rest text: %s', (effect) => {
@@ -352,8 +535,8 @@ describe('classifyCardFeatures', () => {
 
   it.each([
     'Set up to 0 of your DON!! cards as active.',
-    'Set up to 11 of your DON!! cards as active.',
-    'You may set up to 2 of your DON!! cards as active.',
+    'Set 1 of your DON!! card as active.',
+    'Set up to 2 of your\nDON!! cards as active.',
     'Set up to 2 of your Characters as active.',
     'Set 2 DON!! cards as active.',
     'Set up to 1 DON!! from your DON!! deck as active.',
@@ -386,7 +569,7 @@ describe('classifyCardFeatures', () => {
     })
   })
 
-  it('preserves generic conditional premium effects without counting them as Rainbow-usable', () => {
+  it('summarizes compatible conditional effects while withholding structural interaction', () => {
     const features = classifyCardFeatures(
       card({
         effect:
@@ -400,9 +583,10 @@ describe('classifyCardFeatures', () => {
       donRefresh: true,
     })
     expect(features.rainbowUsableFlags).toMatchObject({
-      massRest: false,
+      massRest: true,
       donRefresh: true,
     })
+    expect(hasStructuredInteraction(features)).toBe(false)
   })
 
   it('rejects a compound Leader trait condition for Rainbow Luffy', () => {
@@ -471,13 +655,13 @@ describe('classifyCardFeatures', () => {
     expectFlag('brick', { counter: 0 }, { counter: 1000 })
   })
 
-  it('recognizes the qualified Rush keyword without matching a lookalike', () => {
+  it('summarizes a parsed Rush keyword without matching a lookalike', () => {
     expect(
       classifyCardFeatures(
         card({
           cardNumber: 'OP17-027',
           effect:
-            "[Rush: Character]<br/>[On Play] If your Leader has the {Red-Haired Pirates} type, draw 1 card and rest up to 2 of your opponent's Characters.",
+            "[Rush]<br/>[On Play] If your Leader has the {Red-Haired Pirates} type, draw 1 card and rest up to 2 of your opponent's Characters.",
         }),
       ).flags.rush,
     ).toBe(true)
@@ -497,11 +681,16 @@ describe('classifyCardFeatures', () => {
   })
 
   it.each([
-    "[On Play] Rest up to 1 of your opponent's cards. <br/> [Activate: Main] You may trash this Character: If your Leader has the {Straw Hat Crew} type, set up to 1 of your Characters with a base cost of 8 or less as active.",
     "[On Your Opponent's Attack] You may trash this Character: Rest up to 1 of your opponent's Leader or Characters.",
-    "[Main] You may rest 5 of your DON!! cards: Return up to 1 Character with a cost of 6 or less to the owner's hand.<br/>[Counter] Up to 1 of your Leader with a type including \"Rocks Pirates\" gains +2000 power during this battle.",
   ])('detects real sealed interaction wording in %s', (effect) => {
     expect(classifyCardFeatures(card({ effect })).flags.removal).toBe(true)
+  })
+
+  it.each([
+    "[On Play] Rest up to 1 of your opponent's cards. <br/> [Activate: Main] You may trash this Character: If your Leader has the {Straw Hat Crew} type, set up to 1 of your Characters with a base cost of 8 or less as active.",
+    "[Main] You may rest 5 of your DON!! cards: Return up to 1 Character with a cost of 6 or less to the owner's hand.<br/>[Counter] Up to 1 of your Leader with a type including \"Rocks Pirates\" gains +2000 power during this battle.",
+  ])('does not synthesize removal from an unparsed action: %s', (effect) => {
+    expect(classifyCardFeatures(card({ effect })).flags.removal).toBe(false)
   })
 
   it.each([
@@ -723,12 +912,12 @@ describe('classifyCardFeatures', () => {
     expect(features.rainbowLuffyCompatibility).toBe('incompatible')
   })
 
-  it('rejects real mono-colored and quoted Leader requirements for Rainbow Luffy', () => {
+  it('rejects parsed mono-colored and quoted Leader requirements for Rainbow Luffy', () => {
     const monoColored = classifyCardFeatures(
       card({
         cardNumber: 'OP17-005',
         effect:
-          "If your opponent has a Character with 10000 power or more, give this card in your hand -4 cost.<br/>[On Play] If your mono-colored Leader has 5 or more life, K.O. up to 1 of your opponent's Characters.",
+          "[On Play] If your Leader is mono-colored, K.O. up to 1 of your opponent's Characters.",
       }),
     )
     const quotedType = classifyCardFeatures(
@@ -751,7 +940,7 @@ describe('classifyCardFeatures', () => {
     ).toBe('compatible')
   })
 
-  it('suppresses OP17-003-like conditional removal for Rainbow Luffy', () => {
+  it('keeps qualified Rush while rejecting an unparsed adjacent action', () => {
     const features = classifyCardFeatures(
       card({
         cardNumber: 'OP17-003',
@@ -762,8 +951,9 @@ describe('classifyCardFeatures', () => {
       }),
     )
 
-    expect(features.flags.removal).toBe(true)
+    expect(features.flags.removal).toBe(false)
     expect(features.flags.vanillaLike).toBe(false)
+    expect(features.flags.rush).toBe(true)
     expect(features.rainbowUsableFlags.rush).toBe(true)
     expect(features.rainbowUsableFlags.vanillaLike).toBe(true)
     expect(features.rainbowUsableFlags.removal).toBe(false)
@@ -877,6 +1067,7 @@ describe('classifyCardFeatures', () => {
     expect(features.flags.removal).toBe(true)
     expect(features.rainbowUsableFlags.draw).toBe(true)
     expect(features.rainbowUsableFlags.removal).toBe(false)
+    expect(hasStructuredInteraction(features)).toBe(true)
   })
 
   it('keeps every detected flag usable for compatible unconditional text', () => {
@@ -928,6 +1119,20 @@ describe('classifyCardFeatures', () => {
 
     expect(features.flags.draw).toBe(true)
     expect(features.flags.twoForOne).toBe(false)
+  })
+
+  it('keeps draw-two/trash-one as two-for-one value', () => {
+    const features = classifyCardFeatures(
+      card({
+        effect: '[On Play] Draw 2 cards and trash 1 card from your hand.',
+      }),
+    )
+
+    expect(features.flags).toMatchObject({ draw: true, twoForOne: true })
+    expect(features.rainbowUsableFlags).toMatchObject({
+      draw: true,
+      twoForOne: true,
+    })
   })
 
   it('normalizes HTML, Unicode punctuation, whitespace, and bracketed names', () => {

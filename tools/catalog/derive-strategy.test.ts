@@ -76,7 +76,7 @@ describe('deriveStrategy', () => {
 
     expect(suggestion.features).toEqual(classifyCardFeatures(card))
     expect(canonicalFeatures.effectModelVersion).toBe(2)
-    expect(canonicalFeatures.effectParserRevision).toBe(1)
+    expect(canonicalFeatures.effectParserRevision).toBe(2)
     expect(serializedFeatures).toEqual(suggestion.features)
     expect(suggestion.roles).toEqual([
       'blocker',

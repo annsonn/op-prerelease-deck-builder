@@ -1,5 +1,6 @@
 import { z } from 'zod'
 
+import { effectInstanceSchema } from './card-effect-model.js'
 import { cardFeaturesSchema } from './card-features.js'
 
 export const cardTypeSchema = z.enum([
@@ -127,6 +128,17 @@ const legacyCardFeatureProjectionFields = {
   evidence: z.array(z.string()),
 }
 
+const priorRevisionOneCardFeaturesSchema = z.strictObject({
+  effectModelVersion: z.literal(2),
+  effectParserRevision: z.literal(1),
+  effects: z.array(effectInstanceSchema),
+  unparsedClauses: z.array(z.string().min(1)),
+  flags: legacyCurrentFeatureFlagsSchema,
+  rainbowUsableFlags: legacyCurrentFeatureFlagsSchema,
+  supportRequirementsByFlag: legacySupportRequirementsByFlagSchema,
+  ...legacyCardFeatureProjectionFields,
+})
+
 const legacyCurrentCardFeaturesSchema = z.strictObject({
   flags: legacyCurrentFeatureFlagsSchema,
   rainbowUsableFlags: legacyCurrentFeatureFlagsSchema,
@@ -178,6 +190,7 @@ const legacyPrePremiumRainbowCardFeaturesSchema = z.strictObject({
 
 export const serializedCardFeaturesSchema = z.union([
   cardFeaturesSchema,
+  priorRevisionOneCardFeaturesSchema,
   legacyCurrentCardFeaturesSchema,
   legacyPreSupportRequirementsCardFeaturesSchema,
   legacyPreRainbowCardFeaturesSchema,

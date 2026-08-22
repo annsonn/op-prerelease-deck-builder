@@ -164,7 +164,7 @@ describe('strategySuggestionSchema', () => {
     expect(cardFeaturesSchema.parse(canonical)).toEqual(canonical)
 
     const invalidCanonical = [
-      { ...canonical, effectParserRevision: 2 },
+      { ...canonical, effectParserRevision: 3 },
       Object.fromEntries(
         Object.entries(canonical).filter(
           ([key]) => key !== 'effectParserRevision',
@@ -210,6 +210,19 @@ describe('strategySuggestionSchema', () => {
         false,
       )
     }
+  })
+
+  it('accepts revision one as prior input but not as the canonical runtime model', () => {
+    const canonical = classifyCardFeatures({
+      ...playableCard,
+      effect: '[On Play] Draw 1 card.',
+    })
+    const priorRevision = { ...canonical, effectParserRevision: 1 }
+
+    expect(serializedCardFeaturesSchema.parse(priorRevision)).toEqual(
+      priorRevision,
+    )
+    expect(cardFeaturesSchema.safeParse(priorRevision).success).toBe(false)
   })
 
   it('rejects version two metadata mixed into a legacy feature shape', () => {

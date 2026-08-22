@@ -544,6 +544,35 @@ describe('parseCardEffects clause context', () => {
     ])
   })
 
+  it('parses the qualified Character Rush keyword without widening near matches', () => {
+    const result = parseCardEffects(
+      card({ effect: '[Rush: Character]<br/>[Blocker]' }),
+    )
+
+    expect(result.effects).toMatchObject([
+      {
+        activation: 'static',
+        branches: [{ actions: [{ kind: 'keyword', keyword: 'rush' }] }],
+      },
+      {
+        activation: 'static',
+        branches: [{ actions: [{ kind: 'keyword', keyword: 'blocker' }] }],
+      },
+    ])
+    expect(result.unparsedClauses).not.toContain('[Rush: Character]')
+
+    for (const nearMatch of [
+      '[Rush: Leader]',
+      '[Rush Character]',
+      '[Rush: Characters]',
+      '[Rushdown: Character]',
+    ]) {
+      const rejected = parseCardEffects(card({ effect: nearMatch }))
+      expect(rejected.effects).toEqual([])
+      expect(rejected.unparsedClauses).toEqual([nearMatch])
+    }
+  })
+
   it('marks self deployment only when this card is explicit', () => {
     const self = parseCardEffects(
       card({ trigger: '[Trigger] Play this card.' }),
