@@ -231,7 +231,7 @@ Task 2 evidence (2026-08-21):
 - Modify: `src/solver/effect-value.test.ts`
 - Modify: `src/solver/effect-value.ts`
 
-- [ ] **Step 1: Add failing aggregation tests**
+- [x] **Step 1: Add failing aggregation tests**
 
 Add exact tests for all six costs, shared-cost deduction once, proportional shared-cost allocation across chosen positive actions, rounding-residue reconciliation, the +12 per-instance positive cap before factors, each activation factor, optional clamp, mandatory negative retention, incompatible hard zero, unknown-condition zero, self-state availability, and branch ownership:
 
@@ -256,13 +256,13 @@ Add a mixed beneficial/adverse instance: if its total net is non-positive all
 premium categories are zero; if positive, its positive signed category
 subtotals are proportionally scaled to exactly the instance net.
 
-- [ ] **Step 2: Run aggregation tests and verify RED**
+- [x] **Step 2: Run aggregation tests and verify RED**
 
 Run `npm test -- src/solver/effect-value.test.ts`.
 
 Expected: FAIL at branch/cost/activation aggregation.
 
-- [ ] **Step 3: Implement instance and card aggregation**
+- [x] **Step 3: Implement instance and card aggregation**
 
 Implement `valueCost`, `valueBranch`, and `valueEffectInstance`. First multiply each action's raw gross by its action-target support factor. Sum those effective values inside a branch; take the maximum branch for `chooser: 'player'`, minimum for `chooser: 'opponent'`, and sole branch for `none`. If the selected branch gross exceeds `effectInstanceCap`, retain its non-positive subtotal `N` and multiply each positive action by `(effectInstanceCap - N) / positiveSubtotal`; assign stable-rounding residue to the last positive action. Allocate the one shared cost across the resulting positive action values proportionally; if no action is positive, assign it to the first action. Then apply activation and condition-support factors. Clamp an optional instance at zero; in that case preserve gross and allocated-cost evidence but set every selected action net/category value to zero. Mandatory negative values remain negative. The action net sum must equal the instance net and the cost must never be deducted again. Sum signed action nets by category; when the instance net is positive, proportionally scale its positive category subtotals to that net, otherwise zero every category. Assign category rounding residue to the last positive canonical category.
 
@@ -272,18 +272,69 @@ For Events, group instances by activation, add implicit `{ kind: 'playEventDon',
 
 Freeze all result arrays and objects. Each `EffectContribution` contains ordered frozen `ActionContribution` records and reconciled category totals. Each action records `rawGrossValue`, `targetSupportFactor`, `effectiveTargetCount`, post-cap `cappedGrossValue`, allocated cost, activation/condition factors, and final net. `EffectValuation.total` must equal both the stable sum of `contributions[].netValue` and the sum of selected action nets after the optional clamp; reasons expose every field. Also populate the Phase-4-ready fields now: `premiumImpact` is the stable sum of positive reconciled `EffectContribution`/category totals before marginal-score redundancy, never a raw sum of individually positive actions. Shared costs and mandatory adverse actions therefore reduce the contribution before it can add premium impact. `premiumCategories` is the frozen printed-order de-duplicated list of categories with positive reconciled values. Add assertions that adverse opponent draw lowers or eliminates the containing contribution's premium impact and Event-discarded modes contribute neither impact nor categories.
 
-- [ ] **Step 4: Run evaluator tests and verify GREEN**
+- [x] **Step 4: Run evaluator tests and verify GREEN**
 
 Run `npm test -- src/solver/effect-value.test.ts`.
 
 Expected: PASS with exact reconciliation for all costs, branches, factors, caps, and Event mode choice.
 
-- [ ] **Step 5: Commit aggregation**
+- [x] **Step 5: Commit aggregation**
 
 ```bash
 git add src/solver/effect-value.ts src/solver/effect-value.test.ts
 git commit -m "feat: reconcile effect contributions"
 ```
+
+Task 3 evidence (2026-08-21):
+
+- RED: `npm test -- src/solver/effect-value.test.ts` kept the 65 existing
+  action-arithmetic tests green and failed all 39 new aggregation assertions
+  because `valueCardEffects` did not exist.
+- Evidence-detail RED: the focused suite later failed 1 of 105 tests because
+  contribution/action reasons did not yet expose the selected branch, raw
+  gross, or effective target count.
+- Spec-review RED: seven Event mode-cost regressions produced 5 focused
+  failures because the printed cost was owned by the first same-activation
+  instance, allowing an unavailable first clause to absorb the physical
+  Event cost and making allocation depend on clause order.
+- Spec re-review RED: four mandatory-adverse and availability boundaries
+  produced 4 focused failures because the mode allocator equated no positive
+  action with an unavailable mode and skipped the printed cost for available
+  mandatory adverse Main and Counter effects.
+- Quality-review RED: three arithmetic boundaries produced 3 focused failures:
+  optional mixed-sign exact-zero actions retained misleading signed evidence,
+  an optional Event mode was not clamped after its printed cost, and rounded
+  early proportional allocations produced a negative final residue for tiny
+  weights.
+- Follow-up RED: optional-first, mandatory-first, and Counter mixed-mode
+  regressions produced 3 focused failures because optional positive clauses
+  received part of the physical Event cost and then erased that share through
+  their post-cost clamp.
+- Quality re-review RED: the two Main orderings, Counter boundary, and a mixed
+  Main/Counter card produced 4 focused failures because losing-mode premium
+  suppression rewrote positive `EffectContribution.categoryValues` to zero,
+  violating contribution-to-action reconciliation.
+- GREEN: `npm test -- src/solver/effect-value.test.ts` passed 1 file / 123
+  tests, covering every cost and activation row, target-adjusted chooser
+  branches, cap and cost residue, optional and mandatory outcomes, condition
+  availability, clause-local compatibility, Character/Stage aggregation, and
+  exclusive Event modes including null-cost failure-closed behavior. The
+  physical printed cost is now allocated once across mandatory positive mode
+  evidence whenever any mandatory clause is usable, or to the first available
+  mandatory action when that evidence is non-positive. Only wholly optional
+  modes receive a post-cost optional clamp. Optional adverse and fully
+  unavailable modes remain uncharged. Each contribution retains categories
+  that reconcile to its own action net; losing selected Events suppress only
+  card-level premium impact/categories, without mutating contribution
+  evidence. Largest-remainder micro-unit apportionment keeps every allocation
+  nonnegative and deterministic. Raw and activation-adjusted residue
+  reconciles through action, instance, category, mode, and premium totals.
+- Full suite: `npm test` passed 62 files / 1,180 tests.
+- Verification: `npm run typecheck`, `npm run lint`, and `git diff --check`
+  passed. Self-review confirmed that implicit Event costs are evaluator-only,
+  discarded Event modes supply no premium evidence, instance/action/category
+  totals reconcile after adverse effects, and Trigger deployment is not
+  recursively evaluated as On Play.
 
 ### Task 4: Make summary roles subject-aware and interaction structural
 
