@@ -43,6 +43,10 @@ function featureSet(enabled: readonly CardFeatureKey[]): CardFeatures {
   }
   for (const flag of enabled) flags[flag] = true
   return {
+    effectModelVersion: 2,
+    effectParserRevision: 1,
+    effects: [],
+    unparsedClauses: [],
     flags: { ...flags },
     rainbowUsableFlags: { ...flags },
     supportRequirementsByFlag: {

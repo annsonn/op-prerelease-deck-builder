@@ -293,10 +293,12 @@ external seam must preserve these semantics. Results are deeply frozen,
 ordered by printed occurrence, finite, and deterministic. `unknown` is a real
 safe result, not an exception and not positive value. `effectModelVersion`
 versions the serialized shape; `effectParserRevision` versions the parser's
-semantics. A runtime may trust serialized effects only when both values match
-its current implementation. Derived flags and support summaries are never
-authoritative serialized inputs: the loader always recomputes them from the
-trusted structured effects and current summary policy.
+semantics. A runtime may reuse serialized effects only when both values match
+its current implementation and the effects plus diagnostics are semantically
+equal to one fresh current parse of the printed card. Any payload mismatch
+falls back to the complete fresh classification so runtime effects and derived
+projections cannot form a hybrid. Derived flags and support summaries are
+never authoritative serialized inputs.
 
 An `EffectInstance` groups sequential actions that share one activation,
 condition, and cost. This prevents a cost such as `DON!!-1` from being deducted
@@ -809,14 +811,15 @@ The catalog schema accepts:
 
 Strict parsing continues to reject unknown keys, partial version-2 instances,
 invalid numbers, or mixed shapes. The runtime loader exposes only canonical
-version-2 `CardFeatures`. It trusts serialized effects only when both
-`effectModelVersion` and `effectParserRevision` match the runtime. An explicitly
-accepted prior revision reclassifies from the current card's printed effect and
-Trigger text; an unknown future revision or malformed shape is rejected. Even
-for trusted serialized effects, it recomputes flags, Rainbow-usable summaries,
-support summaries, compatibility summary, and evidence from the structured
-parse plus current policy; these evolving projections are not authoritative
-serialized inputs. It does not mutate the serialized strategy suggestion.
+version-2 `CardFeatures`. It reuses serialized effects only when
+`effectModelVersion` and `effectParserRevision` match the runtime and both the
+effects and diagnostics are semantically equal to one fresh current parse. Any
+semantic mismatch, accepted prior revision, or legacy shape reclassifies from
+the current card's printed effect and Trigger text; an unknown future revision
+or malformed shape is rejected. Flags, Rainbow-usable summaries, support
+summaries, compatibility summary, and evidence always come from that same
+fresh current classification, so serialized metadata cannot create a hybrid
+runtime model. It does not mutate the serialized strategy suggestion.
 Current checked-in catalogs therefore work immediately without a bulk rewrite;
 the next normal catalog build emits canonical version 2 with parser revision
 1.

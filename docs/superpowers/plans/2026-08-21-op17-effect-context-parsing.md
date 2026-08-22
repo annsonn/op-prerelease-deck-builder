@@ -4,7 +4,7 @@
 
 **Goal:** Capture the immutable pre-upgrade strategy baseline, then add canonical version-2/revision-1 structured effect instances and parser diagnostics to every runtime card while preserving all existing feature flags, marginal scores, and deck selections.
 
-**Architecture:** Put the immutable effect vocabulary and strict Zod schemas in `shared/card-effect-model.ts`; keep text normalization, clause context, requirements, costs, targets, actions, and Rainbow compatibility inside `shared/card-effect-parser.ts`. `classifyCardFeatures` remains the only public card-classification entry point and adds version-2/revision-1 metadata without changing its legacy boolean derivation in this phase. A single loader adapter accepts every already-supported serialized shape, trusts parsed effects only at the current parser revision, and always recomputes runtime summary projections rather than trusting serialized flags.
+**Architecture:** Put the immutable effect vocabulary and strict Zod schemas in `shared/card-effect-model.ts`; keep text normalization, clause context, requirements, costs, targets, actions, and Rainbow compatibility inside `shared/card-effect-parser.ts`. `classifyCardFeatures` remains the only public card-classification entry point and adds version-2/revision-1 metadata without changing its legacy boolean derivation in this phase. A single loader adapter accepts every already-supported serialized shape, reuses current-revision parsed effects only when their effects and diagnostics semantically equal one fresh current classification, and otherwise reparses the complete model so runtime summaries and effects cannot form a hybrid.
 
 **Tech Stack:** TypeScript 6, Zod 4, Vitest 4, existing catalog loader and greedy sealed solver
 
@@ -23,7 +23,7 @@
 - Modify `shared/catalog.ts`: accept strict canonical v2 metadata and all exact legacy variants under manifest schema version 1.
 - Modify `shared/catalog.test.ts`: canonical/legacy/mixed/partial schema coverage.
 - Create `src/catalog/upgrade-card-features.ts`: the only runtime migration adapter.
-- Create `src/catalog/upgrade-card-features.test.ts`: matching-revision effect authority, summary recomputation, legacy/absent fallbacks, revision-mismatch rejection, and deep freeze.
+- Create `src/catalog/upgrade-card-features.test.ts`: matching-revision semantic equality, summary recomputation, mismatched/legacy/absent fallbacks, revision-mismatch rejection, and deep freeze.
 - Modify `src/catalog/load-catalog.ts`: delegate all feature resolution to the adapter.
 - Modify `src/catalog/load-catalog.test.ts`: verify canonical v2 runtime output for old and new artifacts.
 - Modify `src/solver/deck-state.test.ts`, `src/solver/marginal-score.test.ts`, and `src/solver/strategy-solver.test.ts`: give handwritten feature fixtures the additive v2 fields without changing expectations.
@@ -698,6 +698,7 @@ Task 4 evidence (2026-08-21):
 ### Task 5: Accept old catalogs and expose only canonical v2 at runtime
 
 **Files:**
+- Modify: `docs/superpowers/specs/2026-08-21-op17-value-model-design.md`
 - Modify: `shared/catalog.test.ts`
 - Modify: `shared/catalog.ts`
 - Create: `src/catalog/upgrade-card-features.test.ts`
@@ -705,8 +706,9 @@ Task 4 evidence (2026-08-21):
 - Modify: `src/catalog/load-catalog.test.ts`
 - Modify: `src/catalog/load-catalog.ts`
 - Modify: `tools/catalog/derive-strategy.test.ts`
+- Modify: `tools/evaluate-strategy.test.ts`
 
-- [ ] **Step 1: Write failing strict migration tests**
+- [x] **Step 1: Write failing strict migration tests**
 
 In `shared/catalog.test.ts`, assert: a complete v2/revision-1 suggestion parses; all eight currently supported legacy/premium variants still parse unchanged; `effectModelVersion: 2` with missing/wrong `effectParserRevision`, missing `effects`, missing `unparsedClauses`, an invalid nested action, or an unknown nested key fails; mixing v2 fields into a legacy flag shape fails.
 
@@ -720,14 +722,16 @@ expect(upgradeSerializedCardFeatures(card({ effect: '[Blocker]' }), legacyFeatur
 expect(upgradeSerializedCardFeatures(card({ effect: '[Rush]' }), undefined).effectModelVersion).toBe(2)
 ```
 
-Also mutate the serialized legacy summary flags beside trusted revision-1
+Also mutate the serialized legacy summary flags beside exact revision-1
 effects and prove the adapter ignores those projections and recomputes current
-flags/support summaries. Revision 1 has no older v2 revision; wrong revisions
-are rejected by the Phase-1 serialized schema. Recursively walk each returned
-value and expect every array/object frozen. When a later phase increments the
+flags/support summaries. Mutate effects and diagnostics independently and
+prove either semantic mismatch falls back to the complete fresh
+classification. Revision 1 has no older v2 revision; wrong revisions are
+rejected by the Phase-1 serialized schema. Recursively walk each returned value
+and expect every array/object frozen. When a later phase increments the
 revision, it must add the prior-revision adapter-reparse test then.
 
-- [ ] **Step 2: Run schema/adapter tests and verify RED**
+- [x] **Step 2: Run schema/adapter tests and verify RED**
 
 Run:
 
@@ -737,9 +741,9 @@ npm test -- shared/catalog.test.ts src/catalog/upgrade-card-features.test.ts
 
 Expected: FAIL because the schema union and adapter do not exist.
 
-- [ ] **Step 3: Implement the exact legacy union and adapter**
+- [x] **Step 3: Implement the exact legacy union and adapter**
 
-In `shared/catalog.ts`, preserve the current eight legacy schemas under explicit legacy names. Define canonical serialized v2 parse metadata with `effectModelVersion`, `effectParserRevision`, strict effects, and diagnostics; legacy summary fields may remain present for artifact compatibility but are projections, not authoritative inputs. Set `serializedCardFeaturesSchema` to a union whose first member is v2/revision-1 and whose remaining members are the exact previous accepted shapes. Retain an explicit accepted prior-revision schema whenever a later phase increments the parser revision. Export `SerializedCardFeatures = z.infer<typeof serializedCardFeaturesSchema>` for the adapter. Keep the outer manifest at `schemaVersion: 1`.
+In `shared/catalog.ts`, preserve the current eight legacy schemas under explicit legacy names and pinned literal historical flag/object schemas that do not derive from the evolving `cardFeaturesSchema` or current feature-key arrays. Define canonical serialized v2 parse metadata with `effectModelVersion`, `effectParserRevision`, strict effects, and diagnostics; legacy summary fields may remain present for artifact compatibility but are projections, not authoritative inputs. Set `serializedCardFeaturesSchema` to a union whose first member is v2/revision-1 and whose remaining members are the exact previous accepted shapes. Retain an explicit accepted prior-revision schema whenever a later phase increments the parser revision. Export `SerializedCardFeatures = z.infer<typeof serializedCardFeaturesSchema>` for the adapter. Keep the outer manifest at `schemaVersion: 1`.
 
 Create `src/catalog/upgrade-card-features.ts`:
 
@@ -748,29 +752,37 @@ export function upgradeSerializedCardFeatures(
   card: PlayableCard,
   serialized: SerializedCardFeatures | undefined,
 ): CardFeatures {
+  const current = classifyCardFeatures(card)
   if (
     serialized?.effectModelVersion === 2 &&
-    serialized.effectParserRevision === CURRENT_EFFECT_PARSER_REVISION
+    serialized.effectParserRevision === CURRENT_EFFECT_PARSER_REVISION &&
+    effectsAndDiagnosticsSemanticallyEqual(serialized, current)
   ) {
-    return freezeCardFeatures(deriveRuntimeCardFeatures(card, serialized))
+    return freezeCardFeatures({
+      ...current,
+      effects: serialized.effects,
+      unparsedClauses: serialized.unparsedClauses,
+    })
   }
-  return freezeCardFeatures(classifyCardFeatures(card))
+  return freezeCardFeatures(current)
 }
 ```
 
-`deriveRuntimeCardFeatures` preserves the trusted parsed effects/diagnostics but
-recomputes every flag, Rainbow-usable flag, compatibility summary,
-required/searchable summary, support summary, and evidence through one current
-projection function. Move the full deep-copy/freezing implementation out of
+The adapter computes one current classification and reuses serialized
+effects/diagnostics only after semantic equality with that current parse.
+Otherwise it returns the complete current classification. Every flag,
+Rainbow-usable flag, compatibility summary, required/searchable summary,
+support summary, and evidence therefore corresponds to the returned effects.
+Move the full deep-copy/freezing implementation out of
 `load-catalog.ts` into this module. It must recursively copy and freeze nested
 effects, predicates, requirements, costs, branches, actions, diagnostics, and
 derived summaries. Do not mutate the serialized suggestion.
 
-- [ ] **Step 4: Route the loader and derivation through v2**
+- [x] **Step 4: Route the loader and derivation through v2**
 
-Delete `hasCurrentFeatureMetadata` and the loader-local freezer from `src/catalog/load-catalog.ts`; for each card call `upgradeSerializedCardFeatures(card, suppliedFeatures)`. Extend loader tests to prove matching-revision parsed effects remain authoritative, summaries are recomputed, and every legacy shape is reclassified from printed text. In `tools/catalog/derive-strategy.test.ts`, assert `deriveStrategy(card).features` has model version 2/parser revision 1 and passes the serialized v2 schema.
+Delete `hasCurrentFeatureMetadata` and the loader-local freezer from `src/catalog/load-catalog.ts`; for each card call `upgradeSerializedCardFeatures(card, suppliedFeatures)`. Extend loader tests to prove exact matching-revision parsed effects may be reused, summaries are recomputed, semantic mismatches fall back to full classification, and every legacy shape is reclassified from printed text. In `tools/catalog/derive-strategy.test.ts`, assert `deriveStrategy(card).features` has model version 2/parser revision 1 and passes the serialized v2 schema.
 
-- [ ] **Step 5: Run migration tests and verify GREEN**
+- [x] **Step 5: Run migration tests and verify GREEN**
 
 Run:
 
@@ -780,12 +792,38 @@ npm test -- shared/catalog.test.ts src/catalog/upgrade-card-features.test.ts src
 
 Expected: PASS for strict v2, every legacy input, canonical runtime output, and new derivation.
 
-- [ ] **Step 6: Commit the migration seam**
+- [x] **Step 6: Commit the migration seam**
 
 ```bash
 git add shared/catalog.ts shared/catalog.test.ts src/catalog/upgrade-card-features.ts src/catalog/upgrade-card-features.test.ts src/catalog/load-catalog.ts src/catalog/load-catalog.test.ts tools/catalog/derive-strategy.test.ts
 git commit -m "feat: upgrade catalog effects at runtime"
 ```
+
+Task 5 evidence (2026-08-21):
+
+- RED: `npm test -- shared/catalog.test.ts
+  src/catalog/upgrade-card-features.test.ts` failed because the exported
+  serialized union and upgrade adapter did not exist; the inherited legacy
+  schemas also rejected their pre-v2 shapes.
+- Review RED: effect and diagnostics mutations at matching version/revision
+  reproduced a hybrid runtime model. Regression tests now require complete
+  current reclassification for either semantic mismatch.
+- GREEN: the focused migration command passed 4 files / 89 tests. It covers
+  strict canonical v2/revision-1 metadata, all eight exact legacy variants,
+  exact-match effect reuse, semantic-mismatch reparsing, summary recomputation,
+  absent-feature fallback, loader delegation, derivation, and recursive
+  detachment/freezing.
+- Compatibility: the manifest remains schema version 1, legacy serialized
+  schemas use pinned literal historical fields independent of the evolving
+  current contract, serialized suggestions remain unchanged in
+  `strategySuggestions`, and every runtime entry is upgraded to canonical v2.
+  The one pre-existing handwritten
+  `tools/evaluate-strategy.test.ts` fixture was completed with empty v2 effect
+  metadata so the repository typecheck is green.
+- Repository gates: `npm test` passed 59 files / 1,016 tests; `npm run lint`,
+  `npm run typecheck`, and `git diff --check` passed; `npm run catalog:check`
+  reported 17 sets / 85 files; and `npm run build` completed the production
+  Vite build.
 
 ### Task 6: Lock exact OP17 semantics and Phase-1 score parity
 

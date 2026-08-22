@@ -16,11 +16,9 @@ import {
   type PlayableCard,
   type StrategySuggestion,
 } from '../../shared/catalog.js'
-import {
-  cardFeaturesSchema,
-  classifyCardFeatures,
-  type CardFeatures,
-} from '../../shared/card-features.js'
+import type { CardFeatures } from '../../shared/card-features.js'
+
+import { upgradeSerializedCardFeatures } from './upgrade-card-features.js'
 
 export interface RuntimeCatalog {
   manifest: CatalogManifest
@@ -105,49 +103,6 @@ function parseSchema<T>(
     })
   }
   return result.data
-}
-
-function freezeCardFeatures(features: CardFeatures): CardFeatures {
-  const supportRequirementsByFlag = Object.fromEntries(
-    Object.entries(features.supportRequirementsByFlag).map(
-      ([flag, requirement]) => [
-        flag,
-        requirement === null
-          ? null
-          : Object.freeze({
-              requiredNames: Object.freeze([...requirement.requiredNames]),
-              requiredTraits: Object.freeze([...requirement.requiredTraits]),
-            }),
-      ],
-    ),
-  ) as CardFeatures['supportRequirementsByFlag']
-  return Object.freeze({
-    flags: Object.freeze({ ...features.flags }),
-    rainbowUsableFlags: Object.freeze({ ...features.rainbowUsableFlags }),
-    supportRequirementsByFlag: Object.freeze(supportRequirementsByFlag),
-    rainbowLuffyCompatibility: features.rainbowLuffyCompatibility,
-    searchableTraits: Object.freeze([...features.searchableTraits]),
-    searchableNames: Object.freeze([...features.searchableNames]),
-    requiredTraits: Object.freeze([...features.requiredTraits]),
-    requiredNames: Object.freeze([...features.requiredNames]),
-    evidence: Object.freeze([...features.evidence]),
-  })
-}
-
-type CurrentSerializedCardFeatures = z.infer<typeof cardFeaturesSchema>
-
-function hasCurrentFeatureMetadata(
-  features: StrategySuggestion['features'],
-): features is CurrentSerializedCardFeatures {
-  return Boolean(
-    features &&
-      'rainbowUsableFlags' in features &&
-      'supportRequirementsByFlag' in features &&
-      'massRest' in features.flags &&
-      'donRefresh' in features.flags &&
-      'massRest' in features.rainbowUsableFlags &&
-      'donRefresh' in features.rainbowUsableFlags,
-  )
 }
 
 export async function browserSha256(bytes: Uint8Array): Promise<string> {
@@ -352,13 +307,9 @@ export async function loadRuntimeCatalog(
   const featuresByCardNumber = new Map(
     cards.map((card) => {
       const suppliedFeatures = suggestionsByCardNumber.get(card.cardNumber)?.features
-      const resolvedFeatures =
-        hasCurrentFeatureMetadata(suppliedFeatures)
-          ? suppliedFeatures
-          : classifyCardFeatures(card)
       return [
         card.cardNumber,
-        freezeCardFeatures(resolvedFeatures),
+        upgradeSerializedCardFeatures(card, suppliedFeatures),
       ] as const
     }),
   )

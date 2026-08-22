@@ -64,6 +64,96 @@ interface RuntimeFixture {
   rebuildChecksums: () => Promise<void>
 }
 
+interface MutableSerializedFeatures {
+  effectModelVersion?: number
+  effectParserRevision?: number
+  effects?: unknown[]
+  unparsedClauses?: string[]
+  flags: Record<string, boolean>
+  rainbowUsableFlags?: Record<string, boolean>
+  supportRequirementsByFlag?: Record<string, unknown>
+  rainbowLuffyCompatibility: string
+  searchableTraits: string[]
+  searchableNames: string[]
+  requiredTraits: string[]
+  requiredNames: string[]
+  evidence: string[]
+}
+
+function exactLegacyFeatureVariants(): readonly MutableSerializedFeatures[] {
+  const current: MutableSerializedFeatures = {
+    flags: {
+      twoKCounter: false,
+      blocker: false,
+      vanillaLike: false,
+      draw: false,
+      removal: false,
+      boss: false,
+      rush: false,
+      banish: false,
+      twoForOne: false,
+      massRest: false,
+      donRefresh: false,
+      searcher: false,
+      comboDependent: false,
+      brick: false,
+    },
+    rainbowUsableFlags: {
+      twoKCounter: false,
+      blocker: false,
+      vanillaLike: false,
+      draw: false,
+      removal: false,
+      boss: false,
+      rush: false,
+      banish: false,
+      twoForOne: false,
+      massRest: false,
+      donRefresh: false,
+      searcher: false,
+      comboDependent: false,
+      brick: false,
+    },
+    supportRequirementsByFlag: {
+      blocker: null,
+      draw: null,
+      removal: null,
+      rush: null,
+      banish: null,
+      twoForOne: null,
+      searcher: null,
+    },
+    rainbowLuffyCompatibility: 'compatible',
+    searchableTraits: [],
+    searchableNames: [],
+    requiredTraits: [],
+    requiredNames: [],
+    evidence: [],
+  }
+
+  const featureLayers = (
+    full: MutableSerializedFeatures,
+  ): MutableSerializedFeatures[] => {
+    const preSupport = structuredClone(full)
+    delete preSupport.supportRequirementsByFlag
+    const preRainbow = structuredClone(preSupport)
+    delete preRainbow.rainbowUsableFlags
+    const rainbowOnly = structuredClone(full)
+    delete rainbowOnly.rainbowUsableFlags
+    return [full, preSupport, preRainbow, rainbowOnly]
+  }
+
+  const prePremium = structuredClone(current)
+  delete prePremium.flags.massRest
+  delete prePremium.flags.donRefresh
+  if (prePremium.rainbowUsableFlags !== undefined) {
+    delete prePremium.rainbowUsableFlags.massRest
+    delete prePremium.rainbowUsableFlags.donRefresh
+  }
+
+  return [...featureLayers(current), ...featureLayers(prePremium)]
+}
+
 async function runtimeFixture(basePath = ''): Promise<RuntimeFixture> {
   const artifactRoot = `${basePath}/catalogs/op16`
   const cards = [
@@ -275,15 +365,23 @@ describe('loadRuntimeCatalog', () => {
     }
   })
 
-  it('uses detached, deeply frozen feature metadata from enriched suggestions', async () => {
+  it('accepts exact effects while recomputing detached, deeply frozen projections', async () => {
     const { artifacts, fetcher, rebuildChecksums } = await runtimeFixture()
     const cards = JSON.parse(
       artifacts['/catalogs/op16/cards.json']!,
     ) as PlayableCard[]
-    // Swap the distinct classifications so fallback reclassification cannot
-    // accidentally satisfy the enriched-metadata contract.
-    const firstFeatures = classifyCardFeatures(cards[1]!)
-    const secondFeatures = classifyCardFeatures(cards[0]!)
+    const firstCanonical = classifyCardFeatures(cards[0]!)
+    const secondCanonical = classifyCardFeatures(cards[1]!)
+    const firstFeatures = {
+      ...firstCanonical,
+      flags: { ...firstCanonical.flags, draw: true },
+      evidence: ['serialized projection is not authoritative'],
+    }
+    const secondFeatures = {
+      ...secondCanonical,
+      flags: { ...secondCanonical.flags, draw: false },
+      evidence: ['serialized projection is not authoritative'],
+    }
     artifacts['/catalogs/op16/strategy-suggestions.json'] = `${JSON.stringify([
       { ...suggestion(cards[0]!.cardNumber), features: firstFeatures },
       { ...suggestion(cards[1]!.cardNumber), features: secondFeatures },
@@ -295,12 +393,15 @@ describe('loadRuntimeCatalog', () => {
     const secondSupplied = catalog.strategySuggestions[1]!.features!
     const firstResolved = catalog.featuresByCardNumber.get('OP16-005')!
     const secondResolved = catalog.featuresByCardNumber.get('OP10-045')!
+    const expectedFirst = classifyCardFeatures(cards[0]!)
+    const expectedSecond = classifyCardFeatures(cards[1]!)
 
     expect(firstSupplied).toEqual(firstFeatures)
     expect(secondSupplied).toEqual(secondFeatures)
-    expect(firstResolved).toEqual(firstFeatures)
-    expect(secondResolved).toEqual(secondFeatures)
-    expect(firstFeatures).not.toEqual(secondFeatures)
+    expect(firstResolved).toEqual(expectedFirst)
+    expect(secondResolved).toEqual(expectedSecond)
+    expect(firstSupplied).not.toEqual(expectedFirst)
+    expect(secondSupplied).not.toEqual(expectedSecond)
     expect(firstResolved).not.toEqual(secondResolved)
     expect(firstResolved).not.toBe(firstSupplied)
     expect(secondResolved).not.toBe(secondSupplied)
@@ -342,6 +443,29 @@ describe('loadRuntimeCatalog', () => {
     }
   })
 
+  it('reparses current-revision effects that do not match printed text', async () => {
+    const { artifacts, fetcher, rebuildChecksums } = await runtimeFixture()
+    const cards = JSON.parse(
+      artifacts['/catalogs/op16/cards.json']!,
+    ) as PlayableCard[]
+    const firstFeatures = classifyCardFeatures(cards[1]!)
+    const secondFeatures = classifyCardFeatures(cards[0]!)
+    artifacts['/catalogs/op16/strategy-suggestions.json'] = `${JSON.stringify([
+      { ...suggestion(cards[0]!.cardNumber), features: firstFeatures },
+      { ...suggestion(cards[1]!.cardNumber), features: secondFeatures },
+    ])}\n`
+    await rebuildChecksums()
+
+    const catalog = await loadRuntimeCatalog(entry, fetcher)
+
+    expect(catalog.featuresByCardNumber.get('OP16-005')).toEqual(
+      classifyCardFeatures(cards[0]!),
+    )
+    expect(catalog.featuresByCardNumber.get('OP10-045')).toEqual(
+      classifyCardFeatures(cards[1]!),
+    )
+  })
+
   it('reclassifies enriched features created before rainbow usable flags', async () => {
     const { artifacts, fetcher, rebuildChecksums } = await runtimeFixture()
     const cards = JSON.parse(
@@ -349,8 +473,14 @@ describe('loadRuntimeCatalog', () => {
     ) as PlayableCard[]
     const firstFeatures = classifyCardFeatures(cards[0]!)
     const secondFeatures = classifyCardFeatures(cards[1]!)
-    const { rainbowUsableFlags: _rainbowUsableFlags, ...legacyFeatures } =
-      secondFeatures
+    const {
+      effectModelVersion: _effectModelVersion,
+      effectParserRevision: _effectParserRevision,
+      effects: _effects,
+      unparsedClauses: _unparsedClauses,
+      rainbowUsableFlags: _rainbowUsableFlags,
+      ...legacyFeatures
+    } = secondFeatures
     artifacts['/catalogs/op16/strategy-suggestions.json'] = `${JSON.stringify([
       { ...suggestion(cards[0]!.cardNumber), features: legacyFeatures },
       suggestion(cards[1]!.cardNumber),
@@ -376,6 +506,10 @@ describe('loadRuntimeCatalog', () => {
     ) as PlayableCard[]
     const currentFeatures = classifyCardFeatures(cards[0]!)
     const {
+      effectModelVersion: _effectModelVersion,
+      effectParserRevision: _effectParserRevision,
+      effects: _effects,
+      unparsedClauses: _unparsedClauses,
       supportRequirementsByFlag: _supportRequirementsByFlag,
       ...preSupportRequirementsFeatures
     } = currentFeatures
@@ -417,9 +551,14 @@ describe('loadRuntimeCatalog', () => {
     }
     artifacts['/catalogs/op16/cards.json'] = `${JSON.stringify(cards)}\n`
     const firstFeatures = classifyCardFeatures(cards[0]!)
-    const swappedFeatures = structuredClone(
-      classifyCardFeatures(cards[1]!),
-    ) as unknown as {
+    const {
+      effectModelVersion: _effectModelVersion,
+      effectParserRevision: _effectParserRevision,
+      effects: _effects,
+      unparsedClauses: _unparsedClauses,
+      ...legacySwappedFeatures
+    } = structuredClone(classifyCardFeatures(cards[1]!))
+    const swappedFeatures = legacySwappedFeatures as unknown as {
       flags: Record<string, boolean>
       rainbowUsableFlags: Record<string, boolean>
     }
@@ -452,6 +591,29 @@ describe('loadRuntimeCatalog', () => {
     expect(resolvedFeatures.flags.donRefresh).toBe(true)
     expect(resolvedFeatures.rainbowUsableFlags.massRest).toBe(true)
     expect(resolvedFeatures.rainbowUsableFlags.donRefresh).toBe(true)
+  })
+
+  it('reclassifies every exact legacy feature layer from printed text', async () => {
+    const { artifacts, fetcher, rebuildChecksums } = await runtimeFixture()
+    const cards = JSON.parse(
+      artifacts['/catalogs/op16/cards.json']!,
+    ) as PlayableCard[]
+    cards[0] = { ...cards[0]!, effect: '[Blocker]' }
+    artifacts['/catalogs/op16/cards.json'] = `${JSON.stringify(cards)}\n`
+    const expected = classifyCardFeatures(cards[0]!)
+
+    for (const legacyFeatures of exactLegacyFeatureVariants()) {
+      artifacts['/catalogs/op16/strategy-suggestions.json'] = `${JSON.stringify([
+        { ...suggestion(cards[0]!.cardNumber), features: legacyFeatures },
+        suggestion(cards[1]!.cardNumber),
+      ])}\n`
+      await rebuildChecksums()
+
+      const catalog = await loadRuntimeCatalog(entry, fetcher)
+
+      expect(catalog.strategySuggestions[0]!.features).toEqual(legacyFeatures)
+      expect(catalog.featuresByCardNumber.get('OP16-005')).toEqual(expected)
+    }
   })
 
   it('classifies legacy suggestions without adding features to the suggestions', async () => {

@@ -8,14 +8,15 @@ import {
   playableCardSchema,
   printedCardIdSchema,
   readinessSchema,
+  serializedCardFeaturesSchema,
   sourceTypeSchema,
   strategySuggestionSchema,
   type PlayableCard,
 } from './catalog.js'
 import {
-  cardFeatureKeys,
+  cardFeaturesSchema,
+  classifyCardFeatures,
   featureFlagsSchema,
-  supportRequirementFlagKeys,
 } from './card-features.js'
 import {
   runtimeCatalogIndexEntrySchema,
@@ -45,6 +46,48 @@ const playableCard: PlayableCard = {
   variantsCollapsed: 1,
   entryShortcut: '001',
   isSpecialReprint: false,
+}
+
+const historicalCurrentFlags = {
+  twoKCounter: false,
+  blocker: false,
+  vanillaLike: false,
+  draw: false,
+  removal: false,
+  boss: false,
+  rush: false,
+  banish: false,
+  twoForOne: false,
+  massRest: false,
+  donRefresh: false,
+  searcher: false,
+  comboDependent: false,
+  brick: false,
+}
+
+const historicalPrePremiumFlags = {
+  twoKCounter: false,
+  blocker: false,
+  vanillaLike: false,
+  draw: false,
+  removal: false,
+  boss: false,
+  rush: false,
+  banish: false,
+  twoForOne: false,
+  searcher: false,
+  comboDependent: false,
+  brick: false,
+}
+
+const historicalSupportRequirementsByFlag = {
+  blocker: null,
+  draw: null,
+  removal: null,
+  rush: null,
+  banish: null,
+  twoForOne: null,
+  searcher: null,
 }
 
 function runtimeIndex(): RuntimeCatalogIndex {
@@ -111,6 +154,86 @@ describe('playableCardSchema', () => {
 })
 
 describe('strategySuggestionSchema', () => {
+  it('accepts only complete canonical version two effect metadata', () => {
+    const canonical = classifyCardFeatures({
+      ...playableCard,
+      effect: '[On Play] Draw 1 card.',
+    })
+
+    expect(serializedCardFeaturesSchema.parse(canonical)).toEqual(canonical)
+    expect(cardFeaturesSchema.parse(canonical)).toEqual(canonical)
+
+    const invalidCanonical = [
+      { ...canonical, effectParserRevision: 2 },
+      Object.fromEntries(
+        Object.entries(canonical).filter(
+          ([key]) => key !== 'effectParserRevision',
+        ),
+      ),
+      Object.fromEntries(
+        Object.entries(canonical).filter(([key]) => key !== 'effects'),
+      ),
+      Object.fromEntries(
+        Object.entries(canonical).filter(
+          ([key]) => key !== 'unparsedClauses',
+        ),
+      ),
+      {
+        ...canonical,
+        effects: canonical.effects.map((effect, index) =>
+          index === 0
+            ? {
+                ...effect,
+                branches: [{ actions: [{ kind: 'notAnAction' }] }],
+              }
+            : effect,
+        ),
+      },
+      {
+        ...canonical,
+        effects: canonical.effects.map((effect, effectIndex) => ({
+          ...effect,
+          branches: effect.branches.map((branch, branchIndex) => ({
+            actions: branch.actions.map((action, actionIndex) =>
+              effectIndex === 0 && branchIndex === 0 && actionIndex === 0
+                ? { ...action, unexpected: true }
+                : action,
+            ),
+          })),
+        })),
+      },
+      { ...canonical, unexpected: true },
+    ]
+
+    for (const features of invalidCanonical) {
+      expect(serializedCardFeaturesSchema.safeParse(features).success).toBe(
+        false,
+      )
+    }
+  })
+
+  it('rejects version two metadata mixed into a legacy feature shape', () => {
+    const canonical = classifyCardFeatures(playableCard)
+    const {
+      effectModelVersion: _effectModelVersion,
+      effectParserRevision: _effectParserRevision,
+      effects: _effects,
+      unparsedClauses: _unparsedClauses,
+      rainbowUsableFlags: _rainbowUsableFlags,
+      ...legacy
+    } = canonical
+
+    expect(
+      serializedCardFeaturesSchema.safeParse({
+        ...legacy,
+        effectModelVersion: 2,
+        effectParserRevision: 1,
+        effects: [],
+        unparsedClauses: [],
+      }).success,
+    ).toBe(false)
+  })
+
   it('accepts the existing suggestion shape', () => {
     const suggestion = {
       cardNumber: 'OP17-001',
@@ -152,13 +275,11 @@ describe('strategySuggestionSchema', () => {
       roles: ['blocker'],
       reviewStatus: 'suggested',
       features: {
-        flags: Object.fromEntries(cardFeatureKeys.map((key) => [key, false])),
-        rainbowUsableFlags: Object.fromEntries(
-          cardFeatureKeys.map((key) => [key, false]),
-        ),
-        supportRequirementsByFlag: Object.fromEntries(
-          supportRequirementFlagKeys.map((key) => [key, null]),
-        ),
+        flags: { ...historicalCurrentFlags },
+        rainbowUsableFlags: { ...historicalCurrentFlags },
+        supportRequirementsByFlag: {
+          ...historicalSupportRequirementsByFlag,
+        },
         rainbowLuffyCompatibility: 'compatible',
         searchableTraits: ['Heart Pirates'],
         searchableNames: ['Trafalgar Law'],
@@ -191,19 +312,6 @@ describe('strategySuggestionSchema', () => {
   })
 
   it('accepts complete current and pre-premium flags across every historical feature layer', () => {
-    const prePremiumFlags = Object.fromEntries(
-      cardFeatureKeys
-        .filter((key) => key !== 'massRest' && key !== 'donRefresh')
-        .map((key) => [key, false]),
-    )
-    const currentFlags = {
-      ...prePremiumFlags,
-      massRest: false,
-      donRefresh: false,
-    }
-    const supportRequirementsByFlag = Object.fromEntries(
-      supportRequirementFlagKeys.map((key) => [key, null]),
-    )
     const common = {
       rainbowLuffyCompatibility: 'compatible',
       searchableTraits: [],
@@ -216,16 +324,29 @@ describe('strategySuggestionSchema', () => {
       {
         flags,
         rainbowUsableFlags: { ...flags },
-        supportRequirementsByFlag,
+        supportRequirementsByFlag: {
+          ...historicalSupportRequirementsByFlag,
+        },
         ...common,
       },
       { flags, rainbowUsableFlags: { ...flags }, ...common },
-      { flags, supportRequirementsByFlag, ...common },
+      {
+        flags,
+        supportRequirementsByFlag: {
+          ...historicalSupportRequirementsByFlag,
+        },
+        ...common,
+      },
       { flags, ...common },
     ]
 
-    expect(featureFlagsSchema.parse(currentFlags)).toEqual(currentFlags)
-    for (const flags of [currentFlags, prePremiumFlags]) {
+    expect(featureFlagsSchema.parse(historicalCurrentFlags)).toEqual(
+      historicalCurrentFlags,
+    )
+    for (const flags of [
+      historicalCurrentFlags,
+      historicalPrePremiumFlags,
+    ]) {
       for (const features of featureLayers(flags)) {
         expect(
           strategySuggestionSchema.safeParse({
@@ -239,23 +360,13 @@ describe('strategySuggestionSchema', () => {
     }
   })
 
-  it('rejects partial premium vocabulary in either feature flag record', () => {
-    const prePremiumFlags = Object.fromEntries(
-      cardFeatureKeys
-        .filter((key) => key !== 'massRest' && key !== 'donRefresh')
-        .map((key) => [key, false]),
-    )
-    const currentFlags = {
-      ...prePremiumFlags,
-      massRest: false,
-      donRefresh: false,
-    }
-    const baseFeatures = {
-      flags: currentFlags,
-      rainbowUsableFlags: { ...currentFlags },
-      supportRequirementsByFlag: Object.fromEntries(
-        supportRequirementFlagKeys.map((key) => [key, null]),
-      ),
+  it('keeps the pinned legacy contract independent of future fields', () => {
+    const legacy = {
+      flags: { ...historicalCurrentFlags },
+      rainbowUsableFlags: { ...historicalCurrentFlags },
+      supportRequirementsByFlag: {
+        ...historicalSupportRequirementsByFlag,
+      },
       rainbowLuffyCompatibility: 'compatible',
       searchableTraits: [],
       searchableNames: [],
@@ -263,7 +374,40 @@ describe('strategySuggestionSchema', () => {
       requiredNames: [],
       evidence: [],
     }
-    const partialFlags = { ...prePremiumFlags, massRest: false }
+
+    expect(serializedCardFeaturesSchema.parse(legacy)).toEqual(legacy)
+    expect(
+      serializedCardFeaturesSchema.safeParse({
+        ...legacy,
+        flags: { ...legacy.flags, futureFlag: false },
+      }).success,
+    ).toBe(false)
+    expect(
+      serializedCardFeaturesSchema.safeParse({
+        ...legacy,
+        futureProjection: [],
+      }).success,
+    ).toBe(false)
+  })
+
+  it('rejects partial premium vocabulary in either feature flag record', () => {
+    const baseFeatures = {
+      flags: { ...historicalCurrentFlags },
+      rainbowUsableFlags: { ...historicalCurrentFlags },
+      supportRequirementsByFlag: {
+        ...historicalSupportRequirementsByFlag,
+      },
+      rainbowLuffyCompatibility: 'compatible',
+      searchableTraits: [],
+      searchableNames: [],
+      requiredTraits: [],
+      requiredNames: [],
+      evidence: [],
+    }
+    const partialFlags = {
+      ...historicalPrePremiumFlags,
+      massRest: false,
+    }
 
     for (const features of [
       { ...baseFeatures, flags: partialFlags },
@@ -281,19 +425,16 @@ describe('strategySuggestionSchema', () => {
   })
 
   it('strictly rejects malformed serialized card features', () => {
-    const featureFlags = Object.fromEntries(
-      cardFeatureKeys.map((key) => [key, false]),
-    )
     const suggestion = {
       cardNumber: 'OP17-001',
       roles: [],
       reviewStatus: 'suggested',
       features: {
-        flags: featureFlags,
-        rainbowUsableFlags: { ...featureFlags },
-        supportRequirementsByFlag: Object.fromEntries(
-          supportRequirementFlagKeys.map((key) => [key, null]),
-        ),
+        flags: { ...historicalCurrentFlags },
+        rainbowUsableFlags: { ...historicalCurrentFlags },
+        supportRequirementsByFlag: {
+          ...historicalSupportRequirementsByFlag,
+        },
         rainbowLuffyCompatibility: 'compatible',
         searchableTraits: [],
         searchableNames: [],
@@ -328,7 +469,7 @@ describe('strategySuggestionSchema', () => {
         ...suggestion,
         features: {
           ...suggestion.features,
-          flags: { ...featureFlags, blocker: 'yes' },
+          flags: { ...historicalCurrentFlags, blocker: 'yes' },
         },
       }).success,
     ).toBe(false)
