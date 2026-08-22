@@ -1,3 +1,4 @@
+import { hasStructuredInteraction } from '../../shared/card-features.js'
 import type { PlayableCard } from '../../shared/catalog.js'
 import type { RuntimeCatalog } from '../catalog/load-catalog.js'
 import {
@@ -207,7 +208,7 @@ function projectedRoles(
   const flags = candidate.features.rainbowUsableFlags
   if (flags.twoKCounter) roles.twoKCounter = quantity
   if (flags.blocker) roles.blocker = quantity
-  if (flags.draw || flags.removal) roles.interaction = quantity
+  if (hasStructuredInteraction(candidate.features)) roles.interaction = quantity
   if (flags.boss) roles.boss = quantity
   if (flags.vanillaLike || flags.rush || flags.banish) {
     roles.pressure = quantity

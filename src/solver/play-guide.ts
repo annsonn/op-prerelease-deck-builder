@@ -1,4 +1,7 @@
-import type { CardFeatures } from '../../shared/card-features.js'
+import {
+  hasStructuredInteraction,
+  type CardFeatures,
+} from '../../shared/card-features.js'
 import type { StrategyProfile } from '../strategy/strategy-profile.js'
 
 import type {
@@ -538,8 +541,10 @@ function addressesWeakness(
       return flags.vanillaLike
     case 'interaction':
       return (
-        supportsClaim(line, features, mainDeck, profile, 'draw') ||
-        supportsClaim(line, features, mainDeck, profile, 'removal')
+        hasStructuredInteraction(features) &&
+        ((!flags.draw && !flags.removal) ||
+          supportsClaim(line, features, mainDeck, profile, 'draw') ||
+          supportsClaim(line, features, mainDeck, profile, 'removal'))
       )
     case 'bosses':
       return (

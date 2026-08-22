@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import {
+  classifyCardFeatures,
   supportRequirementFlagKeys,
   type CardFeatures,
 } from '../../shared/card-features.js'
@@ -105,6 +106,17 @@ function addCopies(
   return next
 }
 
+function classifiedCandidate(
+  cardNumber: string,
+  cardOverrides: Partial<PlayableCard>,
+): CandidateCard {
+  const card = candidate(cardNumber, {
+    setMembership: ['OP17'],
+    ...cardOverrides,
+  }).card
+  return { card, features: classifyCardFeatures(card) }
+}
+
 describe('marginal soft-target scoring', () => {
   it.each([
     ['blocker', 'targetBlocker'],
@@ -148,11 +160,16 @@ describe('marginal soft-target scoring', () => {
   )
 
   it('credits every applicable target on one multi-role card', () => {
+    const structured = classifiedCandidate('OP16-002', {
+      effect:
+        '[On Play] Draw 1 card. Then, K.O. up to 1 of your opponent\'s Characters.',
+    })
     const score = scoreMarginalCandidate(
       candidate(
         'OP16-002',
         { counter: 2000 },
         ['twoKCounter', 'blocker', 'vanillaLike', 'draw', 'removal', 'boss'],
+        { effects: structured.features.effects },
       ),
       createEmptyDeckState(),
       EMPTY_POOL,
@@ -178,7 +195,9 @@ describe('marginal soft-target scoring', () => {
       },
       rainbowLuffyCompatibility: 'incompatible',
     })
-    const usableDraw = candidate('OP16-039', {}, ['draw'])
+    const usableDraw = classifiedCandidate('OP16-039', {
+      effect: '[On Play] Draw 1 card.',
+    })
     const score = scoreMarginalCandidate(
       usableDraw,
       addCandidateToDeckState(createEmptyDeckState(), rawOnlyRemoval),
@@ -189,6 +208,65 @@ describe('marginal soft-target scoring', () => {
     expect(score.components.targetInteraction).toBe(
       PROFILE.weights.softTargets.interaction,
     )
+  })
+
+  it('credits a positive structured lockdown exactly once', () => {
+    const lockdown = classifiedCandidate('OP17-005', {
+      effect:
+        '[On Play] Up to 2 of your opponent\'s Characters cannot attack until the end of your opponent\'s next End Phase.',
+    })
+    const score = scoreMarginalCandidate(
+      lockdown,
+      createEmptyDeckState(),
+      EMPTY_POOL,
+      PROFILE,
+    )
+
+    expect(score.components.targetInteraction).toBe(
+      PROFILE.weights.softTargets.interaction,
+    )
+    expect(
+      Object.keys(score.components).filter(
+        (component) => component === 'targetInteraction',
+      ),
+    ).toHaveLength(1)
+  })
+
+  it.each([
+    {
+      label: 'opponent draw',
+      overrides: { effect: '[On Play] Your opponent draws 2 cards.' },
+    },
+    {
+      label: 'Trigger-only removal',
+      overrides: {
+        trigger:
+          '[Trigger] K.O. up to 1 of your opponent\'s Characters with a cost of 4 or less.',
+      },
+    },
+    {
+      label: 'Rainbow-incompatible removal',
+      overrides: {
+        effect:
+          '[On Play] If your Leader is [Restricted Leader], K.O. up to 1 of your opponent\'s Characters.',
+      },
+    },
+    {
+      label: 'dynamic-condition removal',
+      overrides: {
+        effect:
+          '[On Play] If your opponent has 3 or more Characters, K.O. up to 1 of your opponent\'s Characters.',
+      },
+    },
+  ])('does not grant interaction target credit for $label', ({ overrides }) => {
+    const score = scoreMarginalCandidate(
+      classifiedCandidate('OP17-006', overrides),
+      createEmptyDeckState(),
+      EMPTY_POOL,
+      PROFILE,
+    )
+
+    expect(score.components.targetInteraction).toBeUndefined()
   })
 })
 
@@ -411,15 +489,14 @@ describe('searcher support', () => {
   })
 })
 
-describe('combo support', () => {
-  it('uses continuous selected and pool support while penalizing no-target combos', () => {
+describe('legacy combo support', () => {
+  it('does not add a whole-card combo component for canonical structured features', () => {
     const combo = candidate(
       'OP16-009',
       {},
       ['comboDependent'],
       { requiredNames: ['Alpha'], requiredTraits: ['Navy'] },
     )
-    const noTargets = candidate('OP16-010', {}, ['comboDependent'])
     const overlapping = candidate('OP16-011', {
       name: 'Alpha',
       traits: ['Navy'],
@@ -427,108 +504,120 @@ describe('combo support', () => {
     const supportedPool = buildPoolSupport([{ ...overlapping, quantity: 4 }])
     const unsupportedPool = buildPoolSupport([{ ...overlapping, quantity: 2 }])
 
-    expect(
-      scoreMarginalCandidate(
+    for (const [state, pool] of [
+      [createEmptyDeckState(), supportedPool],
+      [createEmptyDeckState(), unsupportedPool],
+      [addCopies(createEmptyDeckState(), overlapping, 4), supportedPool],
+    ] as const) {
+      expect(scoreMarginalCandidate(
         combo,
-        createEmptyDeckState(),
-        supportedPool,
+        state,
+        pool,
         PROFILE,
-      ).components.comboSupport,
-    ).toBeUndefined()
-    expect(
-      scoreMarginalCandidate(
-        combo,
-        createEmptyDeckState(),
-        unsupportedPool,
-        PROFILE,
-      ).components.comboSupport,
-    ).toBe(-PROFILE.weights.synergy.combo / 2)
-    expect(
-      scoreMarginalCandidate(
-        combo,
-        addCopies(createEmptyDeckState(), overlapping, 2),
-        supportedPool,
-        PROFILE,
-      ).components.comboSupport,
-    ).toBe(PROFILE.weights.synergy.combo / 2)
-    expect(
-      scoreMarginalCandidate(
-        combo,
-        addCopies(createEmptyDeckState(), overlapping, 4),
-        supportedPool,
-        PROFILE,
-      ).components.comboSupport,
-    ).toBe(PROFILE.weights.synergy.combo)
-    expect(
-      scoreMarginalCandidate(
-        noTargets,
-        createEmptyDeckState(),
-        supportedPool,
-        PROFILE,
-      ).components.comboSupport,
-    ).toBe(-PROFILE.weights.synergy.combo)
+      ).components.comboSupport).toBeUndefined()
+    }
   })
 })
 
-describe('Rainbow compatibility and effect quality', () => {
-  it('adds every distinct Rainbow-usable broad effect', () => {
+describe('structured effect quality', () => {
+  it('scores Character body efficiency and an On Play draw exactly once', () => {
     const score = scoreMarginalCandidate(
-      candidate(
-        'OP17-022',
-        { cost: 10, power: 12_000 },
-        ['boss', 'rush', 'removal', 'massRest', 'donRefresh'],
-      ),
+      classifiedCandidate('OP17-001', {
+        cost: 3,
+        power: 5_000,
+        effect: '[On Play] Draw 1 card.',
+      }),
       createEmptyDeckState(),
       EMPTY_POOL,
       PROFILE,
     )
 
-    expect(score.components.effectQuality).toBe(
-      4 * PROFILE.weights.compatibility.effect,
-    )
-    expect(score.reasonsByComponent.effectQuality).toBe(
-      'Broadly useful Rainbow-usable effects: 4 (4)',
-    )
+    expect(score.components).toMatchObject({
+      standalonePower: 4,
+      effectQuality: 2,
+    })
+    expect(score.reasonsByComponent.effectQuality).toContain('effect effect:0')
   })
 
-  it('reports effect count before aggregate value when the effect weight is non-unit', () => {
-    const weightedProfile = mergeStrategyProfile(PROFILE, {
-      weights: { compatibility: { effect: 1.5 } },
+  it('gives Events zero body value and values their best physical-card mode', () => {
+    const value = classifiedCandidate('OP17-002', {
+      cardType: 'EVENT',
+      cost: 3,
+      power: null,
+      effect:
+        '[Main] Draw 2 cards.<br/>[Counter] Up to 1 of your Leader gains +4000 power during this battle.',
+      trigger: '[Trigger] Draw 1 card.',
     })
     const score = scoreMarginalCandidate(
-      candidate(
-        'OP17-019',
-        {},
-        ['removal', 'rush', 'massRest', 'donRefresh'],
-      ),
-      createEmptyDeckState(),
-      EMPTY_POOL,
-      weightedProfile,
-    )
-
-    expect(score.components.effectQuality).toBe(6)
-    expect(score.reasonsByComponent.effectQuality).toBe(
-      'Broadly useful Rainbow-usable effects: 4 (6)',
-    )
-  })
-
-  it('credits all eight Rainbow-usable broad-effect flags', () => {
-    const score = scoreMarginalCandidate(
-      candidate(
-        'OP17-021',
-        {},
-        ['blocker', 'draw', 'removal', 'rush', 'banish', 'twoForOne', 'massRest', 'donRefresh'],
-      ),
+      value,
       createEmptyDeckState(),
       EMPTY_POOL,
       PROFILE,
     )
 
-    expect(PROFILE.weights.compatibility.effect).toBe(1)
-    expect(score.components.effectQuality).toBe(8)
-    expect(score.reasonsByComponent.effectQuality).toBe(
-      'Broadly useful Rainbow-usable effects: 8 (8)',
+    expect(score.components.standalonePower).toBeUndefined()
+    expect(score.components.effectQuality).toBe(3.25)
+    expect(score.reasonsByComponent.effectQuality).toContain('effect effect:1')
+    expect(score.reasonsByComponent.effectQuality).not.toContain('trigger:0')
+    expect(score.reasonsByComponent.effectQuality).not.toContain('effect:0')
+  })
+
+  it('retains adverse opponent-choice value instead of granting a broad bonus', () => {
+    const score = scoreMarginalCandidate(
+      classifiedCandidate('OP17-049', {
+        effect:
+          '[On Play] Your opponent chooses one:<br/>• Draw 2 cards.<br/>• Your opponent trashes 2 cards from their hand.',
+      }),
+      createEmptyDeckState(),
+      EMPTY_POOL,
+      PROFILE,
     )
+
+    expect(score.components.effectQuality).toBe(-4)
+  })
+
+  it('values Gloriosa bottom-deck removal through the structured action', () => {
+    const score = scoreMarginalCandidate(
+      classifiedCandidate('OP17-046', {
+        name: 'Gloriosa',
+        cost: 4,
+        power: 1_000,
+        effect:
+          '[Blocker]<br/>[On Play] Place up to 1 Character with a cost of 5 or less at the bottom of the owner\'s deck.',
+      }),
+      createEmptyDeckState(),
+      EMPTY_POOL,
+      PROFILE,
+    )
+
+    expect(score.components.effectQuality).toBe(4.85)
+    expect(score.reasonsByComponent.effectQuality).toContain('effect effect:1')
+  })
+
+  it('does not apply whole-card compatibility or generic combo penalties', () => {
+    const score = scoreMarginalCandidate(
+      classifiedCandidate('OP17-003', {
+        effect:
+          '[On Play] If your Leader is [Restricted Leader], draw 1 card.<br/>[On Play] If your opponent has 3 or more Characters, draw 1 card.',
+      }),
+      createEmptyDeckState(),
+      EMPTY_POOL,
+      PROFILE,
+    )
+
+    expect(score.components.compatibilityEffect).toBeUndefined()
+    expect(score.components.comboSupport).toBeUndefined()
+  })
+
+  it('does not fall back to legacy broad flags when structured effects are absent', () => {
+    const score = scoreMarginalCandidate(
+      candidate('OP17-004', {}, ['draw', 'removal', 'rush']),
+      createEmptyDeckState(),
+      EMPTY_POOL,
+      PROFILE,
+    )
+
+    expect(score.components.effectQuality).toBeUndefined()
   })
 
   it('does not count or floor raw-only incompatible premium-effect flags', () => {
@@ -552,115 +641,6 @@ describe('Rainbow compatibility and effect quality', () => {
     expect(score.components.premiumBombFloor).toBeUndefined()
   })
 
-  it('counts only usable effects when raw mass-rest and DON-refresh flags remain', () => {
-    const emptyUsable = candidate('OP17-097').features.rainbowUsableFlags
-    const score = scoreMarginalCandidate(
-      candidate(
-        'OP17-020',
-        {},
-        ['removal', 'rush', 'massRest', 'donRefresh'],
-        {
-          rainbowUsableFlags: {
-            ...emptyUsable,
-            removal: true,
-            rush: true,
-          },
-          rainbowLuffyCompatibility: 'incompatible',
-        },
-      ),
-      createEmptyDeckState(),
-      EMPTY_POOL,
-      PROFILE,
-    )
-
-    expect(score.components.effectQuality).toBe(2)
-    expect(score.reasonsByComponent.effectQuality).toBe(
-      'Broadly useful Rainbow-usable effects: 2 (2)',
-    )
-  })
-
-  it('keeps printed stats and usable Rush while removing restricted interaction', () => {
-    const mixed = candidate(
-      'OP16-014',
-      { power: 5000, counter: 1000 },
-      ['removal', 'rush'],
-      {
-        rainbowUsableFlags: {
-          ...candidate('OP16-099').features.rainbowUsableFlags,
-          rush: true,
-        },
-        rainbowLuffyCompatibility: 'incompatible',
-      },
-    )
-    const score = scoreMarginalCandidate(
-      mixed,
-      createEmptyDeckState(),
-      EMPTY_POOL,
-      PROFILE,
-    )
-
-    expect(score.components.standalonePower).toBe(
-      2 * PROFILE.weights.standalone.cardPower,
-    )
-    expect(score.components.standaloneCounter).toBe(
-      PROFILE.weights.standalone.counterValue,
-    )
-    expect(score.components.targetInteraction).toBeUndefined()
-    expect(score.components.effectQuality).toBe(
-      PROFILE.weights.compatibility.effect,
-    )
-    expect(score.components.compatibilityEffect).toBe(
-      -PROFILE.weights.compatibility.effect,
-    )
-  })
-
-  it('credits a usable Blocker without reviving unusable removal', () => {
-    const emptyUsable = candidate('OP16-098').features.rainbowUsableFlags
-    const mixedBlocker = candidate(
-      'OP16-031',
-      {},
-      ['blocker', 'removal'],
-      {
-        rainbowUsableFlags: { ...emptyUsable, blocker: true },
-        rainbowLuffyCompatibility: 'incompatible',
-      },
-    )
-    const score = scoreMarginalCandidate(
-      mixedBlocker,
-      createEmptyDeckState(),
-      EMPTY_POOL,
-      PROFILE,
-    )
-
-    expect(score.components.targetBlocker).toBeGreaterThan(0)
-    expect(score.components.targetInteraction).toBeUndefined()
-    expect(score.components.effectQuality).toBe(
-      PROFILE.weights.compatibility.effect,
-    )
-
-    const unusableConditional = candidate(
-      'OP16-040',
-      {},
-      ['searcher', 'comboDependent'],
-      {
-        rainbowUsableFlags: { ...emptyUsable },
-        rainbowLuffyCompatibility: 'neutral',
-        searchableNames: ['Alpha'],
-        requiredNames: ['Alpha'],
-      },
-    )
-    const support = buildPoolSupport([
-      { ...candidate('OP16-041', { name: 'Alpha' }), quantity: 6 },
-    ])
-    const unusableScore = scoreMarginalCandidate(
-      unusableConditional,
-      createEmptyDeckState(),
-      support,
-      PROFILE,
-    )
-    expect(unusableScore.components.searcherSupport).toBeUndefined()
-    expect(unusableScore.components.comboSupport).toBeUndefined()
-  })
 })
 
 describe('curve scoring', () => {
@@ -719,8 +699,11 @@ describe('curve scoring', () => {
 })
 
 describe('redundancy scoring', () => {
-  it('grows effect redundancy but does not penalize Blockers or effectless duplicates', () => {
-    const duplicate = candidate('OP16-019', {}, ['removal'])
+  it('grows redundancy for positive selected actions but not effectless duplicates', () => {
+    const duplicate = classifiedCandidate('OP16-019', {
+      effect:
+        '[On Play] K.O. up to 1 of your opponent\'s Characters with a cost of 4 or less.',
+    })
     const firstDuplicate = scoreMarginalCandidate(
       duplicate,
       addCandidateToDeckState(createEmptyDeckState(), duplicate),
@@ -735,7 +718,6 @@ describe('redundancy scoring', () => {
     )
     const vanilla = candidate('OP16-032', {}, ['vanillaLike'])
     const twoK = candidate('OP16-033', { counter: 2000 }, ['twoKCounter'])
-    const blocker = candidate('OP16-036', {}, ['blocker'])
 
     expect(firstDuplicate.components.redundancyEffect).toBe(
       -PROFILE.weights.redundancy.effect,
@@ -743,14 +725,6 @@ describe('redundancy scoring', () => {
     expect(secondDuplicate.components.redundancyEffect).toBe(
       -2 * PROFILE.weights.redundancy.effect,
     )
-    expect(
-      scoreMarginalCandidate(
-        blocker,
-        addCandidateToDeckState(createEmptyDeckState(), blocker),
-        EMPTY_POOL,
-        PROFILE,
-      ).components.redundancyEffect,
-    ).toBeUndefined()
     expect(
       scoreMarginalCandidate(
         vanilla,
@@ -767,6 +741,27 @@ describe('redundancy scoring', () => {
         PROFILE,
       ).components.redundancyEffect,
     ).toBeUndefined()
+  })
+
+  it('ignores adverse actions and positive actions in a discarded Event mode', () => {
+    const opponentDraw = classifiedCandidate('OP17-030', {
+      effect: '[On Play] Your opponent draws 2 cards.',
+    })
+    const losingMainMode = classifiedCandidate('OP17-031', {
+      cardType: 'EVENT',
+      cost: 1,
+      power: null,
+      effect: '[Main] Draw 2 cards. Then, your opponent draws 2 cards.',
+      trigger: '[Trigger] Do nothing.',
+    })
+
+    for (const value of [opponentDraw, losingMainMode]) {
+      const state = addCandidateToDeckState(createEmptyDeckState(), value)
+      expect(
+        scoreMarginalCandidate(value, state, EMPTY_POOL, PROFILE).components
+          .redundancyEffect,
+      ).toBeUndefined()
+    }
   })
 
   it('keeps usable role saturation separately named', () => {
@@ -841,11 +836,14 @@ describe('redundancy scoring', () => {
 })
 
 describe('premium bomb first-copy floor', () => {
-  const premiumBomb = candidate(
-    'OP17-022',
-    { cost: 10, power: 12_000 },
-    ['boss', 'rush', 'removal', 'massRest', 'donRefresh', 'brick'],
-  )
+  const premiumBomb = classifiedCandidate('OP17-022', {
+    name: 'Shanks',
+    cost: 10,
+    power: 12_000,
+    counter: 0,
+    effect:
+      '[Rush]<br/>[On Play] Set up to 2 of your DON!! cards as active. Then, rest all of your opponent\'s Characters.',
+  })
   const saturatedRoleCard = candidate(
     'OP17-099',
     { cost: 10, power: 10_000 },
@@ -884,11 +882,10 @@ describe('premium bomb first-copy floor', () => {
     expect(score.components.brickPenalty).toBe(
       -PROFILE.weights.progressiveBricks.first,
     )
-    // Structured rest-all now also exposes the multi-target twoForOne summary.
-    expect(ordinarySubtotal).toBe(8)
-    expect(score.components.premiumBombFloor).toBe(7)
+    expect(ordinarySubtotal).toBe(11.55)
+    expect(score.components.premiumBombFloor).toBe(3.45)
     expect(score.reasonsByComponent.premiumBombFloor).toBe(
-      'First-copy premium bomb floor: 7',
+      'First-copy premium bomb floor: 3.45',
     )
     expect(score.total).toBe(PROFILE.limits.premiumBombFirstCopyFloor)
   })
@@ -899,7 +896,7 @@ describe('premium bomb first-copy floor', () => {
     PROFILE.curve.late.maximum,
   )
 
-  it('raises a saturated first copy without bricks from an ordinary subtotal of 9 to 15', () => {
+  it('raises a saturated first copy after structured effect value', () => {
     const score = scoreMarginalCandidate(
       premiumBomb,
       saturatedStateWithoutBricks,
@@ -912,10 +909,10 @@ describe('premium bomb first-copy floor', () => {
       0,
     )
 
-    expect(ordinarySubtotal).toBe(9)
-    expect(score.components.premiumBombFloor).toBe(6)
+    expect(ordinarySubtotal).toBe(12.55)
+    expect(score.components.premiumBombFloor).toBe(2.45)
     expect(score.reasonsByComponent.premiumBombFloor).toBe(
-      'First-copy premium bomb floor: 6',
+      'First-copy premium bomb floor: 2.45',
     )
     expect(score.total).toBe(PROFILE.limits.premiumBombFirstCopyFloor)
   })
@@ -928,7 +925,7 @@ describe('premium bomb first-copy floor', () => {
       PROFILE,
     )
 
-    expect(score.total).toBe(17)
+    expect(score.total).toBe(20.55)
     expect(score.components.premiumBombFloor).toBeUndefined()
   })
 
@@ -944,7 +941,7 @@ describe('premium bomb first-copy floor', () => {
     expect(score.components.redundancyEffect).toBe(
       -PROFILE.weights.redundancy.effect,
     )
-    expect(score.total).toBe(8)
+    expect(score.total).toBe(10.95)
   })
 
   it.each([
@@ -983,7 +980,7 @@ describe('premium bomb first-copy floor', () => {
   it('keeps the premium floor last in the component and reason contract', () => {
     expect(marginalScoreComponentOrder.at(-1)).toBe('premiumBombFloor')
     expect(marginalScoreComponentLabels.effectQuality).toBe(
-      'Broadly useful Rainbow-usable effects',
+      'Structured effect value',
     )
     expect(marginalScoreComponentLabels.premiumBombFloor).toBe(
       'First-copy premium bomb floor',
@@ -996,7 +993,7 @@ describe('premium bomb first-copy floor', () => {
       PROFILE,
     )
     expect(Object.keys(score.components).at(-1)).toBe('premiumBombFloor')
-    expect(score.reasons.at(-1)).toBe('First-copy premium bomb floor: 6')
+    expect(score.reasons.at(-1)).toBe('First-copy premium bomb floor: 2.45')
   })
 })
 
@@ -1065,13 +1062,10 @@ describe('score result contract', () => {
       'targetTwoKCounter',
       'targetBlocker',
       'targetVanillaLike',
-      'targetInteraction',
       'targetBoss',
       'curveLate',
       'curveHighCost',
-      'effectQuality',
       'searcherSupport',
-      'comboSupport',
     ])
     expect(first.reasons).toEqual([
       'Printed body efficiency value',
@@ -1079,13 +1073,10 @@ describe('score result contract', () => {
       `2K counter target: ${PROFILE.weights.softTargets.twoKCounter}`,
       `Blocker target: ${PROFILE.weights.softTargets.blocker}`,
       `Vanilla-like target: ${PROFILE.weights.softTargets.vanillaLike}`,
-      `Interaction target: ${PROFILE.weights.softTargets.interaction}`,
       `Boss target: ${PROFILE.weights.softTargets.boss}`,
       'Late curve need: 2',
       'High-cost curve need: 2',
-      'Broadly useful Rainbow-usable effects: 2 (2)',
       'Searcher support selected 6, pool potential 6: 2',
-      'Combo support selected 6, pool potential 6: 2',
     ])
     expect(first.reasonsByComponent).toEqual(
       Object.fromEntries(

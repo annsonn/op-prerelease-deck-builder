@@ -1,4 +1,7 @@
-import type { CardFeatureKey } from '../../shared/card-features.js'
+import {
+  hasStructuredInteraction,
+  type CardFeatureKey,
+} from '../../shared/card-features.js'
 import type { SoftTargetRole, StrategyProfile } from '../strategy/strategy-profile.js'
 
 import {
@@ -8,6 +11,7 @@ import {
   type MatchSupportTargets,
   type PoolSupport,
 } from './deck-state.js'
+import { valueCardEffects } from './effect-value.js'
 
 export const marginalScoreComponentOrder = Object.freeze([
   'standalonePower',
@@ -53,7 +57,7 @@ export const marginalScoreComponentLabels: Readonly<
   curveHighCost: 'High-cost curve need',
   curveHighCostSaturation: 'High-cost curve saturation',
   brickPenalty: 'Brick risk beyond tolerance',
-  effectQuality: 'Broadly useful Rainbow-usable effects',
+  effectQuality: 'Structured effect value',
   compatibilityEffect: 'Rainbow Luffy conditional-effect compatibility',
   searcherSupport: 'Searcher support',
   comboSupport: 'Combo support',
@@ -115,35 +119,30 @@ const TARGET_COMPONENTS: readonly Readonly<{
   },
 ]
 
-const BROAD_EFFECT_FLAGS: readonly CardFeatureKey[] = [
-  'blocker',
-  'draw',
-  'removal',
-  'rush',
-  'banish',
-  'twoForOne',
-  'massRest',
-  'donRefresh',
-]
-
-const REDUNDANT_EFFECT_FLAGS: readonly CardFeatureKey[] = [
-  'draw',
-  'removal',
-  'rush',
-  'banish',
-  'twoForOne',
-  'searcher',
-  'comboDependent',
-]
-
 function hasRole(
   candidate: CandidateCard,
   role: CardFeatureKey | 'interaction',
 ): boolean {
   const flags = candidate.features.rainbowUsableFlags
   return role === 'interaction'
-    ? flags.draw || flags.removal
+    ? hasStructuredInteraction(candidate.features)
     : flags[role]
+}
+
+function printedBodyValue(
+  candidate: CandidateCard,
+  profile: StrategyProfile,
+): number {
+  if (
+    candidate.card.cardType !== 'CHARACTER' ||
+    candidate.card.power === null
+  ) {
+    return 0
+  }
+  return (
+    (candidate.card.power / 1000 - (candidate.card.cost ?? 0)) *
+    profile.weights.standalone.cardPower
+  )
 }
 
 function stableNumber(value: number): number {
@@ -268,13 +267,16 @@ function scoreCandidate(
   poolSupport: PoolSupport,
   profile: StrategyProfile,
 ): MarginalScore {
+  const effectValuation = valueCardEffects(
+    candidate,
+    state,
+    poolSupport,
+    profile,
+  )
   const entries: Component[] = [
     [
       'standalonePower',
-      (candidate.card.power === null
-        ? 0
-        : candidate.card.power / 1000 - (candidate.card.cost ?? 0)) *
-        profile.weights.standalone.cardPower,
+      printedBodyValue(candidate, profile),
       'Printed body efficiency value',
     ],
     [
@@ -375,23 +377,13 @@ function scoreCandidate(
     entries.push(['brickPenalty', -penalty, `Brick risk beyond tolerance: ${penalty}`])
   }
 
-  const broadEffectCount = BROAD_EFFECT_FLAGS.filter(
-    (flag) => candidate.features.rainbowUsableFlags[flag],
-  ).length
-  if (broadEffectCount > 0) {
-    const value = broadEffectCount * profile.weights.compatibility.effect
+  if (effectValuation.total !== 0) {
     entries.push([
       'effectQuality',
-      value,
-      `Broadly useful Rainbow-usable effects: ${broadEffectCount} (${stableNumber(value)})`,
-    ])
-  }
-
-  if (candidate.features.rainbowLuffyCompatibility === 'incompatible') {
-    entries.push([
-      'compatibilityEffect',
-      -profile.weights.compatibility.effect,
-      'Rainbow Luffy cannot use the conditional effect',
+      effectValuation.total,
+      `Structured effect value: ${effectValuation.contributions
+        .map((contribution) => contribution.reason)
+        .join(' | ')}`,
     ])
   }
 
@@ -414,41 +406,11 @@ function scoreCandidate(
     ])
   }
 
-  if (candidate.features.rainbowUsableFlags.comboDependent) {
-    const hasTargets =
-      candidate.features.requiredNames.length > 0 ||
-      candidate.features.requiredTraits.length > 0
-    const weight = profile.weights.synergy.combo
-    if (!hasTargets) {
-      entries.push([
-        'comboSupport',
-        -weight,
-        'Combo support unavailable: no extracted targets',
-      ])
-    } else {
-      const support = dynamicSupport(
-        candidate,
-        state,
-        poolSupport,
-        {
-          names: candidate.features.requiredNames,
-          traits: candidate.features.requiredTraits,
-        },
-        profile.limits.comboMinimumSupport,
-        weight,
-      )
-      entries.push([
-        'comboSupport',
-        support.value,
-        `Combo support selected ${support.selected}, pool potential ${support.poolPotential}: ${stableNumber(support.value)}`,
-      ])
-    }
-  }
-
   const selectedCopies =
     state.selectedCountsByCardNumber[candidate.card.cardNumber] ?? 0
-  const hasUsableEffect = REDUNDANT_EFFECT_FLAGS.some(
-    (flag) => candidate.features.rainbowUsableFlags[flag],
+  const hasUsableEffect = effectValuation.contributions.some(
+    (contribution) =>
+      contribution.actions.some((action) => action.netValue > 0),
   )
   if (selectedCopies > 0 && hasUsableEffect) {
     entries.push([
