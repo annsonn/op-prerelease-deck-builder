@@ -30,20 +30,24 @@ export interface CandidatePoolEntry extends CandidateCard {
   readonly quantity: number
 }
 
-export interface CardNumberSupport {
+export interface CardSupportEntry {
   readonly quantity: number
   readonly name: string
   readonly traits: readonly string[]
+  readonly cardType: PlayableCard['cardType']
+  readonly cost: number | null
+  readonly power: number | null
+  readonly counter: number | null
+  readonly hasTrigger: boolean
 }
+export type CardNumberSupport = CardSupportEntry
 
 export interface MatchSupportTargets {
   readonly names: readonly string[]
   readonly traits: readonly string[]
 }
 
-interface ExactCardSupport {
-  readonly cardSupportByNumber: Readonly<Record<string, CardNumberSupport>>
-}
+interface ExactCardSupport { readonly cardSupportByNumber: Readonly<Record<string, CardSupportEntry>> }
 
 export type DeckState = Readonly<{
   size: number
@@ -53,7 +57,7 @@ export type DeckState = Readonly<{
   selectedCountsByCardNumber: Readonly<Record<string, number>>
   selectedCountsByName: Readonly<Record<string, number>>
   selectedCountsByTrait: Readonly<Record<string, number>>
-  cardSupportByNumber: Readonly<Record<string, CardNumberSupport>>
+  cardSupportByNumber: Readonly<Record<string, CardSupportEntry>>
   importantPlayCounts: Readonly<{
     odd: number
     even: number
@@ -107,8 +111,8 @@ function sortedTraits(traits: readonly string[]): readonly string[] {
 }
 
 function sortedCardSupportRecord(
-  support: Readonly<Record<string, CardNumberSupport>>,
-): Record<string, CardNumberSupport> {
+  support: Readonly<Record<string, CardSupportEntry>>,
+): Record<string, CardSupportEntry> {
   const sorted = emptyRecord<CardNumberSupport>()
   for (const [cardNumber, entry] of Object.entries(support).sort(
     ([left], [right]) => left.localeCompare(right),
@@ -117,6 +121,11 @@ function sortedCardSupportRecord(
       quantity: entry.quantity,
       name: entry.name,
       traits: [...entry.traits],
+      cardType: entry.cardType,
+      cost: entry.cost,
+      power: entry.power,
+      counter: entry.counter,
+      hasTrigger: entry.hasTrigger,
     }
   }
   return sorted
@@ -151,6 +160,9 @@ function addCardSupport(
   if (existing !== undefined) {
     if (
       existing.name !== card.name ||
+      existing.cardType !== card.cardType || existing.cost !== card.cost ||
+      existing.power !== card.power || existing.counter !== card.counter ||
+      existing.hasTrigger !== (card.trigger.trim().length > 0) ||
       existing.traits.length !== traits.length ||
       existing.traits.some((trait, index) => trait !== traits[index])
     ) {
@@ -175,6 +187,11 @@ function addCardSupport(
     quantity: nextQuantity,
     name: card.name,
     traits,
+    cardType: card.cardType,
+    cost: card.cost,
+    power: card.power,
+    counter: card.counter,
+    hasTrigger: card.trigger.trim().length > 0,
   }
   return next
 }

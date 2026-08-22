@@ -1240,9 +1240,9 @@ describe('valueCardEffects instance reconciliation', () => {
   it.each([
     [{ kind: 'unknown', normalizedText: 'board condition' }, 0],
     [{ kind: 'cards', target: target({ subject: 'player' }), minimumCount: 1 }, 0],
-    [{ kind: 'leader', names: ['Luffy'], traits: [], monoColorRequired: false }, 0],
-    [{ kind: 'all', children: [{ kind: 'always' }] }, 0],
-    [{ kind: 'any', children: [{ kind: 'always' }] }, 0],
+    [{ kind: 'leader', names: ['Luffy'], traits: [], monoColorRequired: false }, 1],
+    [{ kind: 'all', children: [{ kind: 'always' }] }, 1],
+    [{ kind: 'any', children: [{ kind: 'always' }] }, 1],
     [{ kind: 'selfState', state: 'playedThisTurn' }, 1],
     [{ kind: 'always' }, 1],
   ] satisfies readonly (readonly [RequirementExpression, number])[])(

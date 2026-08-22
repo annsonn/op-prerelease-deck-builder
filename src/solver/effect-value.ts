@@ -4,13 +4,13 @@ import type {
   EffectChooser,
   EffectCost,
   EffectInstance,
-  RequirementExpression,
   RainbowLuffyCompatibility,
   TargetSpec,
   TimingModifier,
 } from '../../shared/card-effect-model.js'
 import type { StrategyProfile } from '../strategy/strategy-profile.js'
 import type { CandidateCard, DeckState, PoolSupport } from './deck-state.js'
+import { evaluateRequirementSupport, evaluateTargetSupport } from './effect-support.js'
 
 export const premiumCategories = Object.freeze([
   'pressure',
@@ -715,16 +715,21 @@ function valueBranch(
   instance: EffectInstance,
   branchIndex: number,
   profile: StrategyProfile,
+  state: DeckState,
+  poolSupport: PoolSupport,
 ): BranchValue {
   const branch = instance.branches[branchIndex]
   if (branch === undefined) {
     return Object.freeze({ branchIndex, actions: Object.freeze([]), grossValue: 0 })
   }
   const actions = branch.actions.map((action, actionIndex) => {
+    const target = actionTarget(action)
+    const targetSupport = target === null ? undefined : evaluateTargetSupport(target, state, poolSupport, profile)
     const actionValue = valueAction(action, {
       profile,
       activation: instance.activation,
       timing: instance.timing,
+      targetSupport,
     })
     return Object.freeze({
       actionIndex,
@@ -744,9 +749,11 @@ function valueBranch(
 function chooseBranch(
   instance: EffectInstance,
   profile: StrategyProfile,
+  state: DeckState,
+  poolSupport: PoolSupport,
 ): BranchValue {
   const branches = instance.branches.map((_, branchIndex) =>
-    valueBranch(instance, branchIndex, profile),
+    valueBranch(instance, branchIndex, profile, state, poolSupport),
   )
   const first = branches[0] ?? Object.freeze({
     branchIndex: 0,
@@ -830,28 +837,6 @@ function capBranchValues(
   )
 }
 
-function conditionSupport(
-  condition: RequirementExpression,
-  compatibility: RainbowLuffyCompatibility,
-): Readonly<{ factor: number; reason: string }> {
-  if (compatibility === 'incompatible') {
-    return Object.freeze({
-      factor: 0,
-      reason: 'Rainbow Luffy incompatible clause is unavailable',
-    })
-  }
-  if (condition.kind === 'always') {
-    return Object.freeze({ factor: 1, reason: 'unconditional effect' })
-  }
-  if (condition.kind === 'selfState' && condition.state === 'playedThisTurn') {
-    return Object.freeze({ factor: 1, reason: 'played-this-turn self state is available' })
-  }
-  return Object.freeze({
-    factor: 0,
-    reason: `${condition.kind} condition support is deferred`,
-  })
-}
-
 function emptyCategoryValues(): Record<PremiumCategory, number> {
   return {
     pressure: 0,
@@ -891,9 +876,11 @@ function reconcileCategoryValues(
 function valueEffectInstance(
   instance: EffectInstance,
   profile: StrategyProfile,
+  state: DeckState,
+  poolSupport: PoolSupport,
   options: InstanceValueOptions = {},
 ): EffectContribution {
-  const selectedBranch = chooseBranch(instance, profile)
+  const selectedBranch = chooseBranch(instance, profile, state, poolSupport)
   const cappedValues = capBranchValues(
     selectedBranch.actions,
     profile.effectModel.effectInstanceCap,
@@ -913,10 +900,9 @@ function valueEffectInstance(
         ),
       )
 
-  const condition = conditionSupport(
-    instance.condition,
-    instance.rainbowLuffyCompatibility,
-  )
+  const condition = instance.rainbowLuffyCompatibility === 'incompatible'
+    ? { factor: 0, reason: 'incompatible structured effect' }
+    : evaluateRequirementSupport(instance.condition, state, poolSupport, profile)
   const activationFactor = stableRound(
     options.activationFactorOverride ??
       profile.effectModel.activationFactors[instance.activation],
@@ -1185,12 +1171,14 @@ function valueEventMode(
   mode: EventMode,
   printedCost: number | null,
   profile: StrategyProfile,
+  state: DeckState,
+  poolSupport: PoolSupport,
 ): readonly EffectContribution[] {
   const paysPrintedCost = mode.activation === 'main' || mode.activation === 'counter'
   const missingPrintedCost = paysPrintedCost && printedCost === null
   const contributions = Object.freeze(
     mode.instances.map((instance) =>
-      valueEffectInstance(instance, profile, {
+      valueEffectInstance(instance, profile, state, poolSupport, {
         activationFactorOverride: missingPrintedCost ? 0 : undefined,
         availabilityReason: missingPrintedCost
           ? 'missing printed Event cost makes this mode unavailable'
@@ -1217,11 +1205,13 @@ function contributionTotal(
 function chosenCardContributions(
   candidate: CandidateCard,
   profile: StrategyProfile,
+  state: DeckState,
+  poolSupport: PoolSupport,
 ): readonly EffectContribution[] {
   if (candidate.card.cardType !== 'EVENT') {
     return Object.freeze(
       candidate.features.effects.map((instance) =>
-        valueEffectInstance(instance, profile),
+        valueEffectInstance(instance, profile, state, poolSupport),
       ),
     )
   }
@@ -1229,10 +1219,10 @@ function chosenCardContributions(
   const modes = groupEventModes(candidate.features.effects)
   const first = modes[0]
   if (first === undefined) return Object.freeze([])
-  let selected = valueEventMode(first, candidate.card.cost, profile)
+  let selected = valueEventMode(first, candidate.card.cost, profile, state, poolSupport)
   let selectedTotal = contributionTotal(selected)
   for (const mode of modes.slice(1)) {
-    const valued = valueEventMode(mode, candidate.card.cost, profile)
+    const valued = valueEventMode(mode, candidate.card.cost, profile, state, poolSupport)
     const total = contributionTotal(valued)
     if (total > selectedTotal) {
       selected = valued
@@ -1248,9 +1238,7 @@ export function valueCardEffects(
   poolSupport: PoolSupport,
   profile: StrategyProfile,
 ): EffectValuation {
-  void state
-  void poolSupport
-  const contributions = chosenCardContributions(candidate, profile)
+  const contributions = chosenCardContributions(candidate, profile, state, poolSupport)
   const total = contributionTotal(contributions)
   const suppressEventPremium =
     candidate.card.cardType === 'EVENT' && total <= 0
