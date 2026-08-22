@@ -3,7 +3,11 @@ import { readFile } from 'node:fs/promises'
 import { describe, expect, it } from 'vitest'
 
 import { canonicalize } from './canonicalize.js'
-import { classifyCardFeatures } from '../../shared/card-features.js'
+import { serializedCardFeaturesSchema } from '../../shared/catalog.js'
+import {
+  cardFeaturesSchema,
+  classifyCardFeatures,
+} from '../../shared/card-features.js'
 import { deriveStrategy } from './derive-strategy.js'
 import type { PlayableCard } from './model.js'
 import { parseOfficialText } from './parse-official-text.js'
@@ -65,8 +69,15 @@ describe('deriveStrategy', () => {
     }
 
     const suggestion = deriveStrategy(card)
+    const serializedFeatures = serializedCardFeaturesSchema.parse(
+      suggestion.features,
+    )
+    const canonicalFeatures = cardFeaturesSchema.parse(serializedFeatures)
 
     expect(suggestion.features).toEqual(classifyCardFeatures(card))
+    expect(canonicalFeatures.effectModelVersion).toBe(2)
+    expect(canonicalFeatures.effectParserRevision).toBe(2)
+    expect(serializedFeatures).toEqual(suggestion.features)
     expect(suggestion.roles).toEqual([
       'blocker',
       'boss',

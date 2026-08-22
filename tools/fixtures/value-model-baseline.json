@@ -1,0 +1,800 @@
+{
+  "provenance": {
+    "engine": "StrategyDeckSolver",
+    "engineCommit": "1aa63a5",
+    "generator": {
+      "function": "generateTestPool",
+      "mode": "tournament"
+    },
+    "seedCount": 5000,
+    "seedStart": 0,
+    "solverVersion": "strategy-v2"
+  },
+  "schemaVersion": 1,
+  "sets": {
+    "OP16": {
+      "artifactSha256": {
+        "cards.json": "d98327c9708ef94aa3180de5cfea058d37a01e3825774748f7bff8536773d1f7",
+        "manifest.json": "782f3640403adf00bf887d9d8146562fb04d5a3fc00cd0445e95220b1fc93a75",
+        "set-contents.json": "062ca465070cbf70b4f8a825f4611bfd071095f18b93da2ded6026ce34046533",
+        "strategy-suggestions.json": "6263925983ebd0e607558aeb48c803cee0fc1e961b46cfb983b00a39cc92090b"
+      },
+      "averages": {
+        "blocker": 8.67,
+        "boss": 3.98,
+        "bricks": 3.6,
+        "early": 16.04,
+        "high": 9.15,
+        "interaction": 12.23,
+        "middle": 14.81,
+        "size": 40,
+        "totalCounter": 49398.8,
+        "twoKCounter": 13,
+        "vanillaLike": 5.75
+      },
+      "belowCounterThreshold": {
+        "neutralMinimum24000": 0,
+        "strengthMinimum30000": 0
+      },
+      "checksum": "d98327c9708ef94aa3180de5cfea058d37a01e3825774748f7bff8536773d1f7",
+      "evaluatedPools": 5000,
+      "exactFortyFailures": 0,
+      "invalidDecks": 0,
+      "nondeterministicDecks": 0,
+      "physicalCopyConservationFailures": 0,
+      "profile": {
+        "canonical": {
+          "analysis": {
+            "totalCounter": {
+              "neutralMinimum": 24000,
+              "scoringSaturationMinimum": 52000,
+              "strengthMinimum": 30000
+            }
+          },
+          "curve": {
+            "early": {
+              "maximumCost": 2,
+              "minimumCost": 0,
+              "target": 8
+            },
+            "highCost": {
+              "maximum": 8,
+              "minimum": 4,
+              "minimumCost": 7
+            },
+            "late": {
+              "maximum": 10,
+              "minimum": 6,
+              "minimumCost": 6
+            },
+            "middle": {
+              "maximumCost": 5,
+              "minimumCost": 3,
+              "target": 16
+            },
+            "turnOrderDominance": 3
+          },
+          "id": "sealed-video-v1",
+          "limits": {
+            "brickTolerance": 8,
+            "comboMinimumSupport": 4,
+            "premiumBombFirstCopyFloor": 15,
+            "searcherMinimumTargets": 6
+          },
+          "targets": {
+            "blocker": 10,
+            "boss": 5,
+            "interaction": 5,
+            "twoKCounter": 10,
+            "vanillaLike": 10
+          },
+          "version": 1,
+          "weights": {
+            "compatibility": {
+              "cardColor": 2,
+              "effect": 1,
+              "leaderColor": 3
+            },
+            "curve": {
+              "early": 3,
+              "highCost": 2,
+              "late": 2,
+              "middle": 3,
+              "turnOrderDominance": 3
+            },
+            "progressiveBricks": {
+              "first": 1,
+              "fourthOrMore": 4,
+              "second": 2,
+              "third": 3
+            },
+            "redundancy": {
+              "effect": 1,
+              "role": 1
+            },
+            "softTargetFloorPercent": {
+              "blocker": 60,
+              "boss": 0,
+              "interaction": 0,
+              "twoKCounter": 0,
+              "vanillaLike": 50
+            },
+            "softTargets": {
+              "blocker": 8,
+              "boss": 2,
+              "interaction": 3,
+              "twoKCounter": 3,
+              "vanillaLike": 1
+            },
+            "standalone": {
+              "cardPower": 2,
+              "counterValue": 7,
+              "saturatedCounterValue": 1
+            },
+            "synergy": {
+              "combo": 2,
+              "searcher": 2,
+              "trait": 2,
+              "type": 2
+            }
+          }
+        },
+        "sha256": "371c9b997556e6dcec85cabed16cfd53d5371c4af78901a2f24e5d23d3e6a545"
+      },
+      "rawSums": {
+        "blocker": 43353,
+        "boss": 19918,
+        "bricks": 17982,
+        "early": 80204,
+        "high": 45728,
+        "interaction": 61153,
+        "middle": 74067,
+        "size": 200000,
+        "totalCounter": 246994000,
+        "twoKCounter": 64983,
+        "vanillaLike": 28757
+      },
+      "reachableTargetMisses": {
+        "blocker": 603,
+        "boss": 3262,
+        "interaction": 0,
+        "twoKCounter": 158,
+        "vanillaLike": 2534
+      },
+      "requestedPools": 5000,
+      "setId": "OP16",
+      "skippedPools": 0
+    },
+    "OP17": {
+      "artifactSha256": {
+        "cards.json": "80185f046091d3def85245b291df31e81b349508adb29842152393c743632a52",
+        "manifest.json": "0dc8b5fb0a8aa113844fb1465b0a8b6c7a2f978a58ee09cbb1b62cd9285742da",
+        "set-contents.json": "d046ded44a2dfec625284a03f107b78b2428dfd7439d96f473e01a3c18b87808",
+        "strategy-suggestions.json": "8763c1a715d023b85c52a7c357da164deb828a6050f533f087aaddc31716aafe"
+      },
+      "averages": {
+        "blocker": 8.95,
+        "boss": 7.38,
+        "bricks": 5.96,
+        "early": 13.38,
+        "high": 9.19,
+        "interaction": 13.91,
+        "middle": 17.43,
+        "size": 40,
+        "totalCounter": 49098.2,
+        "twoKCounter": 15.06,
+        "vanillaLike": 3.57
+      },
+      "belowCounterThreshold": {
+        "neutralMinimum24000": 0,
+        "strengthMinimum30000": 1
+      },
+      "checksum": "80185f046091d3def85245b291df31e81b349508adb29842152393c743632a52",
+      "counterEvents": {
+        "OP17-037": {
+          "main": 1,
+          "opened": 1662
+        },
+        "OP17-038": {
+          "main": 3,
+          "opened": 3154
+        },
+        "OP17-076": {
+          "main": 6,
+          "opened": 1651
+        },
+        "OP17-077": {
+          "main": 0,
+          "opened": 2401
+        },
+        "OP17-078": {
+          "main": 0,
+          "opened": 3177
+        },
+        "OP17-097": {
+          "main": 0,
+          "opened": 3125
+        },
+        "OP17-098": {
+          "main": 0,
+          "opened": 3174
+        }
+      },
+      "evaluatedPools": 5000,
+      "exactFortyFailures": 0,
+      "gatedCards": {
+        "OP17-043": {
+          "main": 72,
+          "opened": 2350
+        },
+        "OP17-046": {
+          "main": 0,
+          "opened": 941
+        },
+        "OP17-049": {
+          "main": 1636,
+          "opened": 1640
+        },
+        "OP17-054": {
+          "main": 259,
+          "opened": 1681
+        },
+        "OP17-063": {
+          "main": 2,
+          "opened": 926
+        },
+        "OP17-065": {
+          "main": 99,
+          "opened": 2393
+        },
+        "OP17-093": {
+          "main": 0,
+          "opened": 954
+        },
+        "OP17-112": {
+          "main": 122,
+          "opened": 906
+        },
+        "OP17-114": {
+          "main": 380,
+          "opened": 1657
+        },
+        "OP17-118": {
+          "main": 52,
+          "opened": 481
+        },
+        "OP17-119": {
+          "main": 328,
+          "opened": 546
+        }
+      },
+      "invalidDecks": 0,
+      "nondeterministicDecks": 0,
+      "physicalCopyConservationFailures": 0,
+      "profile": {
+        "canonical": {
+          "analysis": {
+            "totalCounter": {
+              "neutralMinimum": 24000,
+              "scoringSaturationMinimum": 52000,
+              "strengthMinimum": 30000
+            }
+          },
+          "curve": {
+            "early": {
+              "maximumCost": 2,
+              "minimumCost": 0,
+              "target": 8
+            },
+            "highCost": {
+              "maximum": 8,
+              "minimum": 4,
+              "minimumCost": 7
+            },
+            "late": {
+              "maximum": 10,
+              "minimum": 6,
+              "minimumCost": 6
+            },
+            "middle": {
+              "maximumCost": 5,
+              "minimumCost": 3,
+              "target": 16
+            },
+            "turnOrderDominance": 3
+          },
+          "id": "sealed-video-v1",
+          "limits": {
+            "brickTolerance": 8,
+            "comboMinimumSupport": 4,
+            "premiumBombFirstCopyFloor": 15,
+            "searcherMinimumTargets": 6
+          },
+          "targets": {
+            "blocker": 10,
+            "boss": 5,
+            "interaction": 5,
+            "twoKCounter": 10,
+            "vanillaLike": 10
+          },
+          "version": 1,
+          "weights": {
+            "compatibility": {
+              "cardColor": 2,
+              "effect": 1,
+              "leaderColor": 3
+            },
+            "curve": {
+              "early": 3,
+              "highCost": 2,
+              "late": 2,
+              "middle": 3,
+              "turnOrderDominance": 3
+            },
+            "progressiveBricks": {
+              "first": 1,
+              "fourthOrMore": 4,
+              "second": 2,
+              "third": 3
+            },
+            "redundancy": {
+              "effect": 1,
+              "role": 1
+            },
+            "softTargetFloorPercent": {
+              "blocker": 60,
+              "boss": 0,
+              "interaction": 0,
+              "twoKCounter": 0,
+              "vanillaLike": 50
+            },
+            "softTargets": {
+              "blocker": 8,
+              "boss": 2,
+              "interaction": 3,
+              "twoKCounter": 3,
+              "vanillaLike": 1
+            },
+            "standalone": {
+              "cardPower": 2,
+              "counterValue": 7,
+              "saturatedCounterValue": 1
+            },
+            "synergy": {
+              "combo": 2,
+              "searcher": 2,
+              "trait": 2,
+              "type": 2
+            }
+          }
+        },
+        "sha256": "371c9b997556e6dcec85cabed16cfd53d5371c4af78901a2f24e5d23d3e6a545"
+      },
+      "rawSums": {
+        "blocker": 44738,
+        "boss": 36893,
+        "bricks": 29794,
+        "early": 66920,
+        "high": 45941,
+        "interaction": 69570,
+        "middle": 87139,
+        "size": 200000,
+        "totalCounter": 245491000,
+        "twoKCounter": 75300,
+        "vanillaLike": 17848
+      },
+      "reachableTargetMisses": {
+        "blocker": 178,
+        "boss": 380,
+        "interaction": 0,
+        "twoKCounter": 0,
+        "vanillaLike": 799
+      },
+      "requestedPools": 5000,
+      "setId": "OP17",
+      "skippedPools": 0,
+      "solutionDigests": [
+        {
+          "seed": 0,
+          "sha256": "97f90fc614277ce3b524c76ad9fd66b54af3a72de6e8f63d25aa1988a85ae83e"
+        },
+        {
+          "seed": 1,
+          "sha256": "42884e64cb6f80adf46136a9e4dc218d4b2e78d96791eb3404737846aa19d6ff"
+        },
+        {
+          "seed": 2,
+          "sha256": "025554c14f12fba58ec96757165fa0ca39899bfcbfddc69d2d6044d4cd77e738"
+        },
+        {
+          "seed": 3,
+          "sha256": "5a3d2d4772669c3023db5b0867ab2e8910db703a2d80ce393350a958187ca083"
+        },
+        {
+          "seed": 4,
+          "sha256": "db60d3e5a4e1d3ce9c5d281f36d8b0a75ec0a5b61d388f29e910c26ecb48220d"
+        },
+        {
+          "seed": 5,
+          "sha256": "e38960286187862a6c4b2e806d34c8d0d32192ac9168e25b4e444025ea7300f7"
+        },
+        {
+          "seed": 6,
+          "sha256": "a0794affeb76e921aaacb60f5b5ea7bc71d833f96fe9283ffd57cbefb4676833"
+        },
+        {
+          "seed": 7,
+          "sha256": "5d4fa4fb1d4983463ebc34ff28dc48249f858ffccccd0e22f7af72ea795c1571"
+        },
+        {
+          "seed": 8,
+          "sha256": "4185e3b2c4e2691b56ea3c15f1ca9ecb3ac9cf44c8305a9733acd405cccc6b1e"
+        },
+        {
+          "seed": 9,
+          "sha256": "d0bfb2b6988fb10084af046a11dec04717c32e13368432634b414f4204ae636a"
+        },
+        {
+          "seed": 10,
+          "sha256": "b64c6ed3fa0ac82a87898db5b778733ee95522c742463c9440f8c0aa0ffe9b5e"
+        },
+        {
+          "seed": 11,
+          "sha256": "f296af6d6432b47350f583a47fe99f3f70b54486b56aa2315034baf4b61b4eaf"
+        },
+        {
+          "seed": 12,
+          "sha256": "ce5390c6a3fcc024adc1c85bd5c3d0834c774eec2fe53bbbaae494dae5d471a5"
+        },
+        {
+          "seed": 13,
+          "sha256": "ab7841b582b6d423bf02721f577ac271c77f2716606f6c4b394770338b681c76"
+        },
+        {
+          "seed": 14,
+          "sha256": "0dc5ed68d81c4f7c0d1b368f3d9dfcface8ca0d0c914b8964419d2377a3841a6"
+        },
+        {
+          "seed": 15,
+          "sha256": "451b72da43b9438a3f85ed132ef929164bf3b571cac0bd06e90faca82bddd4d9"
+        },
+        {
+          "seed": 16,
+          "sha256": "f2e68e4e8c9b61696884625177d3bea47643cbc69d8c8bca76d8f93344d7b94b"
+        },
+        {
+          "seed": 17,
+          "sha256": "0b6bcd5d88b1a62f7231506eaa662c571ff57c0de85324dfe34b820e9d8ba6f3"
+        },
+        {
+          "seed": 18,
+          "sha256": "899c813ff393526ca9af3664c970a6cbbe2407ecb68eab42d0128fa757473839"
+        },
+        {
+          "seed": 19,
+          "sha256": "294bbb1a9996c0c62f591925686640376867b9dc6f1727c6fa8d5301031aa643"
+        },
+        {
+          "seed": 20,
+          "sha256": "db770e6ae864eba2ce10099c26488dbff95bba7fd6cf80e2450d8413741a3750"
+        },
+        {
+          "seed": 21,
+          "sha256": "3d54d8972f0fc8ee76a8e0f078cf075a8b9fcd25539abfe09f10c31330f71cc7"
+        },
+        {
+          "seed": 22,
+          "sha256": "2ca2515e23f6f07044e0077ad2155851617253332822d0eede079c799cc92821"
+        },
+        {
+          "seed": 23,
+          "sha256": "0fc8f72b4a580e5224af07dd225c3eb7e57b8f92265d80c746c30347989b2465"
+        },
+        {
+          "seed": 24,
+          "sha256": "a1ae4fd657fe1877cca29de248b1d7573e998d4ee5edc60cf8371fad7d4de64f"
+        },
+        {
+          "seed": 25,
+          "sha256": "db7245571dd7da767538ce5aa32660981fc6334990cb38d2c6b66b707e2615f1"
+        },
+        {
+          "seed": 26,
+          "sha256": "2081185c22f076a4c3225d034e7815b91a44fed63add771656243775bce1023d"
+        },
+        {
+          "seed": 27,
+          "sha256": "6a1e1147aa4afebf16bce0ee7a09c6afa4ee2f12c1b9db5604f9278eb814f484"
+        },
+        {
+          "seed": 28,
+          "sha256": "79e5a32a92fc5336d07078ec000a5a593b8752ee99b266327c424c24e66cb647"
+        },
+        {
+          "seed": 29,
+          "sha256": "77462b77e8df14ea6737e5d7933c7b9169f34c070573bd1c4caf298fd2510940"
+        },
+        {
+          "seed": 30,
+          "sha256": "7df129360c2071cba12136d5af8bf90bdf63979d0d6834075b7af536f359d612"
+        },
+        {
+          "seed": 31,
+          "sha256": "7ef5e4e1fad3de92deb352a05bdba9b075d2a41ecfea43782ef0d0aff7dacecc"
+        },
+        {
+          "seed": 32,
+          "sha256": "9b79229a92d0919f08ee310181650937f6d5e4c653373f0593d5ed168bc5f7d1"
+        },
+        {
+          "seed": 33,
+          "sha256": "e71fefb5ad5be4265bca86242bd7cb83c43844fa0631ba80ac5f5a47a4ceaddc"
+        },
+        {
+          "seed": 34,
+          "sha256": "fc2938c27f9d3625e7f592341e120c983eee37d5e6241c4efb0912886500f08b"
+        },
+        {
+          "seed": 35,
+          "sha256": "33e84a1c5397c1127765851d07cb6d18d4430da90dbb93c77bde827ebcd38a65"
+        },
+        {
+          "seed": 36,
+          "sha256": "f2684dc32bcf62e6a2bd721f7ca575a822cf852f3b838e36f2d757552b7a23cf"
+        },
+        {
+          "seed": 37,
+          "sha256": "5d4462e3e879312ed2d3d0a2e8af9febfa028449d82383fe255d8542f385e04e"
+        },
+        {
+          "seed": 38,
+          "sha256": "dd86f89d7f081b36fc0d3471858c607ceeb0a2b0af61d5c9d2f283e4a3706dee"
+        },
+        {
+          "seed": 39,
+          "sha256": "d46f7132ce1e76cf31a219cfa745e7afa7c50cd15b3e2636fd078bab5194a470"
+        },
+        {
+          "seed": 40,
+          "sha256": "cee9e9fa5325f0c2f396df8f585da79461620dde682b65b3045450bc0d892429"
+        },
+        {
+          "seed": 41,
+          "sha256": "89125aed674dbe07c2397304e1d51da0fa27f6add7701ce53b7a19a58399f77c"
+        },
+        {
+          "seed": 42,
+          "sha256": "6015a7cb021be96672ff8c15780d08398d8c62b65df6d40257519bc4b7ea6cda"
+        },
+        {
+          "seed": 43,
+          "sha256": "8e4b8e953a91cfd8bfc86848c006bca25a6ddd09cad1256bb63f30ecffbfb336"
+        },
+        {
+          "seed": 44,
+          "sha256": "b5038e919fc44c6973e1e9bdb1076b793c4c5a0d6525b20612916d9ddfe404f6"
+        },
+        {
+          "seed": 45,
+          "sha256": "1d7a4fc23ed205791f538fb99ec049a080abc3ae388e08c44252ba4e2f64dc1d"
+        },
+        {
+          "seed": 46,
+          "sha256": "cb36323cb2611c5608f408c0f8b6c874b086b4fff516b3b40e74564c148e68a9"
+        },
+        {
+          "seed": 47,
+          "sha256": "ae05266cb6f0aaca8ac41fc936674b819284b862d0fe82065e74f35ceb8e5d20"
+        },
+        {
+          "seed": 48,
+          "sha256": "de7fca4650a19f6d827c3deb37355075bcfdd41a09d7325d6f916a472b2046c8"
+        },
+        {
+          "seed": 49,
+          "sha256": "f4031464a09cde8af76d42dc1ad2954cb5591d97824db2b25f5ee6a1b0e8081d"
+        },
+        {
+          "seed": 50,
+          "sha256": "b16a650ee4bcc6db0144acf10c4475fe117289fa87038702d62ddd5879f24ec8"
+        },
+        {
+          "seed": 51,
+          "sha256": "1c08779d4b7e90343ff4d693913daa87c96a37d0de2f26d71d5ee1a2f8efd521"
+        },
+        {
+          "seed": 52,
+          "sha256": "a46dc34c67140d3605415ee62c60e6c158b682ba2df3610081b72050d58a3fb8"
+        },
+        {
+          "seed": 53,
+          "sha256": "4fadb5367ca489de9e3718dffa71895076afbcd98e3b309626d906d3d1c1d665"
+        },
+        {
+          "seed": 54,
+          "sha256": "072441190b09dd9e268bb02d8c016caeb87671a48700ee8a128dc9b0e7dd5701"
+        },
+        {
+          "seed": 55,
+          "sha256": "0d2ddad1abc76eb903ce52c1bcd5da44eba4ea2cfd6fab6846d20589c6dc1f8f"
+        },
+        {
+          "seed": 56,
+          "sha256": "e8ee54418e09944a096c99492fa74c36e96b7cf2efb57fcd184d4b2d0f3fc767"
+        },
+        {
+          "seed": 57,
+          "sha256": "7bf83565146cf1c7e315f34430466b6ff2b7c73c2745d22f0deae065984fd653"
+        },
+        {
+          "seed": 58,
+          "sha256": "c615fbc6b9228ea9474f1680c34d51ca4b83ba59bb34eb4abb5f8543fa3fbac0"
+        },
+        {
+          "seed": 59,
+          "sha256": "0098c1e68d440a0b09c16f1e09eac5f5a6a1ed64d3bff4eae7e309c485ff811c"
+        },
+        {
+          "seed": 60,
+          "sha256": "5058a617007a85fe53f68b05e0e1dfec847ac10adeaece1653ecb682a794ae0f"
+        },
+        {
+          "seed": 61,
+          "sha256": "508694eec430cb3031b413c293968a6989b351ae9ef8a28320fcae48ad682e14"
+        },
+        {
+          "seed": 62,
+          "sha256": "9ac5f6d5e287b61b036c73fe9029ff90658d93444df0ed533aa1632361063cc4"
+        },
+        {
+          "seed": 63,
+          "sha256": "bcc7b29d05377a2376a94d9ab3c5be4d0bc79ec805b9ba46ff69de0db929431d"
+        },
+        {
+          "seed": 64,
+          "sha256": "37a2bd0baa5d8ce63d2cb85f493be585e567be799aa695a2257bc22808a31fda"
+        },
+        {
+          "seed": 65,
+          "sha256": "abe80d1f1781e0c75396a62b7693a1f317aed88ad13f4d5dae3ba961f5968c15"
+        },
+        {
+          "seed": 66,
+          "sha256": "c213e37490de72bd2e6f97cb067eb9b0ae3e9da0c9261acddec279cf38957397"
+        },
+        {
+          "seed": 67,
+          "sha256": "a522ebc77a1483f907996d24d41d35ca2fe6412c27fefbf6cb8ad0cccad5ffc2"
+        },
+        {
+          "seed": 68,
+          "sha256": "9917971150b6d37ac6ac3b0e8c4c96f4b11daa340b857aa5f387d79ea1eb9ecd"
+        },
+        {
+          "seed": 69,
+          "sha256": "3b40e5ef9dcc6aa8497f7b6978a7868ab67c8b09b352a8ab0f8c6370779876b0"
+        },
+        {
+          "seed": 70,
+          "sha256": "944d06509c13f3fc15ac3158827f820fbde26c06350c946ed87f3c66c63738a5"
+        },
+        {
+          "seed": 71,
+          "sha256": "fc204d1aecb5b96fdb77da505fa1fdc7ec3b3d55607da26eb01bdce746e57f26"
+        },
+        {
+          "seed": 72,
+          "sha256": "ded262bd2ecdc1d41284eec545656d5681538ccc3c921e325f5520e2e16daced"
+        },
+        {
+          "seed": 73,
+          "sha256": "abde587f0a10fd41635685c7d4459d32be6ef74b8a7d8f487b8b7b7663767848"
+        },
+        {
+          "seed": 74,
+          "sha256": "85769b8f388b945b2d038546cb62e95859aa41be27e083fff839d3ab958a7d9f"
+        },
+        {
+          "seed": 75,
+          "sha256": "91c8be27d0f79f8235d85f5c540b3820923f178daafb7a3215b7ffaf8a8945f8"
+        },
+        {
+          "seed": 76,
+          "sha256": "1b07ac11d2a04411dc6209d4d6b9da3e94a2a230fd213db65f15f57cdb984047"
+        },
+        {
+          "seed": 77,
+          "sha256": "26a2fddf5a61be656f47ae845bc29a78c8b1f9c7fa0b6d6391111e217b9ff5dd"
+        },
+        {
+          "seed": 78,
+          "sha256": "99d501de9c244afcaf7a841a60cbeb7b9dc1d16ec6f7b0097bea38648d0c08ce"
+        },
+        {
+          "seed": 79,
+          "sha256": "b714828b93fa5029948797eee1eed5ba0e29a6215c4e51e56c02c52c88dc1411"
+        },
+        {
+          "seed": 80,
+          "sha256": "64e58d5141340c72453891ef0767a6da08635201ca4c134fddc7eb8fbcc72d67"
+        },
+        {
+          "seed": 81,
+          "sha256": "4fe4b24fc9f37594c362d4cdb036c6dff29c771edb3e451634ef894461338d47"
+        },
+        {
+          "seed": 82,
+          "sha256": "b482009ca4906b3a9d88d3c10eee820d672b0b32c083613ffa55b5778d0fed29"
+        },
+        {
+          "seed": 83,
+          "sha256": "a50b6d8835da38fb24bfa8fbf792f90ea74efa2727944fa9caa85d756157cd6c"
+        },
+        {
+          "seed": 84,
+          "sha256": "5550223429373403f3ea23b0e2ad31428e943b95d0682ffd1a649d85c25e3c80"
+        },
+        {
+          "seed": 85,
+          "sha256": "b5d4b208ea6bafa5634284075ec8075b134cfce1f05a1322658dffbd422ccbe0"
+        },
+        {
+          "seed": 86,
+          "sha256": "89f46ac99cfeb9353e93ce53f01b1beb50fa08c3a4aaaf670d7ac7e92a942068"
+        },
+        {
+          "seed": 87,
+          "sha256": "def8fac0a0b950d5353f85ee9b5bf775b148f8e741c75951993c02c1cde45a01"
+        },
+        {
+          "seed": 88,
+          "sha256": "e6d3b0fd41d3c8fd81e8acec2be4efdf878ceabe28510e9b2b58509849b52d82"
+        },
+        {
+          "seed": 89,
+          "sha256": "447dfd274fc07b006b37cbcde1c6bb0868e6363f061da2eeb1ed54172972d6db"
+        },
+        {
+          "seed": 90,
+          "sha256": "006e04257b4046df663d226d5c539fe2dff0b021e9e9a8aa0a37167c1e3e241e"
+        },
+        {
+          "seed": 91,
+          "sha256": "d0be35501027396cc4ad552d514256bf0f95647abfc4592ae43d09d7051c6751"
+        },
+        {
+          "seed": 92,
+          "sha256": "a1fd4346c47d3fbd133f0875bedac10212b8573c3cc7be1d29c6f65a87ebd7a1"
+        },
+        {
+          "seed": 93,
+          "sha256": "cccbcbe9ce6e5e8d6444bd48b899609418e55268f96b3e77ee80f206973babfb"
+        },
+        {
+          "seed": 94,
+          "sha256": "7fff52de33a3faf17c21870b328ba77239208d0f60ba0b7419064ebbf22cc381"
+        },
+        {
+          "seed": 95,
+          "sha256": "c5f39848bf40d0b0c79b3a595f5006d7805887e32fa3832cd88a0a73b3106ff5"
+        },
+        {
+          "seed": 96,
+          "sha256": "06d9ae21fda0d5fd6930f962108aa84b880a68714bcd5179bdbbc4ca51c04ea9"
+        },
+        {
+          "seed": 97,
+          "sha256": "e42820e8b1bdc131ece3124a2bfe05d581ca83eba48bb00d06988032de60b5f1"
+        },
+        {
+          "seed": 98,
+          "sha256": "ee61c39de52d30664e338ef9b95a93c5d3c082636f633803d2d2ff15c282aaf4"
+        },
+        {
+          "seed": 99,
+          "sha256": "f0a8f2a3526bfd493ed433fa75b8219bfbff2bdc28f1b4ef097170cf44bd4c4f"
+        }
+      ]
+    }
+  }
+}

@@ -281,13 +281,14 @@ describe('BasicDeckSolver', () => {
     expect(result.roleCoverage).toEqual({
       twoKCounter: 8,
       blocker: 16,
-      interaction: 32,
+      interaction: 0,
       pressure: 12,
       boss: 12,
       curve: 28,
     })
     expect(result.warnings).toEqual([
       'Only 8 2K counters; aim for at least 10.',
+      'Only 0 interaction cards; aim for at least 5.',
     ])
     expect(result.label).toBe('Basic sealed build')
     expect(result.solverVersion).toBe('basic-v1')

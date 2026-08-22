@@ -1,6 +1,17 @@
 import { z } from 'zod'
 
 import type { PlayableCard } from './catalog.js'
+import {
+  cardEffectModelSchema,
+  type EffectAction,
+  type EffectBranch,
+  type EffectInstance,
+  type CardEffectModel,
+  type RainbowLuffyCompatibility,
+} from './card-effect-model.js'
+import { parseCardEffects } from './card-effect-parser.js'
+
+export type { RainbowLuffyCompatibility } from './card-effect-model.js'
 
 export const cardFeatureKeys = [
   'twoKCounter',
@@ -39,12 +50,7 @@ export interface SupportRequirement {
   readonly requiredTraits: readonly string[]
 }
 
-export type RainbowLuffyCompatibility =
-  | 'compatible'
-  | 'neutral'
-  | 'incompatible'
-
-export interface CardFeatures {
+export interface CardFeatures extends CardEffectModel {
   readonly flags: Readonly<Record<CardFeatureKey, boolean>>
   readonly rainbowUsableFlags: Readonly<Record<CardFeatureKey, boolean>>
   readonly supportRequirementsByFlag: Readonly<
@@ -91,6 +97,7 @@ export const supportRequirementsByFlagSchema = z.strictObject({
 })
 
 export const cardFeaturesSchema = z.strictObject({
+  ...cardEffectModelSchema.shape,
   flags: featureFlagsSchema,
   rainbowUsableFlags: featureFlagsSchema,
   supportRequirementsByFlag: supportRequirementsByFlagSchema,
@@ -348,6 +355,141 @@ interface TextFeatureFlags {
   readonly comboDependent: boolean
 }
 
+type StructuredBroadFeatureKey =
+  | 'blocker'
+  | 'draw'
+  | 'removal'
+  | 'rush'
+  | 'banish'
+  | 'twoForOne'
+  | 'massRest'
+  | 'donRefresh'
+
+type StructuredBroadFlags = Record<StructuredBroadFeatureKey, boolean>
+
+function emptyStructuredBroadFlags(): StructuredBroadFlags {
+  return {
+    blocker: false,
+    draw: false,
+    removal: false,
+    rush: false,
+    banish: false,
+    twoForOne: false,
+    massRest: false,
+    donRefresh: false,
+  }
+}
+
+function mergeStructuredBroadFlags(
+  target: StructuredBroadFlags,
+  source: Readonly<StructuredBroadFlags>,
+): void {
+  for (const key of Object.keys(target) as StructuredBroadFeatureKey[]) {
+    target[key] ||= source[key]
+  }
+}
+
+function isMultipleTarget(quantity: number | 'all' | 'anyNumber'): boolean {
+  return quantity === 'all' || quantity === 'anyNumber' || quantity >= 2
+}
+
+type RemoveAction = Extract<EffectAction, { readonly kind: 'remove' }>
+
+function isPositiveOpponentRemoval(
+  action: EffectAction,
+): action is RemoveAction {
+  return (
+    action.kind === 'remove' &&
+    action.target.subject === 'opponent' &&
+    (action.mode !== 'powerReduction' ||
+      (action.powerDelta !== null && action.powerDelta < 0))
+  )
+}
+
+function structuredBranchFlags(
+  instance: EffectInstance,
+  branch: EffectBranch,
+): StructuredBroadFlags {
+  const result = emptyStructuredBroadFlags()
+  const discardedFromHand = instance.costs.reduce(
+    (total, cost) => total + (cost.kind === 'discardHand' ? cost.amount : 0),
+    0,
+  )
+
+  for (const action of branch.actions) {
+    if (action.kind === 'keyword') {
+      result[action.keyword] = true
+      continue
+    }
+
+    if (action.kind === 'draw' && action.subject === 'player' && action.amount > 0) {
+      result.draw = true
+      if (
+        action.amount >= 2 &&
+        !(action.amount === 2 && discardedFromHand === 2)
+      ) {
+        result.twoForOne = true
+      }
+      continue
+    }
+
+    if (isPositiveOpponentRemoval(action)) {
+      result.removal = true
+      if (isMultipleTarget(action.target.quantity)) result.twoForOne = true
+      if (action.mode === 'rest' && action.target.quantity === 'all') {
+        result.massRest = true
+      }
+      continue
+    }
+
+    if (
+      action.kind === 'donChange' &&
+      action.mode === 'refresh' &&
+      action.amount > 0
+    ) {
+      result.donRefresh = true
+    }
+  }
+
+  return result
+}
+
+function structuredInstanceFlags(instance: EffectInstance): StructuredBroadFlags {
+  const branchFlags = instance.branches.map((branch) =>
+    structuredBranchFlags(instance, branch),
+  )
+  if (branchFlags.length === 0) return emptyStructuredBroadFlags()
+
+  if (instance.chooser === 'opponent') {
+    const guaranteed = emptyStructuredBroadFlags()
+    for (const key of Object.keys(guaranteed) as StructuredBroadFeatureKey[]) {
+      guaranteed[key] = branchFlags.every((flags) => flags[key])
+    }
+    return guaranteed
+  }
+
+  const available = emptyStructuredBroadFlags()
+  for (const flags of branchFlags) mergeStructuredBroadFlags(available, flags)
+  return available
+}
+
+function deriveStructuredBroadFlags(
+  effects: readonly EffectInstance[],
+  rainbowUsableOnly: boolean,
+): StructuredBroadFlags {
+  const result = emptyStructuredBroadFlags()
+  for (const instance of effects) {
+    if (
+      rainbowUsableOnly &&
+      instance.rainbowLuffyCompatibility === 'incompatible'
+    ) {
+      continue
+    }
+    mergeStructuredBroadFlags(result, structuredInstanceFlags(instance))
+  }
+  return result
+}
+
 function detectTextFeatureFlags(rulesText: string): TextFeatureFlags {
   return {
     blocker: hasBlocker(rulesText),
@@ -438,25 +580,6 @@ function rainbowUsableRulesText(rulesText: string): string {
   }
 
   return usableClauses.join('\n')
-}
-
-function unconditionalMassRestRulesText(rulesText: string): string {
-  const unconditionalClauses: string[] = []
-  let suppressThenContinuation = false
-
-  for (const clause of splitRulesClauses(rulesText)) {
-    if (/^then\b[,:]?/i.test(clause) && suppressThenContinuation) continue
-
-    if (/\bif\b/i.test(clause)) {
-      suppressThenContinuation = true
-      continue
-    }
-
-    suppressThenContinuation = false
-    unconditionalClauses.push(clause)
-  }
-
-  return unconditionalClauses.join('\n')
 }
 
 function supportClaims(text: string): ReadonlySet<SupportRequirementFlag> {
@@ -562,18 +685,26 @@ function buildSupportRequirementsByFlag(
 }
 
 export function classifyCardFeatures(card: PlayableCard): CardFeatures {
+  const effectModel = parseCardEffects(card)
   const rulesText = normalizeRulesText(`${card.effect}\n${card.trigger}`)
   const textFlags = detectTextFeatureFlags(rulesText)
-  const flags = buildFeatureFlags(card, textFlags)
+  const structuredFlags = deriveStructuredBroadFlags(effectModel.effects, false)
+  const flags = {
+    ...buildFeatureFlags(card, textFlags),
+    ...structuredFlags,
+  }
   const usableRulesText = rainbowUsableRulesText(rulesText)
   const usableTextFlags = detectTextFeatureFlags(usableRulesText)
-  const detectedUsableFlags = buildFeatureFlags(card, usableTextFlags)
-  const usableMassRest = hasMassRest(
-    unconditionalMassRestRulesText(usableRulesText),
+  const structuredUsableFlags = deriveStructuredBroadFlags(
+    effectModel.effects,
+    true,
   )
+  const detectedUsableFlags = {
+    ...buildFeatureFlags(card, usableTextFlags),
+    ...structuredUsableFlags,
+  }
   const rainbowUsableFlags: Record<CardFeatureKey, boolean> = {
     ...detectedUsableFlags,
-    massRest: usableMassRest,
     twoKCounter: flags.twoKCounter,
     brick: flags.brick,
   }
@@ -586,6 +717,10 @@ export function classifyCardFeatures(card: PlayableCard): CardFeatures {
     .map((key) => key)
 
   return Object.freeze({
+    effectModelVersion: effectModel.effectModelVersion,
+    effectParserRevision: effectModel.effectParserRevision,
+    effects: effectModel.effects,
+    unparsedClauses: effectModel.unparsedClauses,
     flags: Object.freeze(flags),
     rainbowUsableFlags: Object.freeze(rainbowUsableFlags),
     supportRequirementsByFlag:
@@ -600,4 +735,59 @@ export function classifyCardFeatures(card: PlayableCard): CardFeatures {
     requiredNames: sortedFrozen(cardNameTargets(requiredText)),
     evidence: sortedFrozen(evidence),
   })
+}
+
+function isStructurallyAvailable(instance: EffectInstance): boolean {
+  return (
+    instance.source !== 'trigger' &&
+    instance.activation !== 'trigger' &&
+    instance.rainbowLuffyCompatibility !== 'incompatible' &&
+    (instance.condition.kind === 'always' ||
+      instance.condition.kind === 'selfState')
+  )
+}
+
+function isPositiveStructuralInteraction(action: EffectAction): boolean {
+  switch (action.kind) {
+    case 'draw':
+      return action.subject === 'player' && action.amount > 0
+    case 'remove':
+      return isPositiveOpponentRemoval(action)
+    case 'negateEffect':
+    case 'lockAttack':
+      return action.target.subject === 'opponent'
+    case 'handDiscard':
+      return action.subject === 'opponent' && action.amount > 0
+    case 'lifeMove':
+      return action.direction === 'opponentLifeToHand' && action.amount > 0
+    case 'keyword':
+    case 'filter':
+    case 'deploy':
+    case 'protect':
+    case 'donChange':
+    case 'counterModifier':
+    case 'powerModifier':
+    case 'leaderBasePower':
+    case 'unknown':
+      return false
+  }
+}
+
+function branchHasStructuredInteraction(branch: EffectBranch): boolean {
+  return branch.actions.some(isPositiveStructuralInteraction)
+}
+
+function instanceHasStructuredInteraction(instance: EffectInstance): boolean {
+  if (!isStructurallyAvailable(instance) || instance.branches.length === 0) {
+    return false
+  }
+
+  if (instance.chooser === 'opponent') {
+    return instance.branches.every(branchHasStructuredInteraction)
+  }
+  return instance.branches.some(branchHasStructuredInteraction)
+}
+
+export function hasStructuredInteraction(features: CardFeatures): boolean {
+  return features.effects.some(instanceHasStructuredInteraction)
 }

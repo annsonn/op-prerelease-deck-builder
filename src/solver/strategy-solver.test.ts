@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import {
+  classifyCardFeatures,
   supportRequirementFlagKeys,
   type CardFeatures,
   type CardFeatureKey,
@@ -77,6 +78,10 @@ function candidate(
       ...cardOverrides,
     },
     features: {
+      effectModelVersion: 2,
+      effectParserRevision: 2,
+      effects: [],
+      unparsedClauses: [],
       flags: { ...flags },
       rainbowUsableFlags: { ...flags },
       supportRequirementsByFlag: Object.fromEntries(
@@ -91,6 +96,14 @@ function candidate(
       ...featureOverrides,
     },
   }
+}
+
+function classifiedCandidate(
+  cardNumber: string,
+  cardOverrides: Partial<PlayableCard>,
+): CandidateCard {
+  const card = candidate(cardNumber, cardOverrides).card
+  return { card, features: classifyCardFeatures(card) }
 }
 
 function runtimeCatalog(
@@ -262,10 +275,14 @@ describe('StrategyDeckSolver marginal selection', () => {
 
   it('projects every usable role and lets those roles change later choices', () => {
     const locked = candidate('OP16-000', { cost: null, power: 200_000 })
+    const structuredDraw = classifiedCandidate('OP16-099', {
+      effect: '[On Play] Draw 1 card.',
+    })
     const multiRole = candidate(
       'OP16-001',
       { cost: null, power: 100_000, counter: 2000 },
       ['twoKCounter', 'blocker', 'draw', 'boss', 'rush'],
+      { effects: structuredDraw.features.effects },
     )
     const blocker = candidate('OP16-002', { cost: null, power: 0 }, ['blocker'])
     const filler = candidate('OP16-003', { cost: null, power: 1000 })
@@ -375,10 +392,9 @@ describe('StrategyDeckSolver marginal selection', () => {
       'Printed body efficiency (avg +200)',
       'Blocker target (avg +1.4)',
       'Brick risk beyond tolerance (avg -3.05)',
-      'Broadly useful Rainbow-usable effects (avg +1)',
       'Satisfied-role redundancy (avg -0.75)',
     ])
-    expect(line?.reasons).toHaveLength(5)
+    expect(line?.reasons).toHaveLength(4)
 
     const displayedTotal = line?.reasons.reduce((sum, reason) => {
       const match = /\(avg ([+-]\d+(?:\.\d+)?)\)$/.exec(reason)
@@ -448,6 +464,19 @@ describe('StrategyDeckSolver marginal selection', () => {
 })
 
 describe('StrategyDeckSolver result contract', () => {
+  it('allocates structured lockdown as interaction consistently with analysis', () => {
+    const lockdown = classifiedCandidate('OP16-040', {
+      effect:
+        '[On Play] Up to 2 of your opponent\'s Characters cannot attack until the end of your opponent\'s next End Phase.',
+    })
+    const result = solver.solve(runtimeCatalog([lockdown]), {
+      'OP16-040': 40,
+    })
+
+    expect(result.mainDeck[0]?.allocatedRoles.interaction).toBe(40)
+    expect(result.analysis.roleCoverage.interaction.count).toBe(40)
+  })
+
   it('derives compatibility summaries and play guidance from the final analysis', () => {
     const selected = candidate(
       'OP16-001',

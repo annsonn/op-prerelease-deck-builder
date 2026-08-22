@@ -88,6 +88,76 @@ describe('getStrategyProfile', () => {
     expect(getStrategyProfile('OP17').limits.premiumBombFirstCopyFloor).toBe(15)
   })
 
+  it('publishes the exact structured effect-value policy', () => {
+    expect(getStrategyProfile('OP17').effectModel).toEqual({
+      actions: {
+        ownDrawPerCard: 2,
+        opponentDrawPerCard: -2,
+        filterPerKept: 1,
+        filterPerExtraSeen: 0.25,
+        filterCap: 2.5,
+        opponentDiscardPerCard: 2.5,
+        counterPerThousand: 2,
+        koBase: 4,
+        bottomDeckBase: 4.5,
+        returnHandBase: 3,
+        restBase: 1.5,
+        negateEffectBase: 1.5,
+        powerReductionPerThousand: 0.75,
+        lockAttackBase: 2.5,
+        deployPerCard: 1.5,
+        deployPerCostSaved: 0.5,
+        deployCap: 9,
+        trashDeployBonus: 1,
+        protectionBase: 3,
+        ownLifeGainPerCard: 5,
+        opponentLifeToHandPerCard: 3,
+        refreshDonPerCard: 1.5,
+        rampActiveDonPerCard: 2,
+        rampRestedDonPerCard: 1.25,
+        counterAuraPerThousandPerCard: 1,
+        counterAuraCap: 6,
+        ownPowerPerThousandPerTarget: 0.75,
+        leaderShieldPerThousand: 4,
+        keyword: 1,
+      },
+      costs: {
+        playEventDonPerCard: 1,
+        donMinusPerCard: 1.5,
+        restDonPerCard: 1,
+        discardHandPerCard: 2,
+        trashSelf: 1.5,
+        restSelf: 1,
+      },
+      activationFactors: {
+        onPlay: 1,
+        main: 1,
+        static: 0.8,
+        activateMain: 0.75,
+        whenAttacking: 0.7,
+        counter: 0.65,
+        onOpponentsAttack: 0.6,
+        onBlock: 0.6,
+        onKo: 0.5,
+        trigger: 0.35,
+      },
+      targetMultipliers: {
+        one: 1,
+        two: 1.75,
+        threeOrMore: 2.25,
+        unbounded: 2.5,
+      },
+      costCeilingFactors: {
+        zeroToTwo: 0.55,
+        threeToFour: 0.75,
+        fiveToSix: 0.9,
+        sevenOrMore: 1,
+      },
+      longDurationMultiplier: 1.25,
+      effectInstanceCap: 12,
+    })
+  })
+
   it('keeps every weight category explicit and numeric for scorer tuning', () => {
     const weights = getStrategyProfile('OP16').weights
 
@@ -158,6 +228,8 @@ describe('getStrategyProfile', () => {
 
     expect(first).not.toBe(second)
     expect(first.targets).not.toBe(second.targets)
+    expect(first.effectModel).not.toBe(second.effectModel)
+    expect(first.effectModel.actions).not.toBe(second.effectModel.actions)
     expect(() => {
       ;(first.targets as unknown as { blocker: number }).blocker = 0
     }).toThrow(TypeError)
@@ -251,6 +323,115 @@ describe('mergeStrategyProfile', () => {
     expect(Object.isFrozen(merged.limits)).toBe(true)
     expectDeeplyFrozen(merged)
   })
+
+  it('deeply merges effect policy leaves without dropping siblings', () => {
+    const base = getStrategyProfile('OP17')
+    const merged = mergeStrategyProfile(base, {
+      effectModel: {
+        actions: { koBase: 8 },
+        activationFactors: { trigger: 0.25 },
+      },
+    })
+
+    expect(merged.effectModel).toEqual({
+      ...base.effectModel,
+      actions: { ...base.effectModel.actions, koBase: 8 },
+      activationFactors: {
+        ...base.effectModel.activationFactors,
+        trigger: 0.25,
+      },
+    })
+    expect(base.effectModel.actions.koBase).toBe(4)
+    expect(merged.effectModel.actions.bottomDeckBase).toBe(4.5)
+    expect(merged.effectModel.activationFactors.onPlay).toBe(1)
+    expectDeeplyFrozen(merged.effectModel)
+  })
+
+  it.each([
+    ['actions.koBase', { actions: { koBase: -1 } }],
+    ['actions.keyword', { actions: { keyword: Number.NaN } }],
+    ['actions.filterCap', { actions: { filterCap: Number.POSITIVE_INFINITY } }],
+    ['costs.trashSelf', { costs: { trashSelf: -1 } }],
+    ['costs.restSelf', { costs: { restSelf: Number.NaN } }],
+    [
+      'costs.playEventDonPerCard',
+      { costs: { playEventDonPerCard: Number.POSITIVE_INFINITY } },
+    ],
+  ] as const)('rejects invalid non-negative effect value %s', (label, effectModel) => {
+    expect(() =>
+      mergeStrategyProfile(getStrategyProfile('OP17'), { effectModel }),
+    ).toThrow(new RegExp(`${label.replace('.', '\\.')}.*finite and non-negative`, 'i'))
+  })
+
+  it.each([
+    ['activationFactors.trigger', -0.01],
+    ['activationFactors.trigger', 1.01],
+    ['activationFactors.trigger', Number.NaN],
+    ['activationFactors.trigger', Number.POSITIVE_INFINITY],
+  ] as const)('rejects out-of-range availability factor %s=%s', (label, trigger) => {
+    expect(() =>
+      mergeStrategyProfile(getStrategyProfile('OP17'), {
+        effectModel: { activationFactors: { trigger } },
+      }),
+    ).toThrow(new RegExp(`${label.replace('.', '\\.')}.*0 through 1`, 'i'))
+  })
+
+  it.each([
+    ['targetMultipliers.one', { targetMultipliers: { one: 0 } }],
+    ['targetMultipliers.two', { targetMultipliers: { two: -1 } }],
+    [
+      'targetMultipliers.threeOrMore',
+      { targetMultipliers: { threeOrMore: Number.NaN } },
+    ],
+    [
+      'targetMultipliers.unbounded',
+      { targetMultipliers: { unbounded: Number.POSITIVE_INFINITY } },
+    ],
+    ['costCeilingFactors.zeroToTwo', { costCeilingFactors: { zeroToTwo: 0 } }],
+    [
+      'costCeilingFactors.threeToFour',
+      { costCeilingFactors: { threeToFour: -1 } },
+    ],
+    [
+      'costCeilingFactors.fiveToSix',
+      { costCeilingFactors: { fiveToSix: Number.NaN } },
+    ],
+    [
+      'costCeilingFactors.sevenOrMore',
+      { costCeilingFactors: { sevenOrMore: Number.POSITIVE_INFINITY } },
+    ],
+    ['longDurationMultiplier', { longDurationMultiplier: 0 }],
+    ['longDurationMultiplier', { longDurationMultiplier: -1 }],
+    ['longDurationMultiplier', { longDurationMultiplier: Number.NaN }],
+    [
+      'longDurationMultiplier',
+      { longDurationMultiplier: Number.POSITIVE_INFINITY },
+    ],
+    ['effectInstanceCap', { effectInstanceCap: 0 }],
+    ['effectInstanceCap', { effectInstanceCap: -1 }],
+    ['effectInstanceCap', { effectInstanceCap: Number.NaN }],
+    ['effectInstanceCap', { effectInstanceCap: Number.POSITIVE_INFINITY }],
+  ] as const)('rejects invalid positive effect policy %s', (label, effectModel) => {
+    expect(() =>
+      mergeStrategyProfile(getStrategyProfile('OP17'), { effectModel }),
+    ).toThrow(new RegExp(`${label.replace('.', '\\.')}.*finite and positive`, 'i'))
+  })
+
+  it.each([
+    0.01,
+    Number.NaN,
+    Number.POSITIVE_INFINITY,
+    Number.NEGATIVE_INFINITY,
+  ])(
+    'rejects adverse opponent draw value %s',
+    (opponentDrawPerCard) => {
+      expect(() =>
+        mergeStrategyProfile(getStrategyProfile('OP17'), {
+          effectModel: { actions: { opponentDrawPerCard } },
+        }),
+      ).toThrow(/actions\.opponentDrawPerCard.*finite and non-positive/i)
+    },
+  )
 
   it.each([-1, Number.NaN, Number.POSITIVE_INFINITY])(
     'rejects invalid premium-bomb first-copy floor %s with a named range error',

@@ -1,3 +1,5 @@
+import type { ActivationChannel } from '../../shared/card-effect-model.js'
+
 export type SoftTargetRole =
   | 'twoKCounter'
   | 'blocker'
@@ -55,6 +57,71 @@ type StrategyWeights = Readonly<{
   }>
 }>
 
+export type EffectActionValues = Readonly<{
+  ownDrawPerCard: number
+  opponentDrawPerCard: number
+  filterPerKept: number
+  filterPerExtraSeen: number
+  filterCap: number
+  opponentDiscardPerCard: number
+  counterPerThousand: number
+  koBase: number
+  bottomDeckBase: number
+  returnHandBase: number
+  restBase: number
+  negateEffectBase: number
+  powerReductionPerThousand: number
+  lockAttackBase: number
+  deployPerCard: number
+  deployPerCostSaved: number
+  deployCap: number
+  trashDeployBonus: number
+  protectionBase: number
+  ownLifeGainPerCard: number
+  opponentLifeToHandPerCard: number
+  refreshDonPerCard: number
+  rampActiveDonPerCard: number
+  rampRestedDonPerCard: number
+  counterAuraPerThousandPerCard: number
+  counterAuraCap: number
+  ownPowerPerThousandPerTarget: number
+  leaderShieldPerThousand: number
+  keyword: number
+}>
+
+export type EffectCostValues = Readonly<{
+  playEventDonPerCard: number
+  donMinusPerCard: number
+  restDonPerCard: number
+  discardHandPerCard: number
+  trashSelf: number
+  restSelf: number
+}>
+
+export type EffectModelProfile = Readonly<{
+  actions: EffectActionValues
+  costs: EffectCostValues
+  activationFactors: Readonly<Record<ActivationChannel, number>>
+  targetMultipliers: Readonly<{
+    one: number
+    two: number
+    threeOrMore: number
+    unbounded: number
+  }>
+  costCeilingFactors: Readonly<{
+    zeroToTwo: number
+    threeToFour: number
+    fiveToSix: number
+    sevenOrMore: number
+  }>
+  longDurationMultiplier: number
+  effectInstanceCap: number
+}>
+
+type RecursivePartial<T> = Readonly<{
+  [Key in keyof T]?: T[Key] extends object ? RecursivePartial<T[Key]> : T[Key]
+}>
+
 export type StrategyProfile = Readonly<{
   id: 'sealed-video-v1'
   version: 1
@@ -80,6 +147,7 @@ export type StrategyProfile = Readonly<{
     }>
   }>
   weights: StrategyWeights
+  effectModel: EffectModelProfile
 }>
 
 export type StrategyProfileOverride = Readonly<{
@@ -105,6 +173,7 @@ export type StrategyProfileOverride = Readonly<{
     redundancy?: Partial<StrategyWeights['redundancy']>
     progressiveBricks?: Partial<StrategyWeights['progressiveBricks']>
   }>
+  effectModel?: RecursivePartial<EffectModelProfile>
 }>
 
 const BASE_PROFILE: StrategyProfile = {
@@ -164,6 +233,73 @@ const BASE_PROFILE: StrategyProfile = {
     compatibility: { leaderColor: 3, cardColor: 2, effect: 1 },
     redundancy: { role: 1, effect: 1 },
     progressiveBricks: { first: 1, second: 2, third: 3, fourthOrMore: 4 },
+  },
+  effectModel: {
+    actions: {
+      ownDrawPerCard: 2,
+      opponentDrawPerCard: -2,
+      filterPerKept: 1,
+      filterPerExtraSeen: 0.25,
+      filterCap: 2.5,
+      opponentDiscardPerCard: 2.5,
+      counterPerThousand: 2,
+      koBase: 4,
+      bottomDeckBase: 4.5,
+      returnHandBase: 3,
+      restBase: 1.5,
+      negateEffectBase: 1.5,
+      powerReductionPerThousand: 0.75,
+      lockAttackBase: 2.5,
+      deployPerCard: 1.5,
+      deployPerCostSaved: 0.5,
+      deployCap: 9,
+      trashDeployBonus: 1,
+      protectionBase: 3,
+      ownLifeGainPerCard: 5,
+      opponentLifeToHandPerCard: 3,
+      refreshDonPerCard: 1.5,
+      rampActiveDonPerCard: 2,
+      rampRestedDonPerCard: 1.25,
+      counterAuraPerThousandPerCard: 1,
+      counterAuraCap: 6,
+      ownPowerPerThousandPerTarget: 0.75,
+      leaderShieldPerThousand: 4,
+      keyword: 1,
+    },
+    costs: {
+      playEventDonPerCard: 1,
+      donMinusPerCard: 1.5,
+      restDonPerCard: 1,
+      discardHandPerCard: 2,
+      trashSelf: 1.5,
+      restSelf: 1,
+    },
+    activationFactors: {
+      onPlay: 1,
+      main: 1,
+      static: 0.8,
+      activateMain: 0.75,
+      whenAttacking: 0.7,
+      counter: 0.65,
+      onOpponentsAttack: 0.6,
+      onBlock: 0.6,
+      onKo: 0.5,
+      trigger: 0.35,
+    },
+    targetMultipliers: {
+      one: 1,
+      two: 1.75,
+      threeOrMore: 2.25,
+      unbounded: 2.5,
+    },
+    costCeilingFactors: {
+      zeroToTwo: 0.55,
+      threeToFour: 0.75,
+      fiveToSix: 0.9,
+      sevenOrMore: 1,
+    },
+    longDurationMultiplier: 1.25,
+    effectInstanceCap: 12,
   },
 }
 
@@ -246,6 +382,31 @@ export function mergeStrategyProfile(
         override?.weights?.progressiveBricks,
       ),
     },
+    effectModel: {
+      actions: mergeDefined(
+        base.effectModel.actions,
+        override?.effectModel?.actions,
+      ),
+      costs: mergeDefined(base.effectModel.costs, override?.effectModel?.costs),
+      activationFactors: mergeDefined(
+        base.effectModel.activationFactors,
+        override?.effectModel?.activationFactors,
+      ),
+      targetMultipliers: mergeDefined(
+        base.effectModel.targetMultipliers,
+        override?.effectModel?.targetMultipliers,
+      ),
+      costCeilingFactors: mergeDefined(
+        base.effectModel.costCeilingFactors,
+        override?.effectModel?.costCeilingFactors,
+      ),
+      longDurationMultiplier:
+        override?.effectModel?.longDurationMultiplier ??
+        base.effectModel.longDurationMultiplier,
+      effectInstanceCap:
+        override?.effectModel?.effectInstanceCap ??
+        base.effectModel.effectInstanceCap,
+    },
   }
 
   const { neutralMinimum, strengthMinimum, scoringSaturationMinimum } =
@@ -295,7 +456,66 @@ export function mergeStrategyProfile(
     }
   }
 
+  for (const [name, value] of Object.entries(merged.effectModel.actions)) {
+    const label = `effectModel.actions.${name}`
+    if (name === 'opponentDrawPerCard') {
+      finiteNonPositive(label, value)
+    } else {
+      finiteNonNegative(label, value)
+    }
+  }
+  for (const [name, value] of Object.entries(merged.effectModel.costs)) {
+    finiteNonNegative(`effectModel.costs.${name}`, value)
+  }
+  for (const [name, value] of Object.entries(
+    merged.effectModel.activationFactors,
+  )) {
+    boundedFactor(`effectModel.activationFactors.${name}`, value)
+  }
+  for (const [name, value] of Object.entries(
+    merged.effectModel.targetMultipliers,
+  )) {
+    finitePositive(`effectModel.targetMultipliers.${name}`, value)
+  }
+  for (const [name, value] of Object.entries(
+    merged.effectModel.costCeilingFactors,
+  )) {
+    finitePositive(`effectModel.costCeilingFactors.${name}`, value)
+  }
+  finitePositive(
+    'effectModel.longDurationMultiplier',
+    merged.effectModel.longDurationMultiplier,
+  )
+  finitePositive(
+    'effectModel.effectInstanceCap',
+    merged.effectModel.effectInstanceCap,
+  )
+
   return deepFreeze(merged)
+}
+
+function finiteNonNegative(label: string, value: number): void {
+  if (!Number.isFinite(value) || value < 0) {
+    throw new RangeError(`${label} must be finite and non-negative.`)
+  }
+}
+
+function finiteNonPositive(label: string, value: number): void {
+  if (!Number.isFinite(value) || value > 0) {
+    throw new RangeError(`${label} must be finite and non-positive.`)
+  }
+}
+
+function boundedFactor(label: string, value: number): void {
+  if (!Number.isFinite(value) || value < 0 || value > 1) {
+    throw new RangeError(`${label} must be from 0 through 1.`)
+  }
+}
+
+function finitePositive(label: string, value: number): void {
+  if (!Number.isFinite(value) || value <= 0) {
+    throw new RangeError(`${label} must be finite and positive.`)
+  }
 }
 
 export function getStrategyProfile(setId: string): StrategyProfile {

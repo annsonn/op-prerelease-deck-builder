@@ -1,9 +1,7 @@
 import { z } from 'zod'
 
-import {
-  cardFeaturesSchema,
-  featureFlagsSchema,
-} from './card-features.js'
+import { effectInstanceSchema } from './card-effect-model.js'
+import { cardFeaturesSchema } from './card-features.js'
 
 export const cardTypeSchema = z.enum([
   'LEADER',
@@ -70,53 +68,142 @@ export const suggestedRoleSchema = z.enum([
 
 export type SuggestedRole = z.infer<typeof suggestedRoleSchema>
 
-const preSupportRequirementsCardFeaturesSchema = cardFeaturesSchema.omit({
-  supportRequirementsByFlag: true,
+const legacyCurrentFeatureFlagsSchema = z.strictObject({
+  twoKCounter: z.boolean(),
+  blocker: z.boolean(),
+  vanillaLike: z.boolean(),
+  draw: z.boolean(),
+  removal: z.boolean(),
+  boss: z.boolean(),
+  rush: z.boolean(),
+  banish: z.boolean(),
+  twoForOne: z.boolean(),
+  massRest: z.boolean(),
+  donRefresh: z.boolean(),
+  searcher: z.boolean(),
+  comboDependent: z.boolean(),
+  brick: z.boolean(),
 })
 
-const legacyCardFeaturesSchema = preSupportRequirementsCardFeaturesSchema.omit({
-  rainbowUsableFlags: true,
+const legacyPrePremiumFeatureFlagsSchema = z.strictObject({
+  twoKCounter: z.boolean(),
+  blocker: z.boolean(),
+  vanillaLike: z.boolean(),
+  draw: z.boolean(),
+  removal: z.boolean(),
+  boss: z.boolean(),
+  rush: z.boolean(),
+  banish: z.boolean(),
+  twoForOne: z.boolean(),
+  searcher: z.boolean(),
+  comboDependent: z.boolean(),
+  brick: z.boolean(),
 })
 
-const legacyRainbowCardFeaturesSchema = cardFeaturesSchema.omit({
-  rainbowUsableFlags: true,
+const legacySupportRequirementSchema = z.strictObject({
+  requiredNames: z.array(z.string()),
+  requiredTraits: z.array(z.string()),
 })
 
-const prePremiumFeatureFlagsSchema = featureFlagsSchema.omit({
-  massRest: true,
-  donRefresh: true,
+const legacySupportRequirementsByFlagSchema = z.strictObject({
+  blocker: legacySupportRequirementSchema.nullable(),
+  draw: legacySupportRequirementSchema.nullable(),
+  removal: legacySupportRequirementSchema.nullable(),
+  rush: legacySupportRequirementSchema.nullable(),
+  banish: legacySupportRequirementSchema.nullable(),
+  twoForOne: legacySupportRequirementSchema.nullable(),
+  searcher: legacySupportRequirementSchema.nullable(),
 })
 
-const prePremiumCardFeaturesSchema = cardFeaturesSchema.extend({
-  flags: prePremiumFeatureFlagsSchema,
-  rainbowUsableFlags: prePremiumFeatureFlagsSchema,
+const legacyCardFeatureProjectionFields = {
+  rainbowLuffyCompatibility: z.enum([
+    'compatible',
+    'neutral',
+    'incompatible',
+  ]),
+  searchableTraits: z.array(z.string()),
+  searchableNames: z.array(z.string()),
+  requiredTraits: z.array(z.string()),
+  requiredNames: z.array(z.string()),
+  evidence: z.array(z.string()),
+}
+
+const priorRevisionOneCardFeaturesSchema = z.strictObject({
+  effectModelVersion: z.literal(2),
+  effectParserRevision: z.literal(1),
+  effects: z.array(effectInstanceSchema),
+  unparsedClauses: z.array(z.string().min(1)),
+  flags: legacyCurrentFeatureFlagsSchema,
+  rainbowUsableFlags: legacyCurrentFeatureFlagsSchema,
+  supportRequirementsByFlag: legacySupportRequirementsByFlagSchema,
+  ...legacyCardFeatureProjectionFields,
 })
 
-const prePremiumPreSupportRequirementsCardFeaturesSchema =
-  prePremiumCardFeaturesSchema.omit({
-    supportRequirementsByFlag: true,
+const legacyCurrentCardFeaturesSchema = z.strictObject({
+  flags: legacyCurrentFeatureFlagsSchema,
+  rainbowUsableFlags: legacyCurrentFeatureFlagsSchema,
+  supportRequirementsByFlag: legacySupportRequirementsByFlagSchema,
+  ...legacyCardFeatureProjectionFields,
+})
+
+const legacyPreSupportRequirementsCardFeaturesSchema = z.strictObject({
+  flags: legacyCurrentFeatureFlagsSchema,
+  rainbowUsableFlags: legacyCurrentFeatureFlagsSchema,
+  ...legacyCardFeatureProjectionFields,
+})
+
+const legacyPreRainbowCardFeaturesSchema = z.strictObject({
+  flags: legacyCurrentFeatureFlagsSchema,
+  ...legacyCardFeatureProjectionFields,
+})
+
+const legacyRainbowCardFeaturesSchema = z.strictObject({
+  flags: legacyCurrentFeatureFlagsSchema,
+  supportRequirementsByFlag: legacySupportRequirementsByFlagSchema,
+  ...legacyCardFeatureProjectionFields,
+})
+
+const legacyPrePremiumCardFeaturesSchema = z.strictObject({
+  flags: legacyPrePremiumFeatureFlagsSchema,
+  rainbowUsableFlags: legacyPrePremiumFeatureFlagsSchema,
+  supportRequirementsByFlag: legacySupportRequirementsByFlagSchema,
+  ...legacyCardFeatureProjectionFields,
+})
+
+const legacyPrePremiumPreSupportRequirementsCardFeaturesSchema =
+  z.strictObject({
+    flags: legacyPrePremiumFeatureFlagsSchema,
+    rainbowUsableFlags: legacyPrePremiumFeatureFlagsSchema,
+    ...legacyCardFeatureProjectionFields,
   })
 
-const prePremiumLegacyCardFeaturesSchema =
-  prePremiumPreSupportRequirementsCardFeaturesSchema.omit({
-    rainbowUsableFlags: true,
-  })
+const legacyPrePremiumPreRainbowCardFeaturesSchema = z.strictObject({
+  flags: legacyPrePremiumFeatureFlagsSchema,
+  ...legacyCardFeatureProjectionFields,
+})
 
-const prePremiumLegacyRainbowCardFeaturesSchema =
-  prePremiumCardFeaturesSchema.omit({
-    rainbowUsableFlags: true,
-  })
+const legacyPrePremiumRainbowCardFeaturesSchema = z.strictObject({
+  flags: legacyPrePremiumFeatureFlagsSchema,
+  supportRequirementsByFlag: legacySupportRequirementsByFlagSchema,
+  ...legacyCardFeatureProjectionFields,
+})
 
-const serializedCardFeaturesSchema = z.union([
+export const serializedCardFeaturesSchema = z.union([
   cardFeaturesSchema,
-  preSupportRequirementsCardFeaturesSchema,
-  legacyCardFeaturesSchema,
+  priorRevisionOneCardFeaturesSchema,
+  legacyCurrentCardFeaturesSchema,
+  legacyPreSupportRequirementsCardFeaturesSchema,
+  legacyPreRainbowCardFeaturesSchema,
   legacyRainbowCardFeaturesSchema,
-  prePremiumCardFeaturesSchema,
-  prePremiumPreSupportRequirementsCardFeaturesSchema,
-  prePremiumLegacyCardFeaturesSchema,
-  prePremiumLegacyRainbowCardFeaturesSchema,
+  legacyPrePremiumCardFeaturesSchema,
+  legacyPrePremiumPreSupportRequirementsCardFeaturesSchema,
+  legacyPrePremiumPreRainbowCardFeaturesSchema,
+  legacyPrePremiumRainbowCardFeaturesSchema,
 ])
+
+export type SerializedCardFeatures = z.infer<
+  typeof serializedCardFeaturesSchema
+>
 
 export const strategySuggestionSchema = z.strictObject({
   cardNumber: printedCardIdSchema,

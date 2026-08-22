@@ -617,6 +617,60 @@ describe('generatePlayGuide Sideboard suggestions', () => {
     ])
   })
 
+  it('recommends structural lockdown but not adverse or unavailable interaction', () => {
+    const lockdown = line(
+      card('OP16-092', {
+        effect:
+          '[On Play] Up to 2 of your opponent\'s Characters cannot attack until the end of your opponent\'s next End Phase.',
+      }),
+      1,
+      1,
+    )
+    const opponentDraw = line(
+      card('OP16-093', { effect: '[On Play] Your opponent draws 2 cards.' }),
+      1,
+      10,
+    )
+    const triggerOnly = line(
+      card('OP16-094', {
+        trigger:
+          '[Trigger] K.O. up to 1 of your opponent\'s Characters with a cost of 4 or less.',
+      }),
+      1,
+      10,
+    )
+    const incompatible = line(
+      card('OP16-095', {
+        effect:
+          '[On Play] If your Leader is [Restricted Leader], K.O. up to 1 of your opponent\'s Characters.',
+      }),
+      1,
+      10,
+    )
+    const dynamic = line(
+      card('OP16-096', {
+        effect:
+          '[On Play] If your opponent has 3 or more Characters, K.O. up to 1 of your opponent\'s Characters.',
+      }),
+      1,
+      10,
+    )
+
+    const guide = guideFor({
+      sideboard: [opponentDraw, triggerOnly, incompatible, dynamic, lockdown],
+      deckAnalysis: analysis({
+        weaknesses: [insight('interaction', 'Interaction')],
+      }),
+    })
+
+    expect(guide.sideboardSuggestions).toHaveLength(1)
+    expect(guide.sideboardSuggestions[0]).toMatchObject({
+      cardNumber: 'OP16-092',
+      quantity: 1,
+      addressesInsightIds: ['interaction'],
+    })
+  })
+
   it('does not claim or recommend unsupported conditional finisher and Sideboard effects', () => {
     const unsupportedBoss = line(
       card('OP16-099', {

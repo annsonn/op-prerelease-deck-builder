@@ -375,6 +375,21 @@ describe('analyzeMainDeck authoritative measurements', () => {
     expect(analysis.roleCoverage.interaction.count).toBe(2)
   })
 
+  it('renders structured lockdown coverage without inventing draw or removal', () => {
+    const deck = [
+      line('OP16-003', 2, {
+        effect:
+          '[On Play] Up to 2 of your opponent\'s Characters cannot attack until the end of your opponent\'s next End Phase.',
+      }),
+      line('OP16-004', 38, { cardType: 'EVENT', cost: 0, counter: null }),
+    ]
+    const analysis = analyze(deck)
+
+    expect(analysis.roleCoverage.draw.count).toBe(0)
+    expect(analysis.roleCoverage.removal.count).toBe(0)
+    expect(analysis.roleCoverage.interaction.count).toBe(2)
+  })
+
   it('rejects a deck card without published features', () => {
     const deck = [line('OP16-001', 40)]
     expect(() => analyze(deck, PROFILE, new Map())).toThrow(/features.*OP16-001/i)

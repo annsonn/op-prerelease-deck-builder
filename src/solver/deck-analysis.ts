@@ -1,4 +1,7 @@
-import type { CardFeatures } from '../../shared/card-features.js'
+import {
+  hasStructuredInteraction,
+  type CardFeatures,
+} from '../../shared/card-features.js'
 import {
   displayCardColorOrder,
   normalizeDisplayCardColors,
@@ -96,7 +99,7 @@ function summarizeMainDeck(
       if (role === 'interaction') continue
       if (flags[role]) counts[role] += line.quantity
     }
-    if (flags.draw || flags.removal) counts.interaction += line.quantity
+    if (hasStructuredInteraction(features)) counts.interaction += line.quantity
 
     if (isImportantPlay(line.card, features)) {
       const parity = (line.card.cost ?? 0) % 2 === 0 ? 'even' : 'odd'
