@@ -29,7 +29,7 @@ describe('OP17 general effect-value acceptance', () => {
 
   function valuation(cardNumber: string) {
     const { card, features } = entry(cardNumber)
-    const supportCards = catalog.cards.filter((item) => item.cardType === 'CHARACTER').map((item) => ({ card: item, quantity: 1 }))
+    const supportCards = catalog.cards.filter((item) => item.cardType === 'CHARACTER').map((item) => ({ card: item, features: catalog.featuresByCardNumber.get(item.cardNumber)!, quantity: 1 }))
     return valueCardEffects({ card, features }, createEmptyDeckState(), buildPoolSupport(supportCards), profile)
   }
 
@@ -62,7 +62,7 @@ describe('OP17 general effect-value acceptance', () => {
     for (const card of counters) {
       const features = catalog.featuresByCardNumber.get(card.cardNumber)
       if (features === undefined) throw new Error('Missing features for ' + card.cardNumber + '.')
-      const supportCards = catalog.cards.map((item) => ({ card: item, quantity: 1 }))
+      const supportCards = catalog.cards.map((item) => ({ card: item, features: catalog.featuresByCardNumber.get(item.cardNumber)!, quantity: 1 }))
       const result = valueCardEffects({ card, features }, createEmptyDeckState(), buildPoolSupport(supportCards), profile)
       expect(Number.isFinite(result.total), card.cardNumber).toBe(true)
       if (result.total > 0) positivelyValued += 1

@@ -12,6 +12,7 @@ import {
   type PoolSupport,
 } from './deck-state.js'
 import { valueCardEffects } from './effect-value.js'
+import { qualifyPremiumImpact } from './premium-impact.js'
 
 export const marginalScoreComponentOrder = Object.freeze([
   'standalonePower',
@@ -436,14 +437,8 @@ function scoreCandidate(
     ])
   }
 
-  const usableFlags = candidate.features.rainbowUsableFlags
-  const isPremiumBomb =
-    candidate.card.cardType === 'CHARACTER' &&
-    usableFlags.boss &&
-    usableFlags.rush &&
-    usableFlags.massRest &&
-    usableFlags.donRefresh
-  if (selectedCopies === 0 && isPremiumBomb) {
+  const premiumDecision = qualifyPremiumImpact(candidate.card, effectValuation, profile)
+  if (selectedCopies === 0 && premiumDecision.qualifies) {
     const provisionalScore = freezeResult(entries).total
     const floorContribution =
       profile.limits.premiumBombFirstCopyFloor - provisionalScore

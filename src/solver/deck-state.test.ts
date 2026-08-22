@@ -354,8 +354,9 @@ describe('deck state quantities and important plays', () => {
         quantity: 2,
         name: 'Alpha',
         traits: ['Navy', 'Science'],
+        cardType: 'CHARACTER', cost: 3, power: 4000, counter: 0, hasTrigger: false,
       },
-      'OP16-010': { quantity: 1, name: 'Beta', traits: ['Navy'] },
+      'OP16-010': { quantity: 1, name: 'Beta', traits: ['Navy'], cardType: 'CHARACTER', cost: 3, power: 4000, counter: 0, hasTrigger: false },
     })
     expect(
       countMatchingSupport(state, { names: ['Alpha'], traits: ['Navy'] }),
@@ -389,8 +390,9 @@ describe('pool support', () => {
         quantity: 5,
         name: 'Alpha',
         traits: ['Navy', 'Science'],
+        cardType: 'CHARACTER', cost: 3, power: 4000, counter: 0, hasTrigger: false,
       },
-      'OP16-012': { quantity: 4, name: 'Beta', traits: ['Navy'] },
+      'OP16-012': { quantity: 4, name: 'Beta', traits: ['Navy'], cardType: 'CHARACTER', cost: 3, power: 4000, counter: 0, hasTrigger: false },
     })
   })
 

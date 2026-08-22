@@ -116,6 +116,8 @@ export type EffectModelProfile = Readonly<{
   }>
   longDurationMultiplier: number
   effectInstanceCap: number
+  zoneFactors: Readonly<Record<'deck' | 'hand' | 'field' | 'trash' | 'life', number>>
+  opponentBoardConditionFactor: number
 }>
 
 type RecursivePartial<T> = Readonly<{
@@ -137,7 +139,9 @@ export type StrategyProfile = Readonly<{
     brickTolerance: number
     searcherMinimumTargets: number
     comboMinimumSupport: number
-    premiumBombFirstCopyFloor: number
+  premiumBombFirstCopyFloor: number
+    premiumImpactThreshold: number
+    premiumCategoryMinimum: number
   }>
   analysis: Readonly<{
     totalCounter: Readonly<{
@@ -198,6 +202,8 @@ const BASE_PROFILE: StrategyProfile = {
     searcherMinimumTargets: 6,
     comboMinimumSupport: 4,
     premiumBombFirstCopyFloor: 15,
+    premiumImpactThreshold: 7.5,
+    premiumCategoryMinimum: 2,
   },
   analysis: {
     totalCounter: {
@@ -300,6 +306,8 @@ const BASE_PROFILE: StrategyProfile = {
     },
     longDurationMultiplier: 1.25,
     effectInstanceCap: 12,
+    zoneFactors: { deck: 1, hand: 0.75, field: 0.65, trash: 0.55, life: 0.25 },
+    opponentBoardConditionFactor: 0.5,
   },
 }
 
@@ -406,6 +414,10 @@ export function mergeStrategyProfile(
       effectInstanceCap:
         override?.effectModel?.effectInstanceCap ??
         base.effectModel.effectInstanceCap,
+      zoneFactors: mergeDefined(base.effectModel.zoneFactors, override?.effectModel?.zoneFactors),
+      opponentBoardConditionFactor:
+        override?.effectModel?.opponentBoardConditionFactor ??
+        base.effectModel.opponentBoardConditionFactor,
     },
   }
 
@@ -440,6 +452,19 @@ export function mergeStrategyProfile(
     throw new RangeError(
       'premiumBombFirstCopyFloor must be a finite, non-negative number.',
     )
+  }
+  for (const [name, value] of Object.entries(merged.effectModel.zoneFactors)) {
+    boundedFactor(`effectModel.zoneFactors.${name}`, value)
+  }
+  boundedFactor(
+    'effectModel.opponentBoardConditionFactor',
+    merged.effectModel.opponentBoardConditionFactor,
+  )
+  for (const [name, value] of [
+    ['premiumImpactThreshold', merged.limits.premiumImpactThreshold],
+    ['premiumCategoryMinimum', merged.limits.premiumCategoryMinimum],
+  ] as const) {
+    finiteNonNegative(`limits.${name}`, value)
   }
 
   for (const [role, percentage] of Object.entries(

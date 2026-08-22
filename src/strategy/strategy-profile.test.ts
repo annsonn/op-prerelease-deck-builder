@@ -73,6 +73,8 @@ describe('getStrategyProfile', () => {
       searcherMinimumTargets: 6,
       comboMinimumSupport: 4,
       premiumBombFirstCopyFloor: 15,
+      premiumImpactThreshold: 7.5,
+      premiumCategoryMinimum: 2,
     })
     expect(profile.analysis).toEqual({
       totalCounter: {
@@ -155,6 +157,8 @@ describe('getStrategyProfile', () => {
       },
       longDurationMultiplier: 1.25,
       effectInstanceCap: 12,
+      zoneFactors: { deck: 1, hand: 0.75, field: 0.65, trash: 0.55, life: 0.25 },
+      opponentBoardConditionFactor: 0.5,
     })
   })
 
