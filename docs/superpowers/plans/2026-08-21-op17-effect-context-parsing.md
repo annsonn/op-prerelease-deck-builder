@@ -296,7 +296,7 @@ Task 1 evidence (2026-08-21):
 - Create: `shared/card-effect-parser.test.ts`
 - Create: `shared/card-effect-parser.ts`
 
-- [ ] **Step 1: Write failing clause-context tests**
+- [x] **Step 1: Write failing clause-context tests**
 
 Create `shared/card-effect-parser.test.ts` with a local `card()` fixture and these contracts:
 
@@ -363,13 +363,13 @@ it('never merges Trigger-field text into the printed effect instance', () => {
 })
 ```
 
-- [ ] **Step 2: Run the parser test and verify RED**
+- [x] **Step 2: Run the parser test and verify RED**
 
 Run `npm test -- shared/card-effect-parser.test.ts`.
 
 Expected: FAIL because `parseCardEffects` is missing.
 
-- [ ] **Step 3: Implement normalization and context tokenization**
+- [x] **Step 3: Implement normalization and context tokenization**
 
 Create `shared/card-effect-parser.ts`. Export only:
 
@@ -397,18 +397,64 @@ const TIMINGS = new Map([
 
 Parse colon prefixes into shared costs (`DON!!-N`, `rest N ... DON!!`, discard/trash N from hand, trash self, rest self). Parse bracketed Blocker/Rush/Banish as static keyword actions. Set `allowsSelf: true` only for explicit `this card`/`this Character` support wording and false otherwise. Preserve an unrecognized non-empty result in `unparsedClauses` rather than inventing an action.
 
-- [ ] **Step 4: Run the clause-context tests and verify GREEN**
+- [x] **Step 4: Run the clause-context tests and verify GREEN**
 
 Run `npm test -- shared/card-effect-parser.test.ts`.
 
 Expected: PASS for every activation, shared cost, `Then`, bullet branch, and Trigger separation.
 
-- [ ] **Step 5: Commit the parser skeleton**
+- [x] **Step 5: Commit the parser skeleton**
 
 ```bash
 git add shared/card-effect-parser.ts shared/card-effect-parser.test.ts
 git commit -m "feat: parse card effect context"
 ```
+
+Task 2 evidence (2026-08-21):
+
+- RED: `npm test -- shared/card-effect-parser.test.ts` failed before collection
+  because `shared/card-effect-parser.ts` did not exist.
+- GREEN: `npm test -- shared/card-effect-parser.test.ts` passed 1 file / 24
+  tests covering normalization, every activation mapping, leading timing,
+  `Then` cost ownership, chooser/subject inheritance, common-choice actions,
+  Trigger separation, dense IDs, structural keywords, explicit-self targets,
+  and unknown-clause diagnostics.
+- Regression verification: the complete suite passed 58 files / 915 tests;
+  `npm run lint`, `npm run typecheck`, and `git diff --check` passed.
+- Spec-review RED: 5 of 31 focused tests failed, proving Trigger-field labels
+  could override Trigger activation, line-broken `Then` lost its context,
+  same-line clauses collapsed, trailing unknown text disappeared, and IDs
+  consequently did not remain source-local and dense.
+- Spec-review GREEN: the focused suite passed 1 file / 31 tests after making
+  Trigger activation source-authoritative, introducing explicit continuation
+  state, tokenizing printed sentences before classification, and retaining the
+  unmatched residue of partially parsed clauses as diagnostics.
+- Post-review verification: the complete suite passed 58 files / 922 tests;
+  `npm run lint`, `npm run typecheck`, and `git diff --check` passed.
+- Annotation-review RED: 3 of 34 focused tests failed because an
+  activation/timing-only line was discarded before its result clause.
+- Annotation-review GREEN: the focused suite passed 1 file / 34 tests after
+  retaining one-use pending annotation context, replacing it with later
+  annotation blocks, and preserving Trigger-source activation authority.
+- Annotation-review verification: the complete suite passed 58 files / 925
+  tests; `npm run lint`, `npm run typecheck`, and `git diff --check` passed.
+- Context-composition RED: 4 of 38 focused tests failed because activation-only
+  and timing-only annotation blocks replaced the entire pending context.
+- Context-composition GREEN: the focused suite passed 1 file / 38 tests after
+  splitting pending activation and timing into independently composable and
+  replaceable typed fields.
+- Context-composition verification: the complete suite passed 58 files / 929
+  tests; `npm run lint`, `npm run typecheck`, and `git diff --check` passed.
+- Conservative-parsing RED: 6 of 44 focused tests failed because bracketed
+  DON-minus lost its cost, unsupported annotations could expose optimistic
+  actions, unknown choice bullets disappeared, and alternative activation
+  diagnostics lost the first printed mode.
+- Conservative-parsing GREEN: the focused suite passed 1 file / 44 tests after
+  whitelisting leading annotations, recognizing bracketed DON-minus, rejecting
+  unrepresentable activation syntax, and retaining unknown branches as
+  explicit zero-value actions plus diagnostics.
+- Conservative-parsing verification: the complete suite passed 58 files / 935
+  tests; `npm run lint`, `npm run typecheck`, and `git diff --check` passed.
 
 ### Task 3: Parse subjects, targets, actions, duration, and clause-local compatibility
 
