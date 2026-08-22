@@ -60,6 +60,7 @@ export async function evaluateValueModelCalibration(catalog: RuntimeCatalog, see
     const mainCount = main[cardNumber] ?? 0
     return [cardNumber, freeze({ opened: openedCount, main: mainCount, inclusionRate: openedCount === 0 ? 0 : Number((mainCount / openedCount).toFixed(6)) })]
   }))
-  const bytes = await readFile(resolve('public/catalogs', catalog.manifest.setId, 'cards.json'))
+  const catalogDirectory = catalog.manifest.setId.toLocaleLowerCase()
+  const bytes = await readFile(resolve('public/catalogs', catalogDirectory, 'cards.json'))
   return freeze({ setId: catalog.manifest.setId, seedStart: 0, seedEnd: seedCount - 1, seedCount, catalogChecksum: createHash('sha256').update(bytes).digest('hex'), profileSha256: profileHash(getStrategyProfile(catalog.manifest.setId)), cards: freeze(cards), exactFortyFailures, physicalCopyConservationFailures, nondeterministicDecks })
 }

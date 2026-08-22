@@ -15,6 +15,7 @@ describe('OP17 value-model calibration acceptance', () => {
     const report = await evaluateValueModelCalibration(catalog, 100, ['OP17-046', 'OP17-049', 'OP17-063'])
     expect(report.seedCount).toBe(100)
     expect(report.catalogChecksum).toMatch(/^[a-f0-9]{64}$/)
+    expect(report.catalogChecksum).toBe('80185f046091d3def85245b291df31e81b349508adb29842152393c743632a52')
     expect(report.profileSha256).toMatch(/^[a-f0-9]{64}$/)
     expect(report.exactFortyFailures).toBe(0)
     expect(report.physicalCopyConservationFailures).toBe(0)
