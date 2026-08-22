@@ -831,7 +831,7 @@ Task 5 evidence (2026-08-21):
 - Create: `tools/op17-effect-context.acceptance.test.ts`
 - Modify: `shared/card-effect-parser.test.ts`
 
-- [ ] **Step 1: Add failing catalog-backed acceptance**
+- [x] **Step 1: Add failing catalog-backed acceptance**
 
 Load the checked-in OP17 catalog with `loadLocalCatalogs(['OP17'])`. Assert exact semantic causes:
 
@@ -851,17 +851,17 @@ construct an invalid runtime `CardFeatures` object by deleting required v2
 fields. Assert byte-for-byte equal solutions or a recorded per-seed digest plus
 exact deck lines. This proves additive metadata is not yet authoritative.
 
-- [ ] **Step 2: Run acceptance and verify RED if any named wording is unhandled**
+- [x] **Step 2: Run acceptance and verify RED if any named wording is unhandled**
 
 Run `npm test -- tools/op17-effect-context.acceptance.test.ts`.
 
 Expected before final parser fixes: FAIL with the first exact OP17 semantic mismatch; never change legacy score expectations to make it pass.
 
-- [ ] **Step 3: Make only grammar-general parser corrections**
+- [x] **Step 3: Make only grammar-general parser corrections**
 
 Adjust parser patterns using wording-general rules such as subject inheritance, same-instance target references, duration parsing, or bullet context. Add a positive minimal fixture and a negative near-match beside every correction. Complete all grammar corrections before publishing revision 1. After Phase 1 is released, any semantic grammar correction must increment `effectParserRevision`, retain the older revision as accepted serialized input, and prove the loader reparses it. Do not mention a card number, set, rarity, color, or name in production parser code.
 
-- [ ] **Step 4: Run focused and full Phase-1 verification**
+- [x] **Step 4: Run focused and full Phase-1 verification**
 
 Run:
 
@@ -876,11 +876,11 @@ npm run build
 
 Expected: all commands PASS; the full suite retains its pre-phase score and solution expectations, and the build emits canonical v2 on the next catalog derivation without requiring a bulk catalog rewrite now.
 
-- [ ] **Step 5: Request two-stage review**
+- [x] **Step 5: Request two-stage review**
 
 Dispatch a spec-compliance reviewer against Phase 1 and the approved design. After all spec findings are resolved, dispatch a code-quality reviewer. Re-run the focused acceptance after each correction.
 
-- [ ] **Step 6: Commit Phase-1 acceptance and verification record**
+- [x] **Step 6: Commit Phase-1 acceptance and verification record**
 
 ```bash
 git add tools/op17-effect-context.acceptance.test.ts shared/card-effect-parser.ts shared/card-effect-parser.test.ts docs/superpowers/plans/2026-08-21-op17-effect-context-parsing.md
@@ -888,3 +888,41 @@ git commit -m "test: verify OP17 effect context parsing"
 ```
 
 Record the exact test counts and commands in the checked checklist before committing. Phase 2 may start only when the branch is clean and every Phase-1 gate is green.
+
+Task 6 evidence (2026-08-21):
+
+- First-run acceptance was GREEN rather than RED: Tasks 2 through 5 already
+  handled every named OP17 wording, so the conditional RED gate found no
+  semantic mismatch. No parser production code changed and revision 1 remains
+  current.
+- The catalog-backed acceptance locks exact effect context for OP17-043, 046,
+  049, 054, 063, 065, 093, 112, 114, 118, and 119. It also solves tournament
+  seeds `0..99` twice, matches each canonical solution SHA-256 to the Phase-0
+  fixture, requires exactly 40 Main cards, and conserves every physical copy
+  across Main and Sideboard.
+- Focused verification passed 7 files / 299 tests:
+  `npm test -- shared/card-effect-model.test.ts shared/card-effect-parser.test.ts shared/card-features.test.ts shared/catalog.test.ts src/catalog/upgrade-card-features.test.ts src/catalog/load-catalog.test.ts tools/op17-effect-context.acceptance.test.ts`.
+- Full verification passed 60 files / 1,021 tests. `npm run lint`,
+  `npm run typecheck`, and `git diff --check` passed. `npm run catalog:check`
+  reported 17 sets / 85 files, and `npm run build` completed the Vite
+  production build.
+- Spec-compliance self-review found all Phase-1 semantic and parity gates
+  represented without production card identities. Code-quality self-review
+  found the acceptance helpers bounded, deterministic, and independent of
+  parser implementation details; no corrections were required.
+- Independent spec review found five assertions that proved presence but were
+  not sufficiently mutation-sensitive. The corrected acceptance now pins the
+  opponent-owned two-branch choice, same-target negate/KO pair, one paid
+  draw-plus-lock instance, exactly two common-draw Life branches, and a
+  separately sourced Trigger self-deploy from Life. The first run of these
+  stricter catalog-backed assertions passed, confirming this remained a
+  test-contract correction rather than a parser semantic change.
+- Independent quality review found remaining flattened/partial semantic checks
+  and a duplicate-line blind spot in the acceptance conservation helper. A RED
+  regression reproduced the latter (`3` physical copies were incorrectly
+  collapsed to `2`). The helper now accumulates duplicate lines and rejects
+  non-positive or non-safe quantities. Every audited cause is asserted as a
+  complete effect instance, and negative probes prove that wrong activation,
+  cost, condition, zone, or predicate values fail exact comparison. Final
+  focused and full counts are the 299 and 1,021 totals recorded above; all
+  other gates were rerun after these corrections.
