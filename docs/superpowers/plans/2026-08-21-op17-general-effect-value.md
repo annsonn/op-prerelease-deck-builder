@@ -148,7 +148,7 @@ Task 1 evidence (2026-08-21):
 - Create: `src/solver/effect-value.test.ts`
 - Create: `src/solver/effect-value.ts`
 
-- [ ] **Step 1: Write failing exact action-arithmetic tests**
+- [x] **Step 1: Write failing exact action-arithmetic tests**
 
 Create helpers that construct canonical `EffectAction`, `EffectInstance`, and `CandidateCard` values without printed-card identities. Test every row in the approved action table. Representative assertions:
 
@@ -166,13 +166,13 @@ expect(valueAction({ kind: 'unknown', normalizedText: 'future wording' }, contex
 
 Cover K.O., return hand, rest, effect negation, power reduction, protection, both Life directions, hand discard, all DON modes, counter aura with zero and positive eligible counts, own power modifier, Leader shield, and every keyword. Assert power actions consume `powerDelta`, not an absolute resulting power; multiplicity is applied once; cost ceiling is applied once; broad target values hit the instance cap later; and every returned value is finite.
 
-- [ ] **Step 2: Run evaluator tests and verify RED**
+- [x] **Step 2: Run evaluator tests and verify RED**
 
 Run `npm test -- src/solver/effect-value.test.ts`.
 
 Expected: FAIL because the evaluator module does not exist.
 
-- [ ] **Step 3: Implement pure target and action valuation**
+- [x] **Step 3: Implement pure target and action valuation**
 
 Create `src/solver/effect-value.ts` and export the approved `PremiumCategory`, `EffectContribution`, and `EffectValuation` interfaces plus:
 
@@ -189,18 +189,41 @@ Keep `valueAction` exported only for direct unit testing. Add private helpers fo
 
 Each action result includes `grossValue`, one `PremiumCategory | null`, an initial target-support factor, and a human-readable reason. Map Rush and attack pressure to `pressure`; removal, negation, and lockdown to `interaction`; draw, filtering, hand discard, and deployment to `cardAdvantage`; Life movement to `lifeAdvantage`; DON!! movement to `donAdvantage`; and Blocker, protection, counter auras, and Leader shielding to `durableDefense`. Phase 2 uses target-support factor 1 only for target-independent actions; dynamic pool-backed filter/deploy/search/aura targets remain zero until Phase 3 instead of inflating their value. An explicit `this card` Trigger deployment with `allowsSelf: true` is target-independent and remains available. Unknown action or unsafe subject produces zero and an explicit reason, never an exception.
 
-- [ ] **Step 4: Run action tests and verify GREEN**
+- [x] **Step 4: Run action tests and verify GREEN**
 
 Run `npm test -- src/solver/effect-value.test.ts`.
 
 Expected: PASS for every action row, multiplier, cap input, and zero-value safety boundary.
 
-- [ ] **Step 5: Commit action arithmetic**
+- [x] **Step 5: Commit action arithmetic**
 
 ```bash
 git add src/solver/effect-value.ts src/solver/effect-value.test.ts
 git commit -m "feat: value structured card actions"
 ```
+
+Task 2 evidence (2026-08-21):
+
+- RED: `npm test -- src/solver/effect-value.test.ts` failed before collection
+  because `src/solver/effect-value.ts` did not exist.
+- Spec-review RED: the focused suite failed 6 of 60 tests because independent
+  actions accepted injected support, negation multiplied target quantity, and
+  shorter Leader-power durations received shielding value.
+- Quality-review RED: the focused suite failed 4 of 64 tests because counter
+  aura magnitude used effective support, constrained Leader targets bypassed
+  support, and unsafe requested aura counts were not rejected.
+- Self-review RED: an explicit-self Counter modifier failed 1 of 65 focused
+  tests because aura-cap theory was incorrectly applied to its single target.
+- GREEN: the same focused command passed 1 file / 65 tests, covering every
+  calibrated action row, target multiplicity, cost ceiling, long duration,
+  filter/deploy/aura caps, subject safety, injected support evidence, and
+  six-decimal finite arithmetic. A compile-time exhaustive fixture covers every
+  `EffectAction` kind alongside the exhaustive target accessor.
+- Full suite: `npm test` passed 62 files / 1,122 tests.
+- Verification: `npm run lint`, `npm run typecheck`, and `git diff --check`
+  passed. Self-review confirmed that Task 2 only values individual actions;
+  shared costs, chooser branches, activation factors, conditions, per-instance
+  caps, and Event-mode selection remain deferred to Task 3.
 
 ### Task 3: Reconcile costs, branches, activation, conditions, and Event modes
 
